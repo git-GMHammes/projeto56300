@@ -1,0 +1,308 @@
+# Comandos PowerShell para criar estrutura do projeto React Native
+# Execute cada bloco de comandos no PowerShell
+
+# Navegar para o diretório do projeto
+cd "C:\laragon\www\mobile\react\projeto56300\src"
+
+# Criar estrutura principal do app
+if (!(Test-Path "app")) { New-Item -ItemType Directory -Path "app" -Force }
+
+# Criar estrutura core
+if (!(Test-Path "app\core")) { New-Item -ItemType Directory -Path "app\core" -Force }
+if (!(Test-Path "app\core\api")) { New-Item -ItemType Directory -Path "app\core\api" -Force }
+if (!(Test-Path "app\core\config")) { New-Item -ItemType Directory -Path "app\core\config" -Force }
+if (!(Test-Path "app\core\hooks")) { New-Item -ItemType Directory -Path "app\core\hooks" -Force }
+if (!(Test-Path "app\core\navigation")) { New-Item -ItemType Directory -Path "app\core\navigation" -Force }
+if (!(Test-Path "app\core\providers")) { New-Item -ItemType Directory -Path "app\core\providers" -Force }
+if (!(Test-Path "app\core\store")) { New-Item -ItemType Directory -Path "app\core\store" -Force }
+if (!(Test-Path "app\core\types")) { New-Item -ItemType Directory -Path "app\core\types" -Force }
+if (!(Test-Path "app\core\utils")) { New-Item -ItemType Directory -Path "app\core\utils" -Force }
+if (!(Test-Path "app\core\styles")) { New-Item -ItemType Directory -Path "app\core\styles" -Force }
+
+# Criar arquivos core/api
+if (!(Test-Path "app\core\api\client. ts")) { New-Item -ItemType File -Path "app\core\api\client.ts" -Force }
+if (!(Test-Path "app\core\api\interceptors.ts")) { New-Item -ItemType File -Path "app\core\api\interceptors. ts" -Force }
+if (!(Test-Path "app\core\api\types.ts")) { New-Item -ItemType File -Path "app\core\api\types.ts" -Force }
+
+# Criar arquivos core/config
+if (!(Test-Path "app\core\config\env.ts")) { New-Item -ItemType File -Path "app\core\config\env.ts" -Force }
+if (!(Test-Path "app\core\config\constants.ts")) { New-Item -ItemType File -Path "app\core\config\constants.ts" -Force }
+
+# Criar arquivos core/hooks
+if (!(Test-Path "app\core\hooks\useApi.ts")) { New-Item -ItemType File -Path "app\core\hooks\useApi.ts" -Force }
+if (!(Test-Path "app\core\hooks\useAsyncStorage.ts")) { New-Item -ItemType File -Path "app\core\hooks\useAsyncStorage.ts" -Force }
+if (!(Test-Path "app\core\hooks\useNetworkState.ts")) { New-Item -ItemType File -Path "app\core\hooks\useNetworkState.ts" -Force }
+
+# Criar arquivos core/navigation
+if (!(Test-Path "app\core\navigation\AppNavigator.tsx")) { New-Item -ItemType File -Path "app\core\navigation\AppNavigator.tsx" -Force }
+if (!(Test-Path "app\core\navigation\AuthNavigator.tsx")) { New-Item -ItemType File -Path "app\core\navigation\AuthNavigator.tsx" -Force }
+if (!(Test-Path "app\core\navigation\types.ts")) { New-Item -ItemType File -Path "app\core\navigation\types.ts" -Force }
+if (!(Test-Path "app\core\navigation\linking.ts")) { New-Item -ItemType File -Path "app\core\navigation\linking.ts" -Force }
+
+# Criar arquivos core/providers
+if (!(Test-Path "app\core\providers\ApiProvider.tsx")) { New-Item -ItemType File -Path "app\core\providers\ApiProvider. tsx" -Force }
+if (!(Test-Path "app\core\providers\ThemeProvider.tsx")) { New-Item -ItemType File -Path "app\core\providers\ThemeProvider.tsx" -Force }
+if (!(Test-Path "app\core\providers\index.tsx")) { New-Item -ItemType File -Path "app\core\providers\index.tsx" -Force }
+
+# Criar arquivos core/store
+if (!(Test-Path "app\core\store\index.ts")) { New-Item -ItemType File -Path "app\core\store\index.ts" -Force }
+if (!(Test-Path "app\core\store\rootReducer.ts")) { New-Item -ItemType File -Path "app\core\store\rootReducer.ts" -Force }
+if (!(Test-Path "app\core\store\middleware.ts")) { New-Item -ItemType File -Path "app\core\store\middleware.ts" -Force }
+
+# Criar arquivos core/types
+if (!(Test-Path "app\core\types\api.ts")) { New-Item -ItemType File -Path "app\core\types\api.ts" -Force }
+if (!(Test-Path "app\core\types\navigation.ts")) { New-Item -ItemType File -Path "app\core\types\navigation.ts" -Force }
+if (!(Test-Path "app\core\types\global.ts")) { New-Item -ItemType File -Path "app\core\types\global.ts" -Force }
+
+# Criar arquivos core/utils
+if (!(Test-Path "app\core\utils\validation.ts")) { New-Item -ItemType File -Path "app\core\utils\validation.ts" -Force }
+if (!(Test-Path "app\core\utils\storage.ts")) { New-Item -ItemType File -Path "app\core\utils\storage.ts" -Force }
+if (!(Test-Path "app\core\utils\formatters.ts")) { New-Item -ItemType File -Path "app\core\utils\formatters. ts" -Force }
+if (!(Test-Path "app\core\utils\helpers.ts")) { New-Item -ItemType File -Path "app\core\utils\helpers.ts" -Force }
+
+# Criar arquivos core/styles
+if (!(Test-Path "app\core\styles\theme.ts")) { New-Item -ItemType File -Path "app\core\styles\theme.ts" -Force }
+if (!(Test-Path "app\core\styles\colors.ts")) { New-Item -ItemType File -Path "app\core\styles\colors.ts" -Force }
+if (!(Test-Path "app\core\styles\typography.ts")) { New-Item -ItemType File -Path "app\core\styles\typography.ts" -Force }
+if (!(Test-Path "app\core\styles\spacing.ts")) { New-Item -ItemType File -Path "app\core\styles\spacing.ts" -Force }
+
+# Criar estrutura shared
+if (!(Test-Path "app\shared")) { New-Item -ItemType Directory -Path "app\shared" -Force }
+if (!(Test-Path "app\shared\components")) { New-Item -ItemType Directory -Path "app\shared\components" -Force }
+if (!(Test-Path "app\shared\components\ui")) { New-Item -ItemType Directory -Path "app\shared\components\ui" -Force }
+if (!(Test-Path "app\shared\components\forms")) { New-Item -ItemType Directory -Path "app\shared\components\forms" -Force }
+if (!(Test-Path "app\shared\components\layout")) { New-Item -ItemType Directory -Path "app\shared\components\layout" -Force }
+if (!(Test-Path "app\shared\hooks")) { New-Item -ItemType Directory -Path "app\shared\hooks" -Force }
+if (!(Test-Path "app\shared\utils")) { New-Item -ItemType Directory -Path "app\shared\utils" -Force }
+if (!(Test-Path "app\shared\utils\validation")) { New-Item -ItemType Directory -Path "app\shared\utils\validation" -Force }
+if (!(Test-Path "app\shared\utils\formatters")) { New-Item -ItemType Directory -Path "app\shared\utils\formatters" -Force }
+
+# Criar componentes UI
+if (!(Test-Path "app\shared\components\ui\Button")) { New-Item -ItemType Directory -Path "app\shared\components\ui\Button" -Force }
+if (!(Test-Path "app\shared\components\ui\Button\Button. tsx")) { New-Item -ItemType File -Path "app\shared\components\ui\Button\Button.tsx" -Force }
+if (!(Test-Path "app\shared\components\ui\Button\Button.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Button\Button.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\ui\Button\index.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Button\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\ui\Input")) { New-Item -ItemType Directory -Path "app\shared\components\ui\Input" -Force }
+if (!(Test-Path "app\shared\components\ui\Input\Input.tsx")) { New-Item -ItemType File -Path "app\shared\components\ui\Input\Input.tsx" -Force }
+if (!(Test-Path "app\shared\components\ui\Input\Input.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Input\Input.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\ui\Input\index.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Input\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\ui\Loading")) { New-Item -ItemType Directory -Path "app\shared\components\ui\Loading" -Force }
+if (!(Test-Path "app\shared\components\ui\Loading\Loading.tsx")) { New-Item -ItemType File -Path "app\shared\components\ui\Loading\Loading.tsx" -Force }
+if (!(Test-Path "app\shared\components\ui\Loading\Loading.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Loading\Loading.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\ui\Loading\index.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Loading\index. ts" -Force }
+
+if (!(Test-Path "app\shared\components\ui\Modal")) { New-Item -ItemType Directory -Path "app\shared\components\ui\Modal" -Force }
+if (!(Test-Path "app\shared\components\ui\Modal\Modal.tsx")) { New-Item -ItemType File -Path "app\shared\components\ui\Modal\Modal.tsx" -Force }
+if (!(Test-Path "app\shared\components\ui\Modal\Modal.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Modal\Modal.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\ui\Modal\index.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\Modal\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\ui\index.ts")) { New-Item -ItemType File -Path "app\shared\components\ui\index. ts" -Force }
+
+# Criar componentes forms
+if (!(Test-Path "app\shared\components\forms\FormInput")) { New-Item -ItemType Directory -Path "app\shared\components\forms\FormInput" -Force }
+if (!(Test-Path "app\shared\components\forms\FormInput\FormInput.tsx")) { New-Item -ItemType File -Path "app\shared\components\forms\FormInput\FormInput.tsx" -Force }
+if (!(Test-Path "app\shared\components\forms\FormInput\FormInput.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\forms\FormInput\FormInput.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\forms\FormInput\index. ts")) { New-Item -ItemType File -Path "app\shared\components\forms\FormInput\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\forms\FormError")) { New-Item -ItemType Directory -Path "app\shared\components\forms\FormError" -Force }
+if (!(Test-Path "app\shared\components\forms\FormError\FormError. tsx")) { New-Item -ItemType File -Path "app\shared\components\forms\FormError\FormError.tsx" -Force }
+if (!(Test-Path "app\shared\components\forms\FormError\FormError.styles. ts")) { New-Item -ItemType File -Path "app\shared\components\forms\FormError\FormError.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\forms\FormError\index.ts")) { New-Item -ItemType File -Path "app\shared\components\forms\FormError\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\forms\index. ts")) { New-Item -ItemType File -Path "app\shared\components\forms\index.ts" -Force }
+
+# Criar componentes layout
+if (!(Test-Path "app\shared\components\layout\Header")) { New-Item -ItemType Directory -Path "app\shared\components\layout\Header" -Force }
+if (!(Test-Path "app\shared\components\layout\Header\Header.tsx")) { New-Item -ItemType File -Path "app\shared\components\layout\Header\Header.tsx" -Force }
+if (!(Test-Path "app\shared\components\layout\Header\Header.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\layout\Header\Header.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\layout\Header\index.ts")) { New-Item -ItemType File -Path "app\shared\components\layout\Header\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\layout\Container")) { New-Item -ItemType Directory -Path "app\shared\components\layout\Container" -Force }
+if (!(Test-Path "app\shared\components\layout\Container\Container.tsx")) { New-Item -ItemType File -Path "app\shared\components\layout\Container\Container.tsx" -Force }
+if (!(Test-Path "app\shared\components\layout\Container\Container.styles.ts")) { New-Item -ItemType File -Path "app\shared\components\layout\Container\Container.styles.ts" -Force }
+if (!(Test-Path "app\shared\components\layout\Container\index.ts")) { New-Item -ItemType File -Path "app\shared\components\layout\Container\index.ts" -Force }
+
+if (!(Test-Path "app\shared\components\layout\index.ts")) { New-Item -ItemType File -Path "app\shared\components\layout\index.ts" -Force }
+if (!(Test-Path "app\shared\components\index.ts")) { New-Item -ItemType File -Path "app\shared\components\index.ts" -Force }
+
+# Criar shared hooks
+if (!(Test-Path "app\shared\hooks\useForm.ts")) { New-Item -ItemType File -Path "app\shared\hooks\useForm.ts" -Force }
+if (!(Test-Path "app\shared\hooks\useDebounce.ts")) { New-Item -ItemType File -Path "app\shared\hooks\useDebounce.ts" -Force }
+if (!(Test-Path "app\shared\hooks\useKeyboard.ts")) { New-Item -ItemType File -Path "app\shared\hooks\useKeyboard.ts" -Force }
+if (!(Test-Path "app\shared\hooks\index.ts")) { New-Item -ItemType File -Path "app\shared\hooks\index.ts" -Force }
+
+# Criar shared utils
+if (!(Test-Path "app\shared\utils\validation\schemas. ts")) { New-Item -ItemType File -Path "app\shared\utils\validation\schemas.ts" -Force }
+if (!(Test-Path "app\shared\utils\validation\rules.ts")) { New-Item -ItemType File -Path "app\shared\utils\validation\rules. ts" -Force }
+if (!(Test-Path "app\shared\utils\validation\index.ts")) { New-Item -ItemType File -Path "app\shared\utils\validation\index.ts" -Force }
+
+if (!(Test-Path "app\shared\utils\formatters\date.ts")) { New-Item -ItemType File -Path "app\shared\utils\formatters\date.ts" -Force }
+if (!(Test-Path "app\shared\utils\formatters\currency.ts")) { New-Item -ItemType File -Path "app\shared\utils\formatters\currency.ts" -Force }
+if (!(Test-Path "app\shared\utils\formatters\index.ts")) { New-Item -ItemType File -Path "app\shared\utils\formatters\index.ts" -Force }
+
+if (!(Test-Path "app\shared\utils\index.ts")) { New-Item -ItemType File -Path "app\shared\utils\index.ts" -Force }
+
+# Criar estrutura modules
+if (!(Test-Path "app\modules")) { New-Item -ItemType Directory -Path "app\modules" -Force }
+
+# Criar módulo authentication
+if (!(Test-Path "app\modules\authentication")) { New-Item -ItemType Directory -Path "app\modules\authentication" -Force }
+if (!(Test-Path "app\modules\authentication\components")) { New-Item -ItemType Directory -Path "app\modules\authentication\components" -Force }
+if (!(Test-Path "app\modules\authentication\screens")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens" -Force }
+if (!(Test-Path "app\modules\authentication\services")) { New-Item -ItemType Directory -Path "app\modules\authentication\services" -Force }
+if (!(Test-Path "app\modules\authentication\store")) { New-Item -ItemType Directory -Path "app\modules\authentication\store" -Force }
+if (!(Test-Path "app\modules\authentication\hooks")) { New-Item -ItemType Directory -Path "app\modules\authentication\hooks" -Force }
+if (!(Test-Path "app\modules\authentication\types")) { New-Item -ItemType Directory -Path "app\modules\authentication\types" -Force }
+if (!(Test-Path "app\modules\authentication\utils")) { New-Item -ItemType Directory -Path "app\modules\authentication\utils" -Force }
+
+# Componentes authentication
+if (!(Test-Path "app\modules\authentication\components\LoginForm")) { New-Item -ItemType Directory -Path "app\modules\authentication\components\LoginForm" -Force }
+if (!(Test-Path "app\modules\authentication\components\LoginForm\LoginForm.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\components\LoginForm\LoginForm.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\components\LoginForm\LoginForm.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\LoginForm\LoginForm.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\LoginForm\LoginForm.types.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\LoginForm\LoginForm.types.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\LoginForm\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\LoginForm\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\components\RegisterForm")) { New-Item -ItemType Directory -Path "app\modules\authentication\components\RegisterForm" -Force }
+if (!(Test-Path "app\modules\authentication\components\RegisterForm\RegisterForm.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\components\RegisterForm\RegisterForm.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\components\RegisterForm\RegisterForm.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\RegisterForm\RegisterForm.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\RegisterForm\RegisterForm.types.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\RegisterForm\RegisterForm.types.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\RegisterForm\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\RegisterForm\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\components\ForgotPasswordForm")) { New-Item -ItemType Directory -Path "app\modules\authentication\components\ForgotPasswordForm" -Force }
+if (!(Test-Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.types.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm. types.ts" -Force }
+if (!(Test-Path "app\modules\authentication\components\ForgotPasswordForm\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\ForgotPasswordForm\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\components\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\components\index. ts" -Force }
+
+# Screens authentication
+if (!(Test-Path "app\modules\authentication\screens\LoginScreen")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens\LoginScreen" -Force }
+if (!(Test-Path "app\modules\authentication\screens\LoginScreen\LoginScreen.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\screens\LoginScreen\LoginScreen.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\screens\LoginScreen\LoginScreen.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\LoginScreen\LoginScreen.styles. ts" -Force }
+if (!(Test-Path "app\modules\authentication\screens\LoginScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\LoginScreen\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\screens\RegisterScreen")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens\RegisterScreen" -Force }
+if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen. styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens\ForgotPasswordScreen" -Force }
+if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.tsx" -Force }
+if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen. styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\index.ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\screens\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\index.ts" -Force }
+
+# Services authentication
+if (!(Test-Path "app\modules\authentication\services\authApi.ts")) { New-Item -ItemType File -Path "app\modules\authentication\services\authApi.ts" -Force }
+if (!(Test-Path "app\modules\authentication\services\tokenService.ts")) { New-Item -ItemType File -Path "app\modules\authentication\services\tokenService.ts" -Force }
+if (!(Test-Path "app\modules\authentication\services\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\services\index. ts" -Force }
+
+# Store authentication
+if (!(Test-Path "app\modules\authentication\store\authSlice.ts")) { New-Item -ItemType File -Path "app\modules\authentication\store\authSlice.ts" -Force }
+if (!(Test-Path "app\modules\authentication\store\authActions.ts")) { New-Item -ItemType File -Path "app\modules\authentication\store\authActions.ts" -Force }
+if (!(Test-Path "app\modules\authentication\store\authSelectors.ts")) { New-Item -ItemType File -Path "app\modules\authentication\store\authSelectors.ts" -Force }
+if (!(Test-Path "app\modules\authentication\store\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\store\index.ts" -Force }
+
+# Hooks authentication
+if (!(Test-Path "app\modules\authentication\hooks\useAuth.ts")) { New-Item -ItemType File -Path "app\modules\authentication\hooks\useAuth.ts" -Force }
+if (!(Test-Path "app\modules\authentication\hooks\useLogin.ts")) { New-Item -ItemType File -Path "app\modules\authentication\hooks\useLogin.ts" -Force }
+if (!(Test-Path "app\modules\authentication\hooks\useRegister.ts")) { New-Item -ItemType File -Path "app\modules\authentication\hooks\useRegister.ts" -Force }
+if (!(Test-Path "app\modules\authentication\hooks\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\hooks\index. ts" -Force }
+
+# Types authentication
+if (!(Test-Path "app\modules\authentication\types\auth.ts")) { New-Item -ItemType File -Path "app\modules\authentication\types\auth.ts" -Force }
+if (!(Test-Path "app\modules\authentication\types\user.ts")) { New-Item -ItemType File -Path "app\modules\authentication\types\user. ts" -Force }
+if (!(Test-Path "app\modules\authentication\types\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\types\index.ts" -Force }
+
+# Utils authentication
+if (!(Test-Path "app\modules\authentication\utils\validation. ts")) { New-Item -ItemType File -Path "app\modules\authentication\utils\validation.ts" -Force }
+if (!(Test-Path "app\modules\authentication\utils\storage.ts")) { New-Item -ItemType File -Path "app\modules\authentication\utils\storage. ts" -Force }
+if (!(Test-Path "app\modules\authentication\utils\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\utils\index. ts" -Force }
+
+if (!(Test-Path "app\modules\authentication\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\index.ts" -Force }
+
+# Criar módulo userProfile
+if (!(Test-Path "app\modules\userProfile")) { New-Item -ItemType Directory -Path "app\modules\userProfile" -Force }
+if (!(Test-Path "app\modules\userProfile\components")) { New-Item -ItemType Directory -Path "app\modules\userProfile\components" -Force }
+if (!(Test-Path "app\modules\userProfile\screens")) { New-Item -ItemType Directory -Path "app\modules\userProfile\screens" -Force }
+if (!(Test-Path "app\modules\userProfile\services")) { New-Item -ItemType Directory -Path "app\modules\userProfile\services" -Force }
+if (!(Test-Path "app\modules\userProfile\store")) { New-Item -ItemType Directory -Path "app\modules\userProfile\store" -Force }
+if (!(Test-Path "app\modules\userProfile\hooks")) { New-Item -ItemType Directory -Path "app\modules\userProfile\hooks" -Force }
+if (!(Test-Path "app\modules\userProfile\types")) { New-Item -ItemType Directory -Path "app\modules\userProfile\types" -Force }
+if (!(Test-Path "app\modules\userProfile\utils")) { New-Item -ItemType Directory -Path "app\modules\userProfile\utils" -Force }
+
+# Componentes userProfile
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader")) { New-Item -ItemType Directory -Path "app\modules\userProfile\components\ProfileHeader" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.tsx" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.styles.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader. styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.types. ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.types.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\index.ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\components\ProfileForm")) { New-Item -ItemType Directory -Path "app\modules\userProfile\components\ProfileForm" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileForm\ProfileForm.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileForm\ProfileForm.tsx" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileForm\ProfileForm.styles. ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileForm\ProfileForm.styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileForm\ProfileForm.types.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileForm\ProfileForm. types.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileForm\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileForm\index. ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\components\AvatarUpload")) { New-Item -ItemType Directory -Path "app\modules\userProfile\components\AvatarUpload" -Force }
+if (!(Test-Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.tsx" -Force }
+if (!(Test-Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.styles. ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.types. ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\AvatarUpload\AvatarUpload.types.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\AvatarUpload\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\AvatarUpload\index. ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\components\index. ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\index. ts" -Force }
+
+# Screens userProfile
+if (!(Test-Path "app\modules\userProfile\screens\ProfileScreen")) { New-Item -ItemType Directory -Path "app\modules\userProfile\screens\ProfileScreen" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\ProfileScreen\ProfileScreen.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\ProfileScreen\ProfileScreen.tsx" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\ProfileScreen\ProfileScreen.styles.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\ProfileScreen\ProfileScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\ProfileScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\ProfileScreen\index.ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\screens\EditProfileScreen")) { New-Item -ItemType Directory -Path "app\modules\userProfile\screens\EditProfileScreen" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.tsx" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.styles.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\screens\EditProfileScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\EditProfileScreen\index.ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\screens\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\screens\index.ts" -Force }
+
+# Services userProfile
+if (!(Test-Path "app\modules\userProfile\services\profileApi.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\services\profileApi.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\services\uploadService.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\services\uploadService.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\services\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\services\index.ts" -Force }
+
+# Store userProfile
+if (!(Test-Path "app\modules\userProfile\store\profileSlice.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\store\profileSlice.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\store\profileActions.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\store\profileActions.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\store\profileSelectors.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\store\profileSelectors.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\store\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\store\index.ts" -Force }
+
+# Hooks userProfile
+if (!(Test-Path "app\modules\userProfile\hooks\useProfile.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\hooks\useProfile.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\hooks\useProfileUpdate.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\hooks\useProfileUpdate.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\hooks\useAvatarUpload.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\hooks\useAvatarUpload.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\hooks\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\hooks\index.ts" -Force }
+
+# Types userProfile
+if (!(Test-Path "app\modules\userProfile\types\profile.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\types\profile.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\types\upload.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\types\upload.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\types\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\types\index.ts" -Force }
+
+# Utils userProfile
+if (!(Test-Path "app\modules\userProfile\utils\validation.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\utils\validation.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\utils\imageHelpers.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\utils\imageHelpers.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\utils\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\utils\index.ts" -Force }
+
+if (!(Test-Path "app\modules\userProfile\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\index. ts" -Force }
+
+Write-Host "Estrutura criada com sucesso!" -ForegroundColor Green
+Write-Host "Verificando se todos os diretórios foram criados..." -ForegroundColor Yellow
+
+# Verificar estrutura criada
+Get-ChildItem -Path "app" -Recurse | Where-Object { $_.PSIsContainer } | Sort-Object FullName | ForEach-Object { Write-Host "📁 $($_.FullName. Replace((Get-Location).Path + '\app\', ''))" -ForegroundColor Cyan }
+
+Write-Host "`nVerificando arquivos criados..." -ForegroundColor Yellow
+Get-ChildItem -Path "app" -Recurse -File | Sort-Object FullName | ForEach-Object { Write-Host "📄 $($_.FullName. Replace((Get-Location).Path + '\app\', ''))" -ForegroundColor Green }
