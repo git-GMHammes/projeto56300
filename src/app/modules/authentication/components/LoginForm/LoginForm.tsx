@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Input, Button } from '../../../shared/components/ui';
+import { Input, Button } from '../../../../shared/components/ui';
 import { styles } from './LoginForm.styles';
 
 export const LoginForm: React.FC = () => {

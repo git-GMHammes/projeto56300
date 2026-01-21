@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, typography } from '../../../../core/styles';
+import { colors } from '../../../../core/styles/colors';
+import { spacing } from '../../../../core/styles/spacing';
+import { typography } from '../../../../core/styles/typography';
 
 export const styles = StyleSheet.create({
   container: {
