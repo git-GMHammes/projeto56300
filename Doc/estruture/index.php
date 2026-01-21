@@ -34,7 +34,8 @@ $IGNORE_FILES = [
     'jest.config.js',
     'metro.config.js',
     'package-lock.json',
-    'README.md'
+    'README.md',
+    'App.bkp'
 ];
 
 // PASTAS a ignorar (mostrar caminho, mas não o conteúdo)

@@ -1,10 +1,22 @@
-# React Native Login - Sequência de Desenvolvimento
+# React Native Login - Sequência de Desenvolvimento (CORRIGIDA)
 
 ## Objetivo
 
 Criar tela de login não funcional primeiro, depois tornar funcional com APIs e TOKEN.
 
-## Sequência Mínima de Arquivos (Ordem de Desenvolvimento)
+## CORREÇÃO IMPORTANTE - Arquivos de Índice Necessários
+
+### ADICIONAR PRIMEIRO - Index para Estilos
+
+**Arquivo:** `src/app/core/styles/index.ts`
+
+```typescript
+export { colors } from './colors';
+export { spacing } from './spacing';
+export { typography } from './typography';
+```
+
+## Sequência Corrigida de Arquivos (Ordem de Desenvolvimento)
 
 ### 1. Configuração Base - Estilos
 
@@ -72,7 +84,17 @@ export const typography = {
 };
 ```
 
-### 4. Componente Base - Input
+### 4. **NOVO** - Index dos Estilos
+
+**Arquivo:** `src/app/core/styles/index.ts`
+
+```typescript
+export { colors } from './colors';
+export { spacing } from './spacing';
+export { typography } from './typography';
+```
+
+### 5. Componente Base - Input
 
 **Arquivo:** `src/app/shared/components/ui/Input/Input.tsx`
 
@@ -114,13 +136,13 @@ export const Input: React.FC<InputProps> = ({
 };
 ```
 
-### 5. Estilos do Input
+### 6. Estilos do Input (CORRIGIDO)
 
 **Arquivo:** `src/app/shared/components/ui/Input/Input.styles.ts`
 
 ```typescript
 import { StyleSheet } from 'react-native';
-import { colors, spacing } from '../../../core/styles';
+import { colors, spacing } from '../../../../core/styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -150,7 +172,7 @@ export const styles = StyleSheet.create({
 });
 ```
 
-### 6. Index do Input
+### 7. Index do Input
 
 **Arquivo:** `src/app/shared/components/ui/Input/index.ts`
 
@@ -158,7 +180,7 @@ export const styles = StyleSheet.create({
 export { Input } from './Input';
 ```
 
-### 7. Componente Base - Button
+### 8. Componente Base - Button
 
 **Arquivo:** `src/app/shared/components/ui/Button/Button.tsx`
 
@@ -186,13 +208,13 @@ export const Button: React.FC<ButtonProps> = ({ title, onPress, disabled }) => {
 };
 ```
 
-### 8. Estilos do Button
+### 9. Estilos do Button (CORRIGIDO)
 
 **Arquivo:** `src/app/shared/components/ui/Button/Button.styles.ts`
 
 ```typescript
 import { StyleSheet } from 'react-native';
-import { colors, spacing } from '../../../core/styles';
+import { colors, spacing } from '../../../../core/styles';
 
 export const styles = StyleSheet.create({
   button: {
@@ -213,7 +235,7 @@ export const styles = StyleSheet.create({
 });
 ```
 
-### 9. Index do Button
+### 10. Index do Button
 
 **Arquivo:** `src/app/shared/components/ui/Button/index.ts`
 
@@ -221,14 +243,23 @@ export const styles = StyleSheet.create({
 export { Button } from './Button';
 ```
 
-### 10. Formulário de Login
+### 11. **NOVO** - Index dos Componentes UI
+
+**Arquivo:** `src/app/shared/components/ui/index.ts`
+
+```typescript
+export { Input } from './Input';
+export { Button } from './Button';
+```
+
+### 12. Formulário de Login (CORRIGIDO)
 
 **Arquivo:** `src/app/modules/authentication/components/LoginForm/LoginForm.tsx`
 
 ```typescript
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Input, Button } from '../../../shared/components/ui';
+import { Input, Button } from '../../../../shared/components/ui';
 import { styles } from './LoginForm.styles';
 
 export const LoginForm: React.FC = () => {
@@ -261,13 +292,13 @@ export const LoginForm: React.FC = () => {
 };
 ```
 
-### 11. Estilos do LoginForm
+### 13. Estilos do LoginForm (CORRIGIDO)
 
 **Arquivo:** `src/app/modules/authentication/components/LoginForm/LoginForm.styles.ts`
 
 ```typescript
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../../../core/styles';
+import { spacing } from '../../../../../core/styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -276,7 +307,7 @@ export const styles = StyleSheet.create({
 });
 ```
 
-### 12. Index do LoginForm
+### 14. Index do LoginForm
 
 **Arquivo:** `src/app/modules/authentication/components/LoginForm/index.ts`
 
@@ -284,7 +315,7 @@ export const styles = StyleSheet.create({
 export { LoginForm } from './LoginForm';
 ```
 
-### 13. Tela de Login
+### 15. Tela de Login (CORRIGIDA)
 
 **Arquivo:** `src/app/modules/authentication/screens/LoginScreen/LoginScreen.tsx`
 
@@ -304,13 +335,13 @@ export const LoginScreen: React.FC = () => {
 };
 ```
 
-### 14. Estilos da LoginScreen
+### 16. Estilos da LoginScreen (CORRIGIDO)
 
 **Arquivo:** `src/app/modules/authentication/screens/LoginScreen/LoginScreen.styles.ts`
 
 ```typescript
 import { StyleSheet } from 'react-native';
-import { colors, spacing, typography } from '../../../../core/styles';
+import { colors, spacing, typography } from '../../../../../core/styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -327,7 +358,7 @@ export const styles = StyleSheet.create({
 });
 ```
 
-### 15. Index da LoginScreen
+### 17. Index da LoginScreen
 
 **Arquivo:** `src/app/modules/authentication/screens/LoginScreen/index.ts`
 
@@ -335,7 +366,7 @@ export const styles = StyleSheet.create({
 export { LoginScreen } from './LoginScreen';
 ```
 
-### 16. App Principal (Temporário)
+### 18. App Principal (Temporário)
 
 **Arquivo:** `src/App.tsx`
 
@@ -348,13 +379,13 @@ export default function App() {
 }
 ```
 
+## Principais Correções Feitas
+
+1. **Adicionado** `src/app/core/styles/index.ts` para centralizar exports
+2. **Corrigido** todos os imports para usar os caminhos corretos
+3. **Adicionado** `src/app/shared/components/ui/index.ts` para facilitar imports
+4. **Ajustados** níveis de pasta nos imports (../../../../ vs ../../../../../)
+
 ## Resumo
 
-Esta sequência criará uma tela de login básica não funcional. Após implementar estes arquivos, teremos:
-
-- Sistema de cores e estilos base
-- Componentes Input e Button reutilizáveis
-- Formulário de login simples
-- Tela de login completa
-
-**Próximos passos:** Depois implementaremos APIs, autenticação e navegação.
+Agora todos os imports estão corretos e funcionarão sem erro de resolução de módulos.

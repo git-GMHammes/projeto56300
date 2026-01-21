@@ -79,7 +79,7 @@ TYPE              : 1
 074 -> projeto56300\src\app\modules\authentication\screens\ForgotPasswordScreen\index.ts (.ts)
 075 -> projeto56300\src\app\modules\authentication\screens\LoginScreen
 076 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\index.ts (.ts)
-077 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\LoginScreen.styles. ts (. ts)
+077 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\LoginScreen.styles.ts (.ts)
 078 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\LoginScreen.tsx (.tsx)
 079 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen
 080 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen\index.ts (.ts)
