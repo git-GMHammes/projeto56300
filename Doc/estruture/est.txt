@@ -1,0 +1,221 @@
+LEITOR (index.php): C:\laragon\www\mobile\react\projeto56300\Doc\estruture\index.php
+ALVO (relativo)   : C:\laragon\www\mobile\react\projeto56300
+ALVO (realpath)   : C:\laragon\www\mobile\react\projeto56300
+TYPE              : 1
+
+001 projeto56300\.git [ignorado]
+002 projeto56300\Doc [ignorado]
+003 projeto56300\src
+004 -> projeto56300\src\.bundle [ignorado]
+005 -> projeto56300\src\android [ignorado]
+006 -> projeto56300\src\app
+007 -> projeto56300\src\app\core
+008 -> projeto56300\src\app\core\api
+009 -> projeto56300\src\app\core\api\client.ts (.ts)
+010 -> projeto56300\src\app\core\api\interceptors. ts (. ts)
+011 -> projeto56300\src\app\core\api\types.ts (.ts)
+012 -> projeto56300\src\app\core\config
+013 -> projeto56300\src\app\core\config\constants.ts (.ts)
+014 -> projeto56300\src\app\core\config\env.ts (.ts)
+015 -> projeto56300\src\app\core\hooks
+016 -> projeto56300\src\app\core\hooks\useApi.ts (.ts)
+017 -> projeto56300\src\app\core\hooks\useAsyncStorage.ts (.ts)
+018 -> projeto56300\src\app\core\hooks\useNetworkState.ts (.ts)
+019 -> projeto56300\src\app\core\navigation
+020 -> projeto56300\src\app\core\navigation\AppNavigator.tsx (.tsx)
+021 -> projeto56300\src\app\core\navigation\AuthNavigator.tsx (.tsx)
+022 -> projeto56300\src\app\core\navigation\linking.ts (.ts)
+023 -> projeto56300\src\app\core\navigation\types.ts (.ts)
+024 -> projeto56300\src\app\core\providers
+025 -> projeto56300\src\app\core\providers\ApiProvider. tsx (. tsx)
+026 -> projeto56300\src\app\core\providers\index.tsx (.tsx)
+027 -> projeto56300\src\app\core\providers\ThemeProvider.tsx (.tsx)
+028 -> projeto56300\src\app\core\store
+029 -> projeto56300\src\app\core\store\index.ts (.ts)
+030 -> projeto56300\src\app\core\store\middleware.ts (.ts)
+031 -> projeto56300\src\app\core\store\rootReducer.ts (.ts)
+032 -> projeto56300\src\app\core\styles
+033 -> projeto56300\src\app\core\styles\colors.ts (.ts)
+034 -> projeto56300\src\app\core\styles\spacing.ts (.ts)
+035 -> projeto56300\src\app\core\styles\theme.ts (.ts)
+036 -> projeto56300\src\app\core\styles\typography.ts (.ts)
+037 -> projeto56300\src\app\core\types
+038 -> projeto56300\src\app\core\types\api.ts (.ts)
+039 -> projeto56300\src\app\core\types\global.ts (.ts)
+040 -> projeto56300\src\app\core\types\navigation.ts (.ts)
+041 -> projeto56300\src\app\core\utils
+042 -> projeto56300\src\app\core\utils\formatters. ts (. ts)
+043 -> projeto56300\src\app\core\utils\helpers.ts (.ts)
+044 -> projeto56300\src\app\core\utils\storage.ts (.ts)
+045 -> projeto56300\src\app\core\utils\validation.ts (.ts)
+046 -> projeto56300\src\app\modules
+047 -> projeto56300\src\app\modules\authentication
+048 -> projeto56300\src\app\modules\authentication\components
+049 -> projeto56300\src\app\modules\authentication\components\ForgotPasswordForm
+050 -> projeto56300\src\app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.styles.ts (.ts)
+051 -> projeto56300\src\app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm.tsx (.tsx)
+052 -> projeto56300\src\app\modules\authentication\components\ForgotPasswordForm\ForgotPasswordForm. types.ts (.ts)
+053 -> projeto56300\src\app\modules\authentication\components\ForgotPasswordForm\index.ts (.ts)
+054 -> projeto56300\src\app\modules\authentication\components\LoginForm
+055 -> projeto56300\src\app\modules\authentication\components\LoginForm\index.ts (.ts)
+056 -> projeto56300\src\app\modules\authentication\components\LoginForm\LoginForm.styles.ts (.ts)
+057 -> projeto56300\src\app\modules\authentication\components\LoginForm\LoginForm.tsx (.tsx)
+058 -> projeto56300\src\app\modules\authentication\components\LoginForm\LoginForm.types.ts (.ts)
+059 -> projeto56300\src\app\modules\authentication\components\RegisterForm
+060 -> projeto56300\src\app\modules\authentication\components\RegisterForm\index.ts (.ts)
+061 -> projeto56300\src\app\modules\authentication\components\RegisterForm\RegisterForm.styles.ts (.ts)
+062 -> projeto56300\src\app\modules\authentication\components\RegisterForm\RegisterForm.tsx (.tsx)
+063 -> projeto56300\src\app\modules\authentication\components\RegisterForm\RegisterForm.types.ts (.ts)
+064 -> projeto56300\src\app\modules\authentication\components\index. ts (. ts)
+065 -> projeto56300\src\app\modules\authentication\hooks
+066 -> projeto56300\src\app\modules\authentication\hooks\index. ts (. ts)
+067 -> projeto56300\src\app\modules\authentication\hooks\useAuth.ts (.ts)
+068 -> projeto56300\src\app\modules\authentication\hooks\useLogin.ts (.ts)
+069 -> projeto56300\src\app\modules\authentication\hooks\useRegister.ts (.ts)
+070 -> projeto56300\src\app\modules\authentication\screens
+071 -> projeto56300\src\app\modules\authentication\screens\ForgotPasswordScreen
+072 -> projeto56300\src\app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.styles.ts (.ts)
+073 -> projeto56300\src\app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.tsx (.tsx)
+074 -> projeto56300\src\app\modules\authentication\screens\ForgotPasswordScreen\index.ts (.ts)
+075 -> projeto56300\src\app\modules\authentication\screens\LoginScreen
+076 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\index.ts (.ts)
+077 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\LoginScreen.styles. ts (. ts)
+078 -> projeto56300\src\app\modules\authentication\screens\LoginScreen\LoginScreen.tsx (.tsx)
+079 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen
+080 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen\index.ts (.ts)
+081 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen\RegisterScreen.styles.ts (.ts)
+082 -> projeto56300\src\app\modules\authentication\screens\RegisterScreen\RegisterScreen.tsx (.tsx)
+083 -> projeto56300\src\app\modules\authentication\screens\index.ts (.ts)
+084 -> projeto56300\src\app\modules\authentication\services
+085 -> projeto56300\src\app\modules\authentication\services\authApi.ts (.ts)
+086 -> projeto56300\src\app\modules\authentication\services\index. ts (. ts)
+087 -> projeto56300\src\app\modules\authentication\services\tokenService.ts (.ts)
+088 -> projeto56300\src\app\modules\authentication\store
+089 -> projeto56300\src\app\modules\authentication\store\authActions.ts (.ts)
+090 -> projeto56300\src\app\modules\authentication\store\authSelectors.ts (.ts)
+091 -> projeto56300\src\app\modules\authentication\store\authSlice.ts (.ts)
+092 -> projeto56300\src\app\modules\authentication\store\index.ts (.ts)
+093 -> projeto56300\src\app\modules\authentication\types
+094 -> projeto56300\src\app\modules\authentication\types\auth.ts (.ts)
+095 -> projeto56300\src\app\modules\authentication\types\index.ts (.ts)
+096 -> projeto56300\src\app\modules\authentication\types\user. ts (. ts)
+097 -> projeto56300\src\app\modules\authentication\utils
+098 -> projeto56300\src\app\modules\authentication\utils\index. ts (. ts)
+099 -> projeto56300\src\app\modules\authentication\utils\storage. ts (. ts)
+100 -> projeto56300\src\app\modules\authentication\utils\validation.ts (.ts)
+101 -> projeto56300\src\app\modules\authentication\index.ts (.ts)
+102 -> projeto56300\src\app\modules\userProfile
+103 -> projeto56300\src\app\modules\userProfile\components
+104 -> projeto56300\src\app\modules\userProfile\components\AvatarUpload
+105 -> projeto56300\src\app\modules\userProfile\components\AvatarUpload\AvatarUpload.styles.ts (.ts)
+106 -> projeto56300\src\app\modules\userProfile\components\AvatarUpload\AvatarUpload.tsx (.tsx)
+107 -> projeto56300\src\app\modules\userProfile\components\AvatarUpload\AvatarUpload.types.ts (.ts)
+108 -> projeto56300\src\app\modules\userProfile\components\AvatarUpload\index. ts (. ts)
+109 -> projeto56300\src\app\modules\userProfile\components\ProfileForm
+110 -> projeto56300\src\app\modules\userProfile\components\ProfileForm\index. ts (. ts)
+111 -> projeto56300\src\app\modules\userProfile\components\ProfileForm\ProfileForm.styles.ts (.ts)
+112 -> projeto56300\src\app\modules\userProfile\components\ProfileForm\ProfileForm.tsx (.tsx)
+113 -> projeto56300\src\app\modules\userProfile\components\ProfileForm\ProfileForm. types.ts (.ts)
+114 -> projeto56300\src\app\modules\userProfile\components\ProfileHeader
+115 -> projeto56300\src\app\modules\userProfile\components\ProfileHeader\index.ts (.ts)
+116 -> projeto56300\src\app\modules\userProfile\components\ProfileHeader\ProfileHeader. styles.ts (.ts)
+117 -> projeto56300\src\app\modules\userProfile\components\ProfileHeader\ProfileHeader.tsx (.tsx)
+118 -> projeto56300\src\app\modules\userProfile\components\ProfileHeader\ProfileHeader.types.ts (.ts)
+119 -> projeto56300\src\app\modules\userProfile\components\index. ts (. ts)
+120 -> projeto56300\src\app\modules\userProfile\hooks
+121 -> projeto56300\src\app\modules\userProfile\hooks\index.ts (.ts)
+122 -> projeto56300\src\app\modules\userProfile\hooks\useAvatarUpload.ts (.ts)
+123 -> projeto56300\src\app\modules\userProfile\hooks\useProfile.ts (.ts)
+124 -> projeto56300\src\app\modules\userProfile\hooks\useProfileUpdate.ts (.ts)
+125 -> projeto56300\src\app\modules\userProfile\screens
+126 -> projeto56300\src\app\modules\userProfile\screens\EditProfileScreen
+127 -> projeto56300\src\app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.styles.ts (.ts)
+128 -> projeto56300\src\app\modules\userProfile\screens\EditProfileScreen\EditProfileScreen.tsx (.tsx)
+129 -> projeto56300\src\app\modules\userProfile\screens\EditProfileScreen\index.ts (.ts)
+130 -> projeto56300\src\app\modules\userProfile\screens\ProfileScreen
+131 -> projeto56300\src\app\modules\userProfile\screens\ProfileScreen\index.ts (.ts)
+132 -> projeto56300\src\app\modules\userProfile\screens\ProfileScreen\ProfileScreen.styles.ts (.ts)
+133 -> projeto56300\src\app\modules\userProfile\screens\ProfileScreen\ProfileScreen.tsx (.tsx)
+134 -> projeto56300\src\app\modules\userProfile\screens\index.ts (.ts)
+135 -> projeto56300\src\app\modules\userProfile\services
+136 -> projeto56300\src\app\modules\userProfile\services\index.ts (.ts)
+137 -> projeto56300\src\app\modules\userProfile\services\profileApi.ts (.ts)
+138 -> projeto56300\src\app\modules\userProfile\services\uploadService.ts (.ts)
+139 -> projeto56300\src\app\modules\userProfile\store
+140 -> projeto56300\src\app\modules\userProfile\store\index.ts (.ts)
+141 -> projeto56300\src\app\modules\userProfile\store\profileActions.ts (.ts)
+142 -> projeto56300\src\app\modules\userProfile\store\profileSelectors.ts (.ts)
+143 -> projeto56300\src\app\modules\userProfile\store\profileSlice.ts (.ts)
+144 -> projeto56300\src\app\modules\userProfile\types
+145 -> projeto56300\src\app\modules\userProfile\types\index.ts (.ts)
+146 -> projeto56300\src\app\modules\userProfile\types\profile.ts (.ts)
+147 -> projeto56300\src\app\modules\userProfile\types\upload.ts (.ts)
+148 -> projeto56300\src\app\modules\userProfile\utils
+149 -> projeto56300\src\app\modules\userProfile\utils\imageHelpers.ts (.ts)
+150 -> projeto56300\src\app\modules\userProfile\utils\index.ts (.ts)
+151 -> projeto56300\src\app\modules\userProfile\utils\validation.ts (.ts)
+152 -> projeto56300\src\app\modules\userProfile\index. ts (. ts)
+153 -> projeto56300\src\app\shared
+154 -> projeto56300\src\app\shared\components
+155 -> projeto56300\src\app\shared\components\forms
+156 -> projeto56300\src\app\shared\components\forms\FormError
+157 -> projeto56300\src\app\shared\components\forms\FormError\FormError.styles.ts (.ts)
+158 -> projeto56300\src\app\shared\components\forms\FormError\FormError.tsx (.tsx)
+159 -> projeto56300\src\app\shared\components\forms\FormError\index.ts (.ts)
+160 -> projeto56300\src\app\shared\components\forms\FormInput
+161 -> projeto56300\src\app\shared\components\forms\FormInput\FormInput.styles.ts (.ts)
+162 -> projeto56300\src\app\shared\components\forms\FormInput\FormInput.tsx (.tsx)
+163 -> projeto56300\src\app\shared\components\forms\FormInput\index.ts (.ts)
+164 -> projeto56300\src\app\shared\components\forms\index.ts (.ts)
+165 -> projeto56300\src\app\shared\components\layout
+166 -> projeto56300\src\app\shared\components\layout\Container
+167 -> projeto56300\src\app\shared\components\layout\Container\Container.styles.ts (.ts)
+168 -> projeto56300\src\app\shared\components\layout\Container\Container.tsx (.tsx)
+169 -> projeto56300\src\app\shared\components\layout\Container\index.ts (.ts)
+170 -> projeto56300\src\app\shared\components\layout\Header
+171 -> projeto56300\src\app\shared\components\layout\Header\Header.styles.ts (.ts)
+172 -> projeto56300\src\app\shared\components\layout\Header\Header.tsx (.tsx)
+173 -> projeto56300\src\app\shared\components\layout\Header\index.ts (.ts)
+174 -> projeto56300\src\app\shared\components\layout\index.ts (.ts)
+175 -> projeto56300\src\app\shared\components\ui
+176 -> projeto56300\src\app\shared\components\ui\Button
+177 -> projeto56300\src\app\shared\components\ui\Button\Button.styles.ts (.ts)
+178 -> projeto56300\src\app\shared\components\ui\Button\Button.tsx (.tsx)
+179 -> projeto56300\src\app\shared\components\ui\Button\index.ts (.ts)
+180 -> projeto56300\src\app\shared\components\ui\Input
+181 -> projeto56300\src\app\shared\components\ui\Input\index.ts (.ts)
+182 -> projeto56300\src\app\shared\components\ui\Input\Input.styles.ts (.ts)
+183 -> projeto56300\src\app\shared\components\ui\Input\Input.tsx (.tsx)
+184 -> projeto56300\src\app\shared\components\ui\Loading
+185 -> projeto56300\src\app\shared\components\ui\Loading\index. ts (. ts)
+186 -> projeto56300\src\app\shared\components\ui\Loading\Loading.styles.ts (.ts)
+187 -> projeto56300\src\app\shared\components\ui\Loading\Loading.tsx (.tsx)
+188 -> projeto56300\src\app\shared\components\ui\Modal
+189 -> projeto56300\src\app\shared\components\ui\Modal\index.ts (.ts)
+190 -> projeto56300\src\app\shared\components\ui\Modal\Modal.styles.ts (.ts)
+191 -> projeto56300\src\app\shared\components\ui\Modal\Modal.tsx (.tsx)
+192 -> projeto56300\src\app\shared\components\ui\index. ts (. ts)
+193 -> projeto56300\src\app\shared\components\index.ts (.ts)
+194 -> projeto56300\src\app\shared\hooks
+195 -> projeto56300\src\app\shared\hooks\index.ts (.ts)
+196 -> projeto56300\src\app\shared\hooks\useDebounce.ts (.ts)
+197 -> projeto56300\src\app\shared\hooks\useForm.ts (.ts)
+198 -> projeto56300\src\app\shared\hooks\useKeyboard.ts (.ts)
+199 -> projeto56300\src\app\shared\utils
+200 -> projeto56300\src\app\shared\utils\formatters
+201 -> projeto56300\src\app\shared\utils\formatters\currency.ts (.ts)
+202 -> projeto56300\src\app\shared\utils\formatters\date.ts (.ts)
+203 -> projeto56300\src\app\shared\utils\formatters\index.ts (.ts)
+204 -> projeto56300\src\app\shared\utils\validation
+205 -> projeto56300\src\app\shared\utils\validation\index.ts (.ts)
+206 -> projeto56300\src\app\shared\utils\validation\rules. ts (. ts)
+207 -> projeto56300\src\app\shared\utils\validation\schemas.ts (.ts)
+208 -> projeto56300\src\app\shared\utils\index.ts (.ts)
+209 -> projeto56300\src\ios [ignorado]
+210 -> projeto56300\src\node_modules [ignorado]
+211 -> projeto56300\src\__tests__ [ignorado]
+212 -> projeto56300\src\app.json (.json)
+213 -> projeto56300\src\App.tsx (.tsx)
+214 -> projeto56300\src\index.js (.js)
+215 -> projeto56300\src\package.json (.json)
+216 -> projeto56300\src\tsconfig.json (.json)
