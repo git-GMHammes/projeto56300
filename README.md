@@ -178,6 +178,16 @@ Antes de começar, certifique-se de ter os seguintes requisitos instalados:
 - Node.js (versão 16 ou superior)
 - Git
 
+### React Native CLI (OBRIGATÓRIO)
+
+```powershell
+# Instalar CLI do React Native globalmente
+npm install -g @react-native-community/cli
+
+# Verificar instalação
+npx react-native --version
+```
+
 ### Android Development Environment
 
 #### 1. Android Studio
@@ -230,7 +240,19 @@ cd C:\Users\[SEU_USUARIO]\AppData\Local\Android\Sdk
 # Em seguida, reinstalar o pacote pelo Android Studio
 ```
 
-### Passo 3: Clonar/Configurar o Repositório
+### Passo 3: Instalar Dependências Obrigatórias
+
+#### Instalar React Native CLI Globalmente (OBRIGATÓRIO)
+
+```powershell
+# Instalar CLI globalmente - SEM ISSO NADA FUNCIONA!
+npm install -g @react-native-community/cli
+
+# Verificar se foi instalado corretamente
+npx react-native --version
+```
+
+### Passo 4: Clonar/Configurar o Repositório
 
 #### Se o repositório JÁ EXISTE:
 
@@ -252,6 +274,28 @@ npm install
 ```
 
 ## 🚀 Executando o Projeto
+
+### ⚠️ ANTES DE TUDO: Verificar Instalações
+
+```powershell
+# Verificar se tudo está instalado
+node --version          # Deve mostrar v16+
+npm --version           # Deve funcionar
+npx react-native --version  # DEVE FUNCIONAR - se não, instale a CLI global
+java -version           # Deve mostrar Java 17
+adb devices            # Deve mostrar emulador conectado
+```
+
+### 🔧 Se `npx react-native --version` não funcionar:
+
+```powershell
+# Instalar CLI globalmente (OBRIGATÓRIO)
+npm install -g @react-native-community/cli
+
+# E também localmente no projeto
+cd C:\laragon\www\mobile\react\projeto56300\src
+npm install --save-dev @react-native-community/cli
+```
 
 ### Para Novo Desenvolvimento
 
@@ -468,6 +512,38 @@ git add .
 Remove-Item src/node_modules -Recurse -Force -ErrorAction SilentlyContinue
 ```
 
+### Problemas com CLI
+
+#### 1. Erro "react-native depends on @react-native-community/cli"
+
+```powershell
+# Solução 1: Instalar CLI globalmente
+npm install -g @react-native-community/cli
+
+# Solução 2: Instalar CLI localmente no projeto
+npm install --save-dev @react-native-community/cli
+
+# Solução 3: Reinstalar tudo
+Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
+npm install -g @react-native-community/cli
+npm install
+```
+
+#### 2. CLI instalada mas comandos não funcionam
+
+```powershell
+# Limpar cache npm
+npm cache clean --force
+
+# Reinstalar CLI
+npm uninstall -g @react-native-community/cli
+npm install -g @react-native-community/cli
+
+# Verificar instalação
+npx react-native --version
+```
+
 ### Problemas Comuns de Execução
 
 #### 1. Emulador não conecta
@@ -576,6 +652,16 @@ Se você vai contribuir com este projeto:
 
 ## 🔥 RESUMO RÁPIDO - Cola do Desenvolvedor
 
+### ✅ PRIMEIRA VEZ - Instalação Obrigatória:
+
+```powershell
+# ANTES DE TUDO - instalar CLI globalmente
+npm install -g @react-native-community/cli
+
+# Verificar se funcionou
+npx react-native --version
+```
+
 ### ✅ SEMPRE faça isso ao criar projeto React Native:
 
 ```powershell
@@ -584,6 +670,8 @@ cd src
 Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
 Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
+npm install
+npm install --save-dev @react-native-community/cli
 cd ..
 # Configure .gitignore
 # Agora pode fazer git add . e commit
@@ -594,7 +682,8 @@ cd ..
 ```powershell
 git clone [URL]
 cd projeto/src
-npm install  # OBRIGATÓRIO
+npm install
+npm install --save-dev @react-native-community/cli  # Se der erro de CLI
 npx react-native start
 # Em outro terminal: npx react-native run-android
 ```
