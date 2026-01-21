@@ -1,0 +1,158 @@
+// -------------------------
+// Comandos para Instalação
+// -------------------------
+
+# Passo 1: Instalar Ferramentas do Android SDK
+Certifique-se de que as seguintes ferramentas estão instaladas no Android Studio:
+- Android SDK Build-Tools
+- Android SDK Command-line Tools
+- Android Emulator
+- Android Emulator hypervisor driver
+- Intel x86 Emulator Accelerator (HAXM installer)
+- Android SDK Platform-Tools
+
+# Passo 2: Corrigir Erro na Instalação do Android SDK Platform-Tools
+Se houver falha na instalação:
+
+Comando:
+cd C:\Users\Habilidade.Com\AppData\Local\Android\Sdk
+
+Instrução:
+Exclua a pasta chamada **Platform-Tools** completamente e tente reinstalar o pacote pelo **Android Studio**.
+
+# Passo 3: Baixar e Instalar JDK 17
+Link: https://adoptium.net/pt-BR/temurin/releases?version=17&os=any&arch=any
+
+Instruções:
+1. Instale o Eclipse Temurin JDK 17 LTS.
+2. Configure as variáveis de ambiente:
+   - **JAVA_HOME** apontando para o diretório do JDK instalado.
+   - Adicione `%JAVA_HOME%\bin` ao **PATH**.
+
+Comando para verificar:
+javac -version
+
+// ---------------------------
+// Comandos para Novo Projeto
+// ---------------------------
+
+# Passo 1: Criar um novo projeto React Native
+Comando:
+npx @react-native-community/cli init src
+
+# Passo 2: Entrar na pasta do projeto criado
+Comando:
+
+cd src
+
+# Passo 3: Abrir o Emulador do Android Studio
+
+# Passo 4: Iniciar o servidor (Metro Bundler)
+Comando:
+npx react-native start
+
+# Passo 5: Rodar o aplicativo no emulador
+Comando:
+npx react-native run-android
+
+# Passo 6: Verificar se o emulador está conectado
+Comando:
+adb devices
+
+Saída esperada:
+emulator-5554   device
+
+// -----------------------------------
+// Comandos para um Projeto Existente
+// -----------------------------------
+
+# Passo 1: Acessar a pasta do projeto existente
+Comando:
+cd C:\laragon\www\teste_native\src
+
+# Passo 2: Iniciar o servidor (Metro Bundler)
+Comando:
+npx react-native start
+
+# Passo 3: Rodar o aplicativo no emulador
+Comando:
+npx react-native run-android
+
+# Passo 4: Verificar se o emulador está conectado
+Comando:
+adb devices
+
+Saída esperada:
+emulator-5554   device
+
+// ----------------------------------------------
+// Arquivos e Telas que Devem Permanecer Abertos
+// ----------------------------------------------
+
+1. Terminais do Metro Bundler (`npx react-native start`).
+2. Terminais de execução (`npx react-native run-android`).
+3. React Native DevTools (para monitorar e depurar o app).
+4. Emulador Android (rodando o app).
+
+// -----------------------------
+// Arquivo Principal do Projeto
+// -----------------------------
+
+Arquivo: App.tsx
+
+Descrição:
+Esse arquivo puxa o conteúdo principal do aplicativo. Você deve modificá-lo para alterar a interface ou funcionalidades.
+
+// -------------------------------
+// Criar uma Tela com "Olá Mundo"
+// -------------------------------
+
+Instruções:
+Edite o arquivo **App.tsx** com o seguinte código:
+
+Código:
+
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+
+const App = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Olá Mundo!</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  text: {
+    fontSize: 24,
+    color: '#333',
+  },
+});
+
+export default App;
+
+// -----------------
+// Gerar um APK
+// -----------------
+
+# Passo 1: Acessar a pasta android do projeto
+Comando:
+cd android
+
+# Passo 2: Executar o comando para gerar APK
+Comando:
+./gradlew assembleRelease
+
+# Passo 3: Encontrar o APK gerado
+Localização:
+src/android/app/build/outputs/apk/release/app-release.apk
+
+Descrição:
+Transfira o APK para um dispositivo físico e instale.
