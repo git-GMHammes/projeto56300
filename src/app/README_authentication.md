@@ -122,17 +122,22 @@ export const apiClient = new ApiClient();
 **Arquivo:** `src/app/modules/authentication/services/authApi.ts`
 
 ```typescript
-import { apiClient } from '../../../core/api/client';
 import { API_CONFIG } from '../../../core/config/constants';
-import { ApiResponse } from '../../../core/types/api';
-import { LoginRequest, LoginResponse } from '../types/auth';
 
 export const authApi = {
-  async login(credentials: LoginRequest): Promise<ApiResponse<LoginResponse>> {
-    return await apiClient.post<ApiResponse<LoginResponse>>(
-      API_CONFIG.ENDPOINTS.LOGIN,
-      credentials,
+  async login(user: string, password: string) {
+    const response = await fetch(
+      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LOGIN}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user, password }),
+      },
     );
+
+    return await response.json();
   },
 };
 ```
@@ -244,7 +249,10 @@ export const useAuth = () => {
     try {
       dispatch(loginStart());
 
-      const response = await authApi.login(credentials);
+      const response = await authApi.login(
+        credentials.user,
+        credentials.password,
+      );
 
       if (response.status === 'success') {
         // Salva token e usuário
@@ -268,8 +276,9 @@ export const useAuth = () => {
         dispatch(loginFailure(errorMessage));
         return { success: false, error: errorMessage };
       }
+      // eslint-disable-next-line no-catch-shadow, @typescript-eslint/no-shadow
     } catch (error) {
-      const errorMessage = 'Erro de conexão. Tente novamente.';
+      const errorMessage = `Erro de conexão: ${error}. Tente novamente.`;
       dispatch(loginFailure(errorMessage));
       return { success: false, error: errorMessage };
     }
@@ -430,7 +439,7 @@ export { Loading } from './Loading';
 **Arquivo:** `src/app/shared/components/ui/Loading/index.ts`
 
 ```typescript
-export { Loading } from './Loading';
+// Arquivo: src\app\README.md
 ```
 
 ## Funcionalidades Implementadas

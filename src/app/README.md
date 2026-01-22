@@ -499,3 +499,21 @@ export default function App() {
   return <LoginScreen />;
 }
 ```
+
+---
+
+# COmando para regressar ao projeto
+
+Abra dois Prompts
+
+### Prompt 1:
+
+```
+npx react-native start --reset-cache
+```
+
+### Prompt 2:
+
+```
+npx react-native run-android
+```
