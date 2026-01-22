@@ -16,7 +16,8 @@ POST https://www/codeigniter56300/src/public/api/v1/user-management/login
 
 **Arquivo:** `src/app/core/types/api.ts`
 
-```typescript
+```
+typescript
 export interface ApiResponse<T = any> {
   http_code: number;
   status: 'success' | 'error';
