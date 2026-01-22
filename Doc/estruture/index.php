@@ -46,7 +46,8 @@ $IGNORE_DIRS = [
     '__tests__',
     'android',
     'ios',
-    'node_modules'
+    'node_modules',
+    // 'modules'
 ];
 
 $IGNORE_EXTS = [

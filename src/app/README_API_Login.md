@@ -109,7 +109,7 @@ class ApiClient {
       const result = await response.json();
       return result;
     } catch (error) {
-      throw new Error('Erro de conexão');
+      throw new Error(`Erro de conexão ${error}`);
     }
   }
 }
