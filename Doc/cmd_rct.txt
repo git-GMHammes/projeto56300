@@ -1,0 +1,12 @@
+Comando 1:
+
+npx react-native start
+ 
+---
+
+Comandos 2:
+
+npx react-native run-android
+ 
+adb devices
+ 
