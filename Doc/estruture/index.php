@@ -47,7 +47,7 @@ $IGNORE_DIRS = [
     'android',
     'ios',
     'node_modules',
-    // 'modules'
+    'mules'
 ];
 
 $IGNORE_EXTS = [
