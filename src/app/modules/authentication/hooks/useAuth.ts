@@ -14,40 +14,73 @@ export const useAuth = () => {
     try {
       dispatch(loginStart());
 
-      const response = await authApi.login(credentials.user, credentials.password);
+      const response = await authApi.login(credentials);
 
       if (response.status === 'success') {
+        // Garantir que data tem a estrutura correta
+        const loginData = response.data as {
+          user: {
+            id: string;
+            user: string;
+            last_login: string;
+            created_at: string;
+            updated_at: string;
+            deleted_at: string | null;
+          };
+          token: string;
+        };
+
         // Salva token e usuário
-        await tokenService.saveToken(response.data.token);
-        await tokenService.saveUser(response.data.user);
+        await tokenService.saveToken(loginData.token);
+        await tokenService.saveUser(loginData.user);
 
         dispatch(
           loginSuccess({
-            user: response.data.user,
-            token: response.data.token,
+            user: loginData.user,
+            token: loginData.token,
           }),
         );
 
         return { success: true };
       } else {
         // Trata erros da API
-        const errorMessage = response.data?.validation
-          ? (Object.values(response.data.validation)[0] as string)
-          : response.message;
+        let errorMessage = response.message;
+
+        // Se há erros de validação, pega o primeiro
+        if (response.data && typeof response.data === 'object' && 'validation' in response.data) {
+          const validationData = response.data as { validation: Record<string, string> };
+          const firstValidationError = Object.values(validationData.validation)[0];
+          if (firstValidationError) {
+            errorMessage = firstValidationError;
+          }
+        }
 
         dispatch(loginFailure(errorMessage));
         return { success: false, error: errorMessage };
       }
     // eslint-disable-next-line no-catch-shadow, @typescript-eslint/no-shadow
     } catch (error) {
-      const errorMessage = `Erro de conexão: ${error}. Tente novamente.`;
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Erro de conexão. Tente novamente.';
+
       dispatch(loginFailure(errorMessage));
-      return { success: false, error: errorMessage }
+      return { success: false, error: errorMessage };
     }
+  };
+
+  const logout = () => {
+    // Remove dados do storage
+    tokenService.removeToken();
+    tokenService.removeUser();
+
+    // Atualiza estado
+    dispatch({ type: 'auth/logout' });
   };
 
   return {
     login,
+    logout,
     isAuthenticated,
     user,
     loading,

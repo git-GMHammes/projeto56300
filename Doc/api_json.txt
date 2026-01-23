@@ -1,0 +1,92 @@
+{{www}}/api/v1/user-management/login
+
+www = https://habilidade.com/codeigniter56300/src/public
+
+Carga: 
+{
+    "user": "gmhammes1",
+    "password": "gmhammes1"
+}
+
+Sucesso: 
+{
+    "http_code": 200,
+    "status": "success",
+    "message": "Login realizado com sucesso.",
+    "api_data": {
+        "version": "1.0.0",
+        "date_time": "2026-01-22 20:06:25"
+    },
+    "data": {
+        "user": {
+            "id": "79",
+            "user": "gmhammes1",
+            "last_login": "2025-12-12 14:39:30",
+            "created_at": "2025-12-12 17:39:30",
+            "updated_at": "2025-12-12 17:39:30",
+            "deleted_at": null
+        },
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NjkxMTIzODUsIm5iZiI6MTc2OTExMjM4NSwiZXhwIjoxNzY5MTE1OTg1LCJzdWIiOiI3OSIsInVzZXIiOiJnbWhhbW1lczEifQ.9-cN1fif4CAziemtAPnPdT86yfqX45HDmuI3NKAC4dw"
+    },
+    "metadata": {
+        "url": {
+            "base_url": "https://habilidade.com/codeigniter56300/public/",
+            "get_uri": [
+                "api",
+                "v1",
+                "user-management",
+                "login"
+            ]
+        }
+    }
+}
+
+Erro:
+{
+    "http_code": 404,
+    "status": "error",
+    "message": "Credenciais inválidas. Verifique seus dados.",
+    "api_data": {
+        "version": "1.0.0",
+        "date_time": "2026-01-22 20:07:47"
+    },
+    "data": [],
+    "metadata": {
+        "url": {
+            "base_url": "https://habilidade.com/codeigniter56300/public/",
+            "get_uri": [
+                "api",
+                "v1",
+                "user-management",
+                "login"
+            ]
+        }
+    }
+}
+
+Campos Faltando:
+{
+    "http_code": 422,
+    "status": "error",
+    "message": "Dados de entrada inválidos.",
+    "api_data": {
+        "version": "1.0.0",
+        "date_time": "2026-01-22 20:08:05"
+    },
+    "data": {
+        "validation": {
+            "password": "O campo senha é obrigatório."
+        }
+    },
+    "metadata": {
+        "url": {
+            "base_url": "https://habilidade.com/codeigniter56300/public/",
+            "get_uri": [
+                "api",
+                "v1",
+                "user-management",
+                "login"
+            ]
+        }
+    }
+}

@@ -1,18 +1,30 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../../../core/styles/colors';
-import { spacing } from '../../../../core/styles/spacing';
-import { typography } from '../../../../core/styles/typography';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#f5f5f5',
     justifyContent: 'center',
+    padding: 20,
   },
   title: {
-    ...typography.h1,
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333333',
     textAlign: 'center',
-    marginBottom: spacing.xl,
-    color: colors.text,
+    marginBottom: 40,
+  },
+  formContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
 });

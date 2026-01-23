@@ -22,19 +22,32 @@ export const LoginForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const data = await authApi.login(user, password);
+      const response = await authApi.login({ user: user.trim(), password });
 
-      if (data.status === 'success') {
+      if (response.status === 'success') {
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
-        console.log('Token:', data.data.token);
+
+        if ('token' in response.data && 'user' in response.data) {
+          console.log('Token:', response.data.token);
+          console.log('User:', response.data.user);
+        }
       } else {
-        const errorMsg = data.data?.validation 
-          ? Object.values(data.data.validation)[0]
-          : data.message;
-        Alert.alert('Erro', errorMsg);
+        // Trata erros da API
+        let errorMessage = response.message;
+
+        // Se há erros de validação, pega o primeiro
+        if (response.data && typeof response.data === 'object' && 'validation' in response.data) {
+          const validationData = response.data as { validation: Record<string, string> };
+          const firstValidationError = Object.values(validationData.validation)[0];
+          if (firstValidationError) {
+            errorMessage = firstValidationError;
+          }
+        }
+
+        Alert.alert('Erro', errorMessage);
       }
     } catch (error) {
-      Alert.alert('Erro', `Falha na conexão ${error}`);
+      Alert.alert('Erro', `Falha na conexão: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -49,6 +62,8 @@ export const LoginForm: React.FC = () => {
         value={user}
         onChangeText={setUser}
         editable={!loading}
+        autoCapitalize="none"
+        autoCorrect={false}
       />
 
       <Text style={styles.label}>Senha</Text>
@@ -59,6 +74,8 @@ export const LoginForm: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
         editable={!loading}
+        autoCapitalize="none"
+        autoCorrect={false}
       />
 
       <TouchableOpacity 

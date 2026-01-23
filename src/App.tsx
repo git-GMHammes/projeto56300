@@ -1,6 +1,14 @@
 import React from 'react';
-import { LoginScreen } from './app/modules/authentication/screens/LoginScreen';
+import { Provider } from 'react-redux';
+import { store } from './src/app/core/store';
+import { LoginScreen } from './src/app/modules/authentication/screens/LoginScreen';
 
-export default function App() {
-  return <LoginScreen />;
-}
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <LoginScreen />
+    </Provider>
+  );
+};
+
+export default App;
