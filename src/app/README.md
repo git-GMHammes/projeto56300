@@ -502,7 +502,7 @@ export default function App() {
 
 ---
 
-# COmando para regressar ao projeto
+# Comando para regressar ao projeto
 
 Abra dois Prompts
 

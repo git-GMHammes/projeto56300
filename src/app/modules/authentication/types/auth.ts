@@ -1,3 +1,5 @@
+// Quem conecta? src\app\modules\authentication\store\authSlice.ts
+// src\app\modules\authentication\types\auth.ts
 export interface LoginRequest {
     user: string;
     password: string;

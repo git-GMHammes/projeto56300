@@ -675,3 +675,21 @@ npm install --save-dev @react-native-community/cli  # Se der erro de CLI
 npx react-native start
 # Em outro terminal: npx react-native run-android
 ```
+
+---
+
+# Comando para regressar ao projeto
+
+Abra dois Prompts
+
+### Prompt 1:
+
+```
+npx react-native start --reset-cache
+```
+
+### Prompt 2:
+
+```
+npx react-native run-android
+```
