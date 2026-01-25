@@ -1,12 +1,33 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { HomeScreen, AccountScreen, SettingsScreen, NotificationsScreen } from '../screens';
 import type { MainTabParamList } from '../../../core/navigation/types';
+import type { TabIconProps } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
+// Render functions para ícones (definidas fora para evitar re-criação)
+const renderHomeIcon = ({ color, size }: TabIconProps) => (
+  <Icon name="home-outline" size={size} color={color} />
+);
+
+const renderNotificationsIcon = ({ color, size }: TabIconProps) => (
+  <Icon name="notifications-outline" size={size} color={color} />
+);
+
+const renderSettingsIcon = ({ color, size }: TabIconProps) => (
+  <Icon name="settings-outline" size={size} color={color} />
+);
+
+const renderAccountIcon = ({ color, size }: TabIconProps) => (
+  <Icon name="person-outline" size={size} color={color} />
+);
+
 export const MainNavigator: React.FC = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -30,8 +51,8 @@ export const MainNavigator: React.FC = () => {
           backgroundColor: '#fff',
           borderTopWidth: 1,
           borderTopColor: '#E5E5EA',
-          height: 60,
-          paddingBottom: 8,
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom + 8,
           paddingTop: 8,
         },
         tabBarLabelStyle: {
@@ -45,9 +66,7 @@ export const MainNavigator: React.FC = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" size={size} color={color} />
-          ),
+          tabBarIcon: renderHomeIcon,
         }}
       />
       <Tab.Screen
@@ -55,9 +74,7 @@ export const MainNavigator: React.FC = () => {
         component={NotificationsScreen}
         options={{
           tabBarLabel: 'Notifications',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="notifications-outline" size={size} color={color} />
-          ),
+          tabBarIcon: renderNotificationsIcon,
         }}
       />
       <Tab.Screen
@@ -65,9 +82,7 @@ export const MainNavigator: React.FC = () => {
         component={SettingsScreen}
         options={{
           tabBarLabel: 'Settings',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="settings-outline" size={size} color={color} />
-          ),
+          tabBarIcon: renderSettingsIcon,
         }}
       />
       <Tab.Screen
@@ -75,9 +90,7 @@ export const MainNavigator: React.FC = () => {
         component={AccountScreen}
         options={{
           tabBarLabel: 'Account',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="person-outline" size={size} color={color} />
-          ),
+          tabBarIcon: renderAccountIcon,
         }}
       />
     </Tab.Navigator>

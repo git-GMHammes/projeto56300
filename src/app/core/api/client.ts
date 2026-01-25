@@ -5,7 +5,7 @@ class ApiClient {
   private baseURL = API_CONFIG.BASE_URL;
   private timeout = API_CONFIG.TIMEOUT;
 
-  async post<T>(endpoint: string, data: any): Promise<ResponseData> { // ✅ Retorna ResponseData
+  async post(endpoint: string, data: any): Promise<ResponseData> {
     const config: RequestConfig = {
       url: `${this.baseURL}${endpoint}`,
       method: 'POST',

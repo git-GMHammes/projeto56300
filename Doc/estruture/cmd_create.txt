@@ -186,12 +186,12 @@ if (!(Test-Path "app\modules\authentication\screens\LoginScreen\index.ts")) { Ne
 
 if (!(Test-Path "app\modules\authentication\screens\RegisterScreen")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens\RegisterScreen" -Force }
 if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.tsx" -Force }
-if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen. styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\RegisterScreen.styles.ts" -Force }
 if (!(Test-Path "app\modules\authentication\screens\RegisterScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\RegisterScreen\index.ts" -Force }
 
 if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen")) { New-Item -ItemType Directory -Path "app\modules\authentication\screens\ForgotPasswordScreen" -Force }
 if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.tsx")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.tsx" -Force }
-if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen. styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.styles.ts" -Force }
+if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.styles.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\ForgotPasswordScreen.styles.ts" -Force }
 if (!(Test-Path "app\modules\authentication\screens\ForgotPasswordScreen\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\ForgotPasswordScreen\index.ts" -Force }
 
 if (!(Test-Path "app\modules\authentication\screens\index.ts")) { New-Item -ItemType File -Path "app\modules\authentication\screens\index.ts" -Force }
@@ -238,7 +238,7 @@ if (!(Test-Path "app\modules\userProfile\utils")) { New-Item -ItemType Directory
 # Componentes userProfile
 if (!(Test-Path "app\modules\userProfile\components\ProfileHeader")) { New-Item -ItemType Directory -Path "app\modules\userProfile\components\ProfileHeader" -Force }
 if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.tsx")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.tsx" -Force }
-if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.styles.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader. styles.ts" -Force }
+if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.styles.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.styles.ts" -Force }
 if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.types.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\ProfileHeader.types.ts" -Force }
 if (!(Test-Path "app\modules\userProfile\components\ProfileHeader\index.ts")) { New-Item -ItemType File -Path "app\modules\userProfile\components\ProfileHeader\index.ts" -Force }
 
