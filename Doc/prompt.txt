@@ -1,0 +1,14 @@
+Elabore um prompt em JSON, ORGANOZADO, LIMPO e DETALHADO, utilizando os dados abaixo: 
+
+ALERTA 1: Primeiramente o JSON deve ALERTAR: Devolver um resumo com a lista de ações claras para a solução do JSON.
+ALERTA 2: SEMPRE SOLICITAR permissão para alteração.
+
+PROBLEMA: Campo data não reconhece valor da data no arquivo "Fabrica de data";
+
+"Fabrica de data": C:\laragon\www\php\loglab\detran\cakephp\diarias\app\webroot\js\sad\v1\form\field\filed_date.js
+
+Rota: http://localhost:56100/web/v1/pedido-diarias-view/update/76
+
+Imagem: em anexo.
+
+Quando clico no campo data e retiro o cursor para outra parte da tela o campo recongece o valor.
