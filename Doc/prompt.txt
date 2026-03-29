@@ -1,14 +1,104 @@
-Elabore um prompt em JSON, ORGANOZADO, LIMPO e DETALHADO, utilizando os dados abaixo: 
+Monte um prompt em formato JSON, DETALHADO, ORGANIZADO e LIMPO, Sobre o seguinte pedido:
 
-ALERTA 1: Primeiramente o JSON deve ALERTAR: Devolver um resumo com a lista de ações claras para a solução do JSON.
-ALERTA 2: SEMPRE SOLICITAR permissão para alteração.
 
-PROBLEMA: Campo data não reconhece valor da data no arquivo "Fabrica de data";
+```
+{
+  "projeto": {
+    "nome": "SaaS - Software como Serviço",
+    "contexto": "Hub de serviços para distribuiir soluções a multiplos clientes."
+  },
 
-"Fabrica de data": C:\laragon\www\php\loglab\detran\cakephp\diarias\app\webroot\js\sad\v1\form\field\filed_date.js
+ "comportamento": {
+    "_ordem": "Permissões → Qualidade → Limites",
+    "permissoes": {
+      "leitura": "Você tem permissão para ler e analisar qualquer arquivo do projeto.",
+      "analise": "Analise com calma e atenção antes de responder."
+    },
+    "qualidade": {
+      "caminhos_alterados": "Sempre exiba o caminho completo de todos os arquivos que serão alterados.",
+      "dependencias": "Se algo depender de arquivo ou pasta externa, informe os caminhos.",
+      "analise_global": "Análises globais somente se imprescindível para a tarefa."
+    },
+    "limites": {
+      "escopo": "Siga exatamente o solicitado. Para fazer algo além, pergunte antes.",
+      "autorizacao": "Antes de executar alterações, apresente o plano e aguarde aprovação."
+    }
+  },
 
-Rota: http://localhost:56100/web/v1/pedido-diarias-view/update/76
+  "padroes_tecnicos": {
+    "nomenclatura_modulos": {
+      "aviso": "Respeite o formato correto conforme o contexto de uso.",
+      "kebab-case": "nome-do-modulo",
+      "PascalCase": "NomeDoModulo",
+      "snake_case": "nome_do_modulo"
+    },
 
-Imagem: em anexo.
+    "rotas_api": {
+      "base": "/api/v1/{modulo}",
+      "endpoints": [
+        "POST   /find",
+        "GET    /get-grouped",
+        "GET    /get/{id}",
+        "GET    /get-all?page=1&limit=20",
+        "GET    /get-no-pagination",
+        "GET    /get-deleted/{id}",
+        "POST   /create",
+        "PUT    /update/{id}",
+        "DELETE /delete-soft/{id}",
+        "PATCH  /delete-restore/{id}",
+        "DELETE /delete-hard/{id}",
+        "DELETE /clear-deleted",
+        "DELETE /clear-deleted/{id}"
+      ]
+    }
+  },
 
-Quando clico no campo data e retiro o cursor para outra parte da tela o campo recongece o valor.
+  "tarefa": {
+    "instrucoes_gerais": {
+      "contexto": "Refatoração de interface de usuário (UI) no sistema Detran/LogLab.",
+      "objetivo": "Substituir símbolos e textos de paginação por Bootstrap Icons com comportamento responsivo.",
+      "tecnologias": [
+        "JavaScript Native/jQuery",
+        "CakePHP (webroot structure)",
+        "Bootstrap CSS",
+        "Bootstrap Icons"
+      ]
+    },
+    "arquivo_alvo": {
+      "caminho": "C:\\xampp\\htdocs\\php\\loglab\\detran\\cakephp\\diarias\\app\\webroot\\js\\sad\\v1\\core\\pagination_factory.js",
+      "funcao_principal": "Gerenciamento e renderização da factory de paginação dinâmica no frontend."
+    },
+    "configuracao_visual_responsiva": {
+      "comportamento_web": "Exibir ÍCONE + TEXTO (Ex: [Ícone] Próxima).",
+      "comportamento_mobile": "Exibir APENAS ÍCONE. O texto deve ser ocultado automaticamente em telas pequenas.",
+      "implementacao_sugerida": "Utilizar classes utilitárias do Bootstrap (ex: .d-none .d-md-inline) para envolver os rótulos de texto."
+    },
+    "requisitos_da_solicitacao": [
+      {
+        "item": "Mapeamento de Ícones",
+        "de_simbolo": ["<<", "<", ">", ">>"],
+        "para_bootstrap_icon": [
+          "bi-chevron-double-left",
+          "bi-chevron-left",
+          "bi-chevron-right",
+          "bi-chevron-double-right"
+        ]
+      },
+      {
+        "item": "Tratamento de Strings",
+        "palavras_alvo": ["Primeira", "Anterior", "Próxima", "Última"],
+        "acao": "Manter as palavras no código, mas garantir que fiquem invisíveis no mobile via CSS/Bootstrap Classes."
+      },
+      {
+        "item": "Estrutura de DOM",
+        "instrucao": "Manter estritamente as classes 'pagination', 'page-item' e 'page-link' para preservar a integridade do layout global do sistema."
+      }
+    ],
+    "output_esperado": {
+      "formato": "Código JavaScript (pagination_factory.js) refatorado e limpo.",
+      "detalhes_de_saida": "O código deve gerar as tags <i> para os ícones e <span> com classes de visibilidade para os textos."
+    }
+  }
+}
+```
+
