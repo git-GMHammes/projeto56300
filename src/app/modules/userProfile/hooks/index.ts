@@ -1,3 +1,0 @@
-export { useAvatarUpload } from './useAvatarUpload';
-export { useProfile } from './useProfile';
-export { useProfileUpdate } from './useProfileUpdate';

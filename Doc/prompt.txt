@@ -1,11 +1,31 @@
 Monte um prompt em formato JSON, DETALHADO, ORGANIZADO e LIMPO, Sobre o seguinte pedido:
 
+Tenho uma estrutura MUITO AMADORA em Codeigniter 4.6, ainda e preciso: 
+
+Revisar e analisar a arquitetura;
+Melhorar o fluxo com arquivos limpos e BASES com abstrações mais completas
+
+Arquivos: 
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Config\Routes.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Config\Routes\Api\v1\UserManagement\Routes.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Controllers\Api\V1\UserManagement\ResourceController.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Controllers\Api\V1\BaseResourceController.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Models\Api\V1\UserManagement\Table.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Request\Api\V1\UserManagement\CreateRequest.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Request\Api\V1\UserManagement\FindRequest.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Request\Api\V1\UserManagement\GetGroupedRequest.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Request\Api\V1\UserManagement\UpdateRequest.php
+-> C:\laragon\www\mobile\react\projeto56300\src\app\Service\Api\V1\UserManagement\Manager.php
+
+Complete o que for necessário e refatore o que não esta bom e amador. 
 
 ```
 {
   "projeto": {
     "nome": "SaaS - Software como Serviço",
     "contexto": "Hub de serviços para distribuiir soluções a multiplos clientes."
+    "pasta": "C:\laragon\www\mobile\react\projeto56300"
+    "camada": "BACKEND com CODEIGNITER 4.6"
   },
 
  "comportamento": {
@@ -19,6 +39,7 @@ Monte um prompt em formato JSON, DETALHADO, ORGANIZADO e LIMPO, Sobre o seguinte
       "dependencias": "Se algo depender de arquivo ou pasta externa, informe os caminhos.",
       "analise_global": "Análises globais somente se imprescindível para a tarefa."
     },
+
     "limites": {
       "escopo": "Siga exatamente o solicitado. Para fazer algo além, pergunte antes.",
       "autorizacao": "Antes de executar alterações, apresente o plano e aguarde aprovação."
@@ -28,26 +49,32 @@ Monte um prompt em formato JSON, DETALHADO, ORGANIZADO e LIMPO, Sobre o seguinte
   "padroes_tecnicos": {
     "nomenclatura_modulos": {
       "aviso": "Respeite o formato correto conforme o contexto de uso.",
+      "versao_pastas": "v1, v2, v3",
       "kebab-case": "nome-do-modulo",
       "PascalCase": "NomeDoModulo",
       "snake_case": "nome_do_modulo"
+      "idioma_arquivos": "inglês"
+      "idioma_comentarios": "português"
     },
 
     "rotas_api": {
-      "base": "/api/v1/{modulo}",
+      "token_jwt": "vindo_do_login",
+      "versao_api": "v1",
+      "base": "/api/{versao_api}/{modulo}",
       "endpoints": [
-        "POST   /find",
-        "GET    /get-grouped",
+        "POST   /find?page=1&limit=20&sort=id&order=desc",
+        "GET    /get-grouped?page=1&limit=20&sort=id&order=desc",
         "GET    /get/{id}",
-        "GET    /get-all?page=1&limit=20",
-        "GET    /get-no-pagination",
+        "GET    /get-all?page=1&limit=20&sort=id&order=desc",
+        "GET    /get-no-pagination?sort=id&order=desc",
+        "GET    /get-deleted-all?page=1&limit=20&sort=id&order=desc",
         "GET    /get-deleted/{id}",
         "POST   /create",
         "PUT    /update/{id}",
         "DELETE /delete-soft/{id}",
         "PATCH  /delete-restore/{id}",
         "DELETE /delete-hard/{id}",
-        "DELETE /clear-deleted",
+        "DELETE /clear-deleted-all",
         "DELETE /clear-deleted/{id}"
       ]
     }
@@ -55,50 +82,75 @@ Monte um prompt em formato JSON, DETALHADO, ORGANIZADO e LIMPO, Sobre o seguinte
 
   "tarefa": {
     "instrucoes_gerais": {
-      "contexto": "Refatoração de interface de usuário (UI) no sistema Detran/LogLab.",
-      "objetivo": "Substituir símbolos e textos de paginação por Bootstrap Icons com comportamento responsivo.",
-      "tecnologias": [
-        "JavaScript Native/jQuery",
-        "CakePHP (webroot structure)",
-        "Bootstrap CSS",
-        "Bootstrap Icons"
+      "contexto": "Refatoração de arquitetura amadora em CodeIgniter 4.6 para uma API RESTful de alto nível.",
+      "objetivo_principal": "Migrar de uma estrutura básica para uma arquitetura profissional, escalável e com abstrações sólidas.",
+      "diretrizes_de_design": [
+        "SOLID Principles",
+        "DRY (Don't Repeat Yourself)",
+        "Dependency Injection",
+        "Repository/Service Pattern",
+        "Standardized API Responses (JSON)"
       ]
     },
-    "arquivo_alvo": {
-      "caminho": "C:\\xampp\\htdocs\\php\\loglab\\detran\\cakephp\\diarias\\app\\webroot\\js\\sad\\v1\\core\\pagination_factory.js",
-      "funcao_principal": "Gerenciamento e renderização da factory de paginação dinâmica no frontend."
+    "estrutura_de_arquivos_alvo": {
+      "configuracao": [
+        "Config/Routes.php",
+        "Config/Routes/Api/v1/UserManagement/Routes.php"
+      ],
+      "controladores": [
+        "Controllers/Api/V1/BaseResourceController.php",
+        "Controllers/Api/V1/UserManagement/ResourceController.php"
+      ],
+      "camada_de_dados": [
+        "Models/Api/V1/UserManagement/Table.php",
+        "Request/Api/V1/UserManagement/CreateRequest.php",
+        "Request/Api/V1/UserManagement/FindRequest.php",
+        "Request/Api/V1/UserManagement/GetGroupedRequest.php",
+        "Request/Api/V1/UserManagement/UpdateRequest.php"
+      ],
+      "negocio": [
+        "Service/Api/V1/UserManagement/Manager.php"
+      ]
     },
-    "configuracao_visual_responsiva": {
-      "comportamento_web": "Exibir ÍCONE + TEXTO (Ex: [Ícone] Próxima).",
-      "comportamento_mobile": "Exibir APENAS ÍCONE. O texto deve ser ocultado automaticamente em telas pequenas.",
-      "implementacao_sugerida": "Utilizar classes utilitárias do Bootstrap (ex: .d-none .d-md-inline) para envolver os rótulos de texto."
+    "requisitos_da_refatoracao": {
+      "abstracao_base": {
+        "BaseResourceController": "Criar uma base robusta que gerencie automaticamente respostas JSON, logs de erro e validação de Requests.",
+        "BaseService": "Implementar uma classe base para serviços que facilite a manipulação de transações de banco de dados."
+      },
+      "fluxo_de_dados": {
+        "validacao": "Refatorar as classes 'Request' para utilizarem o Validation do CI4 de forma desacoplada do Controller.",
+        "servicos": "O 'Manager.php' deve conter toda a regra de negócio, isolando o Controller de chamadas diretas ao Model."
+      },
+      "roteamento": "Organizar as rotas para utilizar Grouping e Namespacing adequados, garantindo versionamento (v1) limpo."
     },
-    "requisitos_da_solicitacao": [
-      {
-        "item": "Mapeamento de Ícones",
-        "de_simbolo": ["<<", "<", ">", ">>"],
-        "para_bootstrap_icon": [
-          "bi-chevron-double-left",
-          "bi-chevron-left",
-          "bi-chevron-right",
-          "bi-chevron-double-right"
-        ]
-      },
-      {
-        "item": "Tratamento de Strings",
-        "palavras_alvo": ["Primeira", "Anterior", "Próxima", "Última"],
-        "acao": "Manter as palavras no código, mas garantir que fiquem invisíveis no mobile via CSS/Bootstrap Classes."
-      },
-      {
-        "item": "Estrutura de DOM",
-        "instrucao": "Manter estritamente as classes 'pagination', 'page-item' e 'page-link' para preservar a integridade do layout global do sistema."
-      }
-    ],
     "output_esperado": {
-      "formato": "Código JavaScript (pagination_factory.js) refatorado e limpo.",
-      "detalhes_de_saida": "O código deve gerar as tags <i> para os ícones e <span> com classes de visibilidade para os textos."
-    }
+      "analise_critica": "Breve explicação técnica do que estava 'amador' e como a nova estrutura resolve esses problemas.",
+      "codigo_refatorado": "Prover o código completo e otimizado para cada um dos arquivos listados.",
+      "sugestao_de_melhoria": "Indicar se há necessidade de DTOs (Data Transfer Objects) ou Interfaces para maior desacoplamento."
+    },
+    "input_do_usuario": "Aguardando o conteúdo atual dos arquivos para iniciar a análise e refatoração."
   }
 }
+
+Tabela Alvo:
+
+CREATE TABLE `user_management` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`user` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`password` VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`last_login` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`deleted_at` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`) USING BTREE,
+	UNIQUE INDEX `user` (`user`) USING BTREE
+)
+COMMENT='SELECT \r\n    COLUMN_NAME as \'Campo\'\r\nFROM \r\n    INFORMATION_SCHEMA.COLUMNS\r\nWHERE \r\n    TABLE_SCHEMA = DATABASE()\r\n    AND TABLE_NAME = \'user_management\'\r\nORDER BY \r\n    IS_NULLABLE ASC, COLUMN_DEFAULT ASC, COLUMN_KEY ASC;\r\n    \r\n    --\r\n    \r\n    SELECT \r\n    COLUMN_NAME as \'Campo\',\r\n    COLUMN_TYPE as \'Tipo\',\r\n    IS_NULLABLE as \'Nulo\',\r\n    COLUMN_KEY as \'Chave\',\r\n    COLUMN_DEFAULT as \'Padrão\'\r\nFROM \r\n    INFORMATION_SCHEMA.COLUMNS\r\nWHERE \r\n    TABLE_SCHEMA = DATABASE()\r\n    AND TABLE_NAME = \'user_management\'\r\nORDER BY \r\n    IS_NULLABLE ASC, COLUMN_DEFAULT ASC, COLUMN_KEY ASC;\r\n    \r\n    --\r\n    \r\n    '
+COLLATE='utf8mb4_unicode_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=121
+;
+
+
 ```
 

@@ -1,695 +1,1647 @@
-# Projeto 56300 - React Native
+# 📐 Arquitetura do Sistema - Documentação Técnica
 
-## 📱 Sobre o Projeto
+> **Projeto**: API REST Multi-tenant com Frontend Multi-plataforma  
+> **Backend**: CodeIgniter 4  
+> **Frontend**: Flutter Web/Mobile + React Web  
+> **Padrão**: MVC + Service Layer + Repository Pattern  
+> **Data**: Dezembro 2025
 
-Este é um projeto React Native desenvolvido para [descrever brevemente o objetivo do projeto]. O projeto está localizado em `C:\laragon\www\mobile\react\projeto56300` e utiliza as melhores práticas de desenvolvimento mobile.
+---
 
-## ⚠️ IMPORTANTE: Configuração do Git
+## 📋 Índice
 
-### 🔄 Cenário 1: Adicionando React Native a um Repositório Git Existente
+1. [Visão Geral da Arquitetura](#visão-geral-da-arquitetura)
+2. [Backend - API CodeIgniter 4](#backend---api-codeigniter-4)
+3. [Frontend Flutter](#frontend-flutter)
+4. [Frontend React](#frontend-react)
+5. [Fluxos de Dados](#fluxos-de-dados)
+6. [Code Review e Boas Práticas](#code-review-e-boas-práticas)
+7. [Segurança e Autenticação](#segurança-e-autenticação)
+8. [Conclusão](#conclusão)
 
-Se você já possui um repositório Git e quer adicionar um projeto React Native, **SEMPRE** execute a limpeza antes de fazer commit:
+---
 
-```powershell
-# 1. Navegue para a pasta do projeto React Native
-cd C:\laragon\www\mobile\react\projeto56300\src
+## 🏗️ Visão Geral da Arquitetura
 
-# 2. OBRIGATÓRIO: Remova arquivos que conflitam com Git
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
-
-# 3. Volte para a raiz do projeto
-cd ..
-
-# 4. Configure .gitignore (se não existir)
-# Veja seção "Configuração do .gitignore" abaixo
-
-# 5. Agora pode fazer commit normalmente
-git add .
-git status
-git commit -m "Adicionar projeto React Native"
-git push origin main
-```
-
-### 🆕 Cenário 2: Criando um Novo Repositório Git
-
-Se você ainda não tem um repositório Git configurado:
-
-```powershell
-# 1. Navegue para a pasta raiz do projeto
-cd C:\laragon\www\mobile\react\projeto56300
-
-# 2. Inicialize um novo repositório Git
-git init
-
-# 3. Configure .gitignore (veja seção abaixo)
-
-# 4. Limpe os arquivos conflitantes da pasta src
-cd src
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
-cd ..
-
-# 5. Adicione origem remota (substitua pela URL do seu repositório)
-git remote add origin https://github.com/seu-usuario/seu-repositorio.git
-
-# 6. Faça o primeiro commit
-git add .
-git commit -m "Initial commit: Projeto React Native"
-
-# 7. Envie para o repositório remoto
-git branch -M main
-git push -u origin main
-```
-
-### 📝 Configuração do .gitignore
-
-**SEMPRE** configure um `.gitignore` na raiz do projeto antes de fazer qualquer commit:
-
-```gitignore
-# === REACT NATIVE ESPECÍFICO ===
-
-# Dependências Node.js
-node_modules/
-*/node_modules/
-src/node_modules/
-
-# Lock files (podem ser incluídos ou não, dependendo da estratégia da equipe)
-package-lock.json
-yarn.lock
-**/package-lock.json
-**/yarn.lock
-
-# Build e Cache
-src/android/app/build/
-src/ios/build/
-src/.bundle/
-**/.bundle/
-
-# Metro bundler cache
-.metro-health-check*
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Arquivos temporários
-tmp/
-temp/
-
-# === ANDROID ===
-src/android/.gradle/
-src/android/local.properties
-src/android/app/build/
-src/android/gradle.properties
-src/android/gradlew
-src/android/gradlew.bat
-
-# === iOS ===
-src/ios/build/
-src/ios/*.xcworkspace
-src/ios/Pods/
-
-# === DESENVOLVIMENTO ===
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# === SISTEMA OPERACIONAL ===
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Linux
-*~
-```
-
-## 🔄 Por que essa Limpeza é Necessária?
-
-### Problema: Repositórios Aninhados
-
-Quando você executa `npx @react-native-community/cli init src`, o comando cria:
-
-- **Um novo repositório Git** dentro de `src/` (pasta `.git`)
-- Isso resulta em **repositório dentro de repositório**
-- O Git principal não consegue gerenciar adequadamente essa estrutura
-
-### Problema: Arquivos Gigantes
-
-- **node_modules/**: Pasta com milhares de arquivos (50MB+)
-- **package-lock.json**: Arquivo que pode causar conflitos
-- Esses arquivos devem ser **regenerados** em cada ambiente, não versionados
-
-### Solução: Estrutura Limpa
-
-Após a limpeza, você terá:
+### Arquitetura Geral do Sistema
 
 ```
-projeto56300/
-├── .gitignore           # Configurado corretamente
-├── README.md           # Este arquivo
-└── src/                # Projeto React Native limpo
-    ├── App.tsx         # Código-fonte
-    ├── package.json    # Dependências (este SIM é versionado)
-    ├── android/        # Configurações nativas
-    ├── ios/            # Configurações nativas
-    └── ...             # Outros arquivos de código
+┌────────────────────────────────────────────────────────────────┐
+│                        CAMADA DE CLIENTES                      │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  ┌──────────────────────┐         ┌──────────────────────┐     │
+│  │   Flutter Web/Mobile │         │     React Web        │     │
+│  │   ┌──────────────┐   │         │   ┌──────────────┐   │     │
+│  │   │ Presentation │   │         │   │  Components  │   │     │
+│  │   │ Application  │   │         │   │    Hooks     │   │     │
+│  │   │    Domain    │   │         │   │   Contexts   │   │     │
+│  │   │     Data     │   │         │   │   Services   │   │     │
+│  │   └──────────────┘   │         │   └──────────────┘   │     │
+│  └──────────────────────┘         └──────────────────────┘     │
+│           │                                   │                │
+│           └───────────────┬───────────────────┘                │
+│                           │                                    │
+└───────────────────────────┼────────────────────────────────────┘
+                            │
+                    ┌───────▼────────┐
+                    │   CORS/HTTPS   │
+                    └───────┬────────┘
+                            │
+┌───────────────────────────▼──────────────────────────────────────┐
+│                    CAMADA DE API REST                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │              CodeIgniter 4 Framework (v4.x)                │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌─────────────────┐     ┌───────────────────┐                   │
+│  │   AuthFilter    │───▶ │ LogRequestFilter │                    │
+│  └─────────────────┘     └───────────────────┘                   │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │                    CONTROLLERS (v1)                        │  │
+│  │  • UserManagement/AuthController                           │  │
+│  │  • UserManagement/ManagerController                        │  │
+│  │  • UserCustomer/ManagerController                          │  │
+│  │  • UserCustomerFile/ManagerController                      │  │
+│  │  • UserCustomerManagement/ManagerController                │  │
+│  │  • Log/ManagerController                                   │  │
+│  └────────────────────┬───────────────────────────────────────┘  │
+│                       │                                          │
+│  ┌────────────────────▼───────────────────────────────────────┐  │
+│  │                    REQUESTS (v1)                           │  │
+│  │  • LoginRequest, StoreRequest, ModifyRequest               │  │
+│  │  • SearchRequest (Validação + Regras de Negócio)           │  │
+│  └────────────────────┬───────────────────────────────────────┘  │
+│                       │                                          │
+│  ┌────────────────────▼───────────────────────────────────────┐  │
+│  │                    SERVICES (v1)                           │  │
+│  │  • AuthenticationService (JWT + Password)                  │  │
+│  │  • TokenService (Geração/Validação JWT)                    │  │
+│  │  • ManagerService (CRUD + Lógica de Negócio)               │  │
+│  │  • UploadService (Gerenciamento de Arquivos)               │  │
+│  └────────────────────┬───────────────────────────────────────┘  │
+│                       │                                          │
+│  ┌────────────────────▼───────────────────────────────────────┐  │
+│  │                     MODELS (v1)                            │  │
+│  │  • BaseResourceModel (CRUD Base + Soft Delete)             │  │
+│  │  • UserManagement/ResourceModel                            │  │
+│  │  • UserCustomer/ResourceModel + FileModel                  │  │
+│  │  • Log/ResourceModel                                       │  │
+│  └────────────────────┬───────────────────────────────────────┘  │
+│                       │                                          │
+└───────────────────────┼──────────────────────────────────────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+┌───────▼──────┐ ┌──────▼─────┐ ┌──────▼─────┐
+│   Database   │ │  Database  │ │  Database  │
+│   Primary    │ │  Secondary │ │   Logs     │
+│   (Users)    │ │ (Customers)│ │  (Audit)   │
+└──────────────┘ └────────────┘ └────────────┘
 ```
 
-## 📋 Pré-requisitos
+---
 
-Antes de começar, certifique-se de ter os seguintes requisitos instalados:
+## 🔧 Backend - API CodeIgniter 4
 
-### Sistema Operacional
+### 1. Estrutura de Camadas MVC Estendida
 
-- Windows 10/11
-- Node.js (versão 16 ou superior)
-- Git
+O projeto implementa uma arquitetura em **6 camadas** que estende o padrão MVC tradicional:
 
-### React Native CLI (OBRIGATÓRIO)
-
-```powershell
-# Instalar CLI do React Native globalmente
-npm install -g @react-native-community/cli
-
-# Verificar instalação
-npx react-native --version
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    1. ROUTES LAYER                           │
+│  Define endpoints versionados da API                         │
+│  Localização: app/Routes/API/v1/**/api_routes.php            │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────┐
+│                    2. FILTERS LAYER                          │
+│  • AuthFilter: Validação JWT                                 │
+│  • LogRequestFilter: Auditoria de requisições                │
+│  Localização: app/Filters/v1/                                │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────┐
+│                    3. CONTROLLERS LAYER                      │
+│  • Recebe requisições HTTP                                   │
+│  • Orquestra chamadas aos Services                           │
+│  • Retorna ApiResponse padronizada                           │
+│  Base: BaseManagerController                                 │
+│  Localização: app/Controllers/API/v1/                        │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────┐
+│                    4. REQUESTS LAYER                         │
+│  • Validação de entrada (Input Validation)                   │
+│  • Regras customizadas (Rules)                               │
+│  • Sanitização de dados                                      │
+│  Localização: app/Requests/v1/ + app/Rules/v1/               │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────┐
+│                    5. SERVICES LAYER                         │
+│  • Lógica de negócio complexa                                │
+│  • Transações multi-tabela                                   │
+│  • Integração com APIs externas                              │
+│  Base: BaseManagerService                                    │
+│  Localização: app/Services/v1/                               │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────┐
+│                    6. MODELS LAYER                           │
+│  • Acesso direto ao banco de dados                           │
+│  • CRUD básico + Soft Delete                                 │
+│  • Relacionamentos entre entidades                           │
+│  Base: BaseResourceModel                                     │
+│  Localização: app/Models/v1/                                 │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+                    ┌────────▼────────┐
+                    │    Database     │
+                    └─────────────────┘
 ```
 
-### Android Development Environment
+### 2. Fluxo de Requisição Completo
 
-#### 1. Android Studio
+#### 2.1. Fluxo de Autenticação (Login)
 
-Instale o Android Studio com os seguintes componentes:
-
-- Android SDK Build-Tools
-- Android SDK Command-line Tools
-- Android Emulator
-- Android Emulator hypervisor driver
-- Intel x86 Emulator Accelerator (HAXM installer)
-- Android SDK Platform-Tools
-
-#### 2. Java Development Kit (JDK)
-
-- **JDK 17 LTS** (Eclipse Temurin)
-- Download: https://adoptium.net/pt-BR/temurin/releases?version=17&os=any&arch=any
-
-## 🛠️ Instalação e Configuração
-
-### Passo 1: Configurar Variáveis de Ambiente
-
-#### Configurar JAVA_HOME
-
-1. Após instalar o JDK 17, configure a variável `JAVA_HOME`
-2. Adicione `%JAVA_HOME%\bin` ao **PATH**
-3. Verifique a instalação:
-
-```bash
-javac -version
+```
+┌─────────────┐
+│   Cliente   │
+│ (Flutter/   │
+│  React)     │
+└──────┬──────┘
+       │
+       │ POST /api/v1/user-management/login
+       │ { "email": "user@gov.br", "password": "***" }
+       │
+       ▼
+┌──────────────────────────────────────────────────────────┐
+│  ROUTES: app/Routes/API/v1/UserManagement/api_routes.php │
+│  $routes->post('login', 'AuthController::login');        │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  CONTROLLER: AuthController::login()                     │
+│  1. Valida dados com LoginRequest                        │
+│  2. Chama AuthenticationService::login()                 │
+│  3. Retorna JWT + dados do usuário                       │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  REQUEST: LoginRequest                                   │
+│  • Valida email (formato + obrigatório)                  │
+│  • Valida senha (min 6 chars + obrigatório)              │
+│  • Sanitiza inputs                                       │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  SERVICE: AuthenticationService::login()                 │
+│  1. Busca usuário por email (UserModel)                  │
+│  2. Verifica senha (PasswordService::verify)             │
+│  3. Gera JWT (TokenService::generate)                    │
+│  4. Atualiza last_login                                  │
+│  5. Registra log de acesso                               │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  MODEL: UserManagement/ResourceModel                     │
+│  • findByEmail($email)                                   │
+│  • update(['last_login' => now()])                       │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  RESPONSE: ApiResponse                                   │
+│  {                                                       │
+│    "success": true,                                      │
+│    "data": {                                             │
+│      "token": "eyJ0eXAiOiJKV1QiLCJh...",                 │
+│      "user": { "id": 1, "name": "..." }                  │
+│    },                                                    │
+│    "message": "Login realizado com sucesso"              │
+│  }                                                       │
+└──────────────────────────────────────────────────────────┘
 ```
 
-#### Configurar Android SDK
+#### 2.2. Fluxo de Requisição Autenticada (CRUD)
 
-1. Configure a variável `ANDROID_HOME` apontando para o SDK do Android
-2. Adicione ao PATH:
-   - `%ANDROID_HOME%\platform-tools`
-   - `%ANDROID_HOME%\tools`
-   - `%ANDROID_HOME%\tools\bin`
-
-### Passo 2: Resolver Problemas Comuns do Android SDK
-
-Se houver falha na instalação do Android SDK Platform-Tools:
-
-```bash
-# Navegar para o diretório do SDK
-cd C:\Users\[SEU_USUARIO]\AppData\Local\Android\Sdk
-
-# Excluir a pasta Platform-Tools completamente
-# Em seguida, reinstalar o pacote pelo Android Studio
+```
+┌─────────────┐
+│   Cliente   │
+└──────┬──────┘
+       │
+       │ GET /api/v1/user-customer?page=1&limit=10
+       │ Headers: { Authorization: "Bearer eyJ0eXAi..." }
+       │
+       ▼
+┌──────────────────────────────────────────────────────────┐
+│  FILTER: AuthFilter::before()                            │
+│  1. Extrai token do header Authorization                 │
+│  2. Valida JWT (TokenService::validate)                  │
+│  3. Injeta dados do usuário em CurrentUser               │
+│  4. Verifica permissões                                  │
+└────────────────────────┬─────────────────────────────────┘
+                         │ ✓ Token válido
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  FILTER: LogRequestFilter::before()                      │
+│  • Registra timestamp de entrada                         │
+│  • Captura IP, User-Agent, Endpoint                      │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  CONTROLLER: UserCustomer/ManagerController::index()     │
+│  1. Valida query params com SearchRequest                │
+│  2. Chama ManagerService::search()                       │
+│  3. Formata response com ApiResponse                     │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  REQUEST: SearchRequest                                  │
+│  • Valida page (inteiro positivo)                        │
+│  • Valida limit (max 100)                                │
+│  • Valida order_by (campos permitidos)                   │
+│  • Sanitiza filtros                                      │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  SERVICE: UserCustomer/ManagerService::search()          │
+│  1. Monta query com filtros                              │
+│  2. Aplica paginação                                     │
+│  3. Busca dados (ResourceModel)                          │
+│  4. Enriquece dados (joins, related)                     │
+│  5. Aplica formatação de resposta                        │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  MODEL: UserCustomer/ResourceModel                       │
+│  • Método search() com QueryBuilder                      │
+│  • Aplica soft_delete filter (deleted_at IS NULL)        │
+│  • Retorna Collection paginada                           │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  FILTER: LogRequestFilter::after()                       │
+│  • Calcula tempo de execução                             │
+│  • Registra status code da resposta                      │
+│  • Salva log completo (LogModel)                         │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│  RESPONSE: ApiResponse (Paginada)                        │
+│  {                                                       │
+│    "success": true,                                      │
+│    "data": [{ ... }, { ... }],                           │
+│    "pagination": {                                       │
+│      "page": 1,                                          │
+│      "limit": 10,                                        │
+│      "total": 156,                                       │
+│      "pages": 16                                         │
+│    }                                                     │
+│  }                                                       │
+└──────────────────────────────────────────────────────────┘
 ```
 
-### Passo 3: Instalar Dependências Obrigatórias
-
-#### Instalar React Native CLI Globalmente (OBRIGATÓRIO)
-
-```powershell
-# Instalar CLI globalmente - SEM ISSO NADA FUNCIONA!
-npm install -g @react-native-community/cli
-
-# Verificar se foi instalado corretamente
-npx react-native --version
-```
-
-### Passo 4: Clonar/Configurar o Repositório
-
-#### Se o repositório JÁ EXISTE:
-
-```bash
-# Clonar o repositório
-git clone [URL_DO_REPOSITORIO]
-
-# Navegar para o diretório do projeto
-cd projeto56300/src
-
-# Instalar dependências
-npm install
-```
-
-#### Se é um NOVO repositório:
-
-```bash
-# Siga os comandos da seção "Cenário 2" acima
-```
-
-## 🚀 Executando o Projeto
-
-### ⚠️ ANTES DE TUDO: Verificar Instalações
-
-```powershell
-# Verificar se tudo está instalado
-node --version          # Deve mostrar v16+
-npm --version           # Deve funcionar
-npx react-native --version  # DEVE FUNCIONAR - se não, instale a CLI global
-java -version           # Deve mostrar Java 17
-adb devices            # Deve mostrar emulador conectado
-```
-
-### 🔧 Se `npx react-native --version` não funcionar:
-
-```powershell
-# Instalar CLI globalmente (OBRIGATÓRIO)
-npm install -g @react-native-community/cli
-
-# E também localmente no projeto
-cd C:\laragon\www\mobile\react\projeto56300\src
-npm install --save-dev @react-native-community/cli
-```
-
-### Para Novo Desenvolvimento
-
-#### 1. Criar Novo Projeto (se necessário)
-
-```bash
-# Criar novo projeto React Native
-npx @react-native-community/cli init src
-
-# ⚠️ IMPORTANTE: Sempre execute a limpeza após criar o projeto
-cd src
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
-
-# Instalar dependências
-npm install
-```
-
-#### 2. Iniciar o Desenvolvimento
-
-```bash
-# 1. Abrir o Emulador Android no Android Studio
-
-# 2. Verificar se o emulador está conectado
-adb devices
-# Saída esperada: emulator-5554   device
-
-# 3. Iniciar o Metro Bundler (manter aberto)
-npx react-native start
-
-# 4. Em outro terminal, executar o app no emulador
-npx react-native run-android
-```
-
-### Para Projeto Existente (Após Clonar)
-
-```bash
-# 1. Navegar para a pasta do projeto
-cd C:\laragon\www\mobile\react\projeto56300\src
-
-# 2. Instalar dependências (OBRIGATÓRIO após clonar)
-npm install
-
-# 3. Iniciar o Metro Bundler
-npx react-native start
-
-# 4. Em outro terminal, executar o app
-npx react-native run-android
-
-# 5. Verificar conexão do emulador
-adb devices
-```
-
-## 📂 Estrutura do Projeto sem MÓDULOS/FEATURES ESPECÍFICOS
-
-```typescript
-// Arquivo: README_estruture.md
-```
-
-### Arquivos Principais
-
-- **App.tsx**: Arquivo principal do aplicativo onde você deve modificar a interface e funcionalidades
-- **index.js**: Ponto de entrada da aplicação
-- **package.json**: Gerenciamento de dependências e scripts
-- **app.json**: Configurações gerais do aplicativo
-
-## 💻 Desenvolvimento
-
-### Exemplo: Tela "Olá Mundo"
-
-Edite o arquivo **App.tsx** com o seguinte código:
-
-```tsx
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-
-const App = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Olá Mundo!</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  text: {
-    fontSize: 24,
-    color: "#333",
-  },
-});
-
-export default App;
-```
-
-### Ferramentas de Desenvolvimento
-
-Mantenha sempre abertas as seguintes ferramentas durante o desenvolvimento:
-
-1. **Terminal do Metro Bundler** (`npx react-native start`)
-2. **Terminal de Execução** (`npx react-native run-android`)
-3. **React Native DevTools** (para monitoramento e debug)
-4. **Emulador Android** (executando o app)
-
-## 🔧 Workflow de Desenvolvimento com Git
-
-### Fluxo Diário de Trabalho
-
-```powershell
-# 1. Atualizar código antes de começar
-git pull origin main
-
-# 2. Fazer suas alterações no código...
-
-# 3. Antes de commit, verificar status
-git status
-
-# 4. Adicionar alterações
-git add .
-
-# 5. Fazer commit com mensagem descritiva
-git commit -m "feat: adicionar tela de login"
-
-# 6. Enviar alterações
-git push origin main
-```
-
-### Comandos de Emergência (Se algo der errado)
-
-```powershell
-# Se precisa limpar tudo e começar novamente
-cd src
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-npm install
-
-# Se o Git está bagunçado (CUIDADO - perde alterações não salvas)
-git reset --hard HEAD
-git clean -fd
-```
-
-## 📦 Build e Distribuição
-
-### Gerar APK para Release
-
-```bash
-# 1. Navegar para a pasta android
-cd src/android
-
-# 2. Executar o build de release
-./gradlew assembleRelease
-
-# 3. Localizar o APK gerado
-# Caminho: src/android/app/build/outputs/apk/release/app-release.apk
-```
-
-### Instalação em Dispositivo Físico
-
-1. Transfira o APK gerado para um dispositivo Android
-2. Habilite a instalação de apps de fontes desconhecidas
-3. Instale o APK
-
-## 🛠️ Scripts Disponíveis
-
-```json
+### 3. Padrões de Código Aplicados
+
+#### 3.1. BaseResourceModel (Herança)
+
+```php
+/**
+ * Model base com funcionalidades comuns
+ * Todos os models herdam desta classe
+ */
+abstract class BaseResourceModel extends Model
 {
-  "scripts": {
-    "start": "npx react-native start",
-    "android": "npx react-native run-android",
-    "ios": "npx react-native run-ios",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    // Soft Delete automático
+    protected $useSoftDeletes = true;
+    protected $deletedField = 'deleted_at';
+    
+    // Timestamps automáticos
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+    
+    // Métodos comuns herdados por todos
+    public function search(array $filters, int $page, int $limit)
+    {
+        // Implementação de busca avançada
+        // Aplicada automaticamente em todos os models
+    }
+    
+    public function softDelete(int $id): bool
+    {
+        // Soft delete padronizado
+        return $this->update($id, ['deleted_at' => date('Y-m-d H:i:s')]);
+    }
+}
+```
+
+#### 3.2. ApiResponse (Padronização)
+
+```php
+/**
+ * Padronização de todas as respostas da API
+ */
+class ApiResponse
+{
+    public static function success($data = null, string $message = '', int $code = 200)
+    {
+        return response()->setJSON([
+            'success' => true,
+            'data' => $data,
+            'message' => $message,
+            'timestamp' => time(),
+            'api_version' => 'v1'
+        ])->setStatusCode($code);
+    }
+    
+    public static function error(string $message, int $code = 400, $errors = null)
+    {
+        return response()->setJSON([
+            'success' => false,
+            'message' => $message,
+            'errors' => $errors,
+            'timestamp' => time(),
+            'api_version' => 'v1'
+        ])->setStatusCode($code);
+    }
+}
+```
+
+#### 3.3. Múltiplos Bancos de Dados
+
+```php
+/**
+ * Configuração em app/Config/Database.php
+ */
+class Database extends Config
+{
+    public $default = [
+        'DSN'      => '',
+        'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'db_users',
+        // Banco principal: usuários, autenticação
+    ];
+    
+    public $customers = [
+        'DSN'      => '',
+        'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'db_customers',
+        // Banco secundário: clientes, arquivos
+    ];
+    
+    public $logs = [
+        'DSN'      => '',
+        'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'db_logs',
+        // Banco de auditoria: logs, requisições
+    ];
+}
+
+/**
+ * Uso nos Models
+ */
+class UserCustomerResourceModel extends BaseResourceModel
+{
+    protected $DBGroup = 'customers'; // Usa banco 'customers'
+}
+
+class LogResourceModel extends BaseResourceModel
+{
+    protected $DBGroup = 'logs'; // Usa banco 'logs'
+}
+```
+
+---
+
+## 📱 Frontend Flutter
+
+### 1. Arquitetura DDD (Domain-Driven Design)
+
+```
+lib/
+├── app/                          # Configuração da aplicação
+│   ├── router/                   # Sistema de rotas
+│   │   ├── app_router.dart      # Definição de rotas
+│   │   └── app_routes.dart      # Constantes de rotas
+│   ├── theme/                    # Tema e cores
+│   │   ├── app_theme.dart
+│   │   └── color_schemes.dart
+│   └── app.dart                  # App principal
+│
+├── core/                         # Núcleo compartilhado
+│   ├── config/
+│   │   └── env.dart             # Variáveis de ambiente
+│   ├── errors/
+│   │   ├── app_exception.dart   # Exceções customizadas
+│   │   └── failure.dart         # Tratamento de falhas
+│   ├── network/
+│   │   ├── interceptors/        # Interceptors HTTP
+│   │   ├── api_endpoints.dart   # Endpoints da API
+│   │   └── dio_client.dart      # Cliente HTTP (Dio)
+│   ├── utils/
+│   │   ├── debouncer.dart       # Debounce para inputs
+│   │   └── validators.dart      # Validações
+│   └── widgets/
+│       ├── app_dialog.dart      # Diálogos padrão
+│       ├── app_loader.dart      # Loading screens
+│       ├── app_scaffold.dart    # Scaffold base
+│       └── app_snackbar.dart    # Snackbars
+│
+├── features/                     # Features por domínio
+│   ├── user/
+│   │   ├── domain/              # Camada de Domínio
+│   │   │   ├── entities/        # Entidades puras
+│   │   │   ├── repositories/    # Contratos de repositórios
+│   │   │   └── usecases/        # Casos de uso
+│   │   ├── data/                # Camada de Dados
+│   │   │   ├── models/          # DTOs
+│   │   │   ├── datasources/     # APIs, Local Storage
+│   │   │   └── repositories/    # Implementação
+│   │   ├── application/         # Camada de Aplicação
+│   │   │   ├── providers/       # State Management (Riverpod)
+│   │   │   └── controllers/     # Controladores
+│   │   └── presentation/        # Camada de Apresentação
+│   │       ├── screens/         # Telas
+│   │       └── widgets/         # Componentes UI
+│   │
+│   └── home/
+│       └── [mesma estrutura]
+│
+└── shared/                       # Recursos compartilhados
+    ├── utils/
+    └── widgets/
+```
+
+### 2. Fluxo de Dados no Flutter
+
+```
+┌───────────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                         │
+│  ┌──────────────┐         ┌──────────────┐                    │
+│  │  LoginScreen │────────▶│ LoginButton │                    │
+│  └──────────────┘         └──────┬───────┘                    │
+│                                   │ onPressed()               │
+└───────────────────────────────────┼───────────────────────────┘
+                                    │
+┌───────────────────────────────────▼───────────────────────────┐
+│                   APPLICATION LAYER                           │
+│  ┌────────────────────────────────────────────────────┐       │
+│  │         UserController / Provider                  │       │
+│  │  • Gerencia estado da UI                           │       │
+│  │  • Chama casos de uso                              │       │
+│  │  • Trata loading/success/error                     │       │
+│  └─────────────────────┬──────────────────────────────┘       │
+│                        │ loginUseCase.call()                  │
+└────────────────────────┼──────────────────────────────────────┘
+                         │
+┌────────────────────────▼──────────────────────────────────────┐
+│                     DOMAIN LAYER                              │
+│  ┌────────────────────────────────────────────────────┐       │
+│  │              LoginUseCase                          │       │
+│  │  • Lógica de negócio pura                          │       │
+│  │  • Independente de framework                       │       │
+│  │  • Chama repositório                               │       │
+│  └─────────────────────┬──────────────────────────────┘       │
+│                        │ repository.login()                   │
+│  ┌─────────────────────▼──────────────────────────────┐       │
+│  │         IUserRepository (Interface)                │       │
+│  │  • Contrato de acesso a dados                      │       │
+│  └────────────────────────────────────────────────────┘       │
+└───────────────────────────────────────────────────────────────┘
+                         │
+┌────────────────────────▼──────────────────────────────────────┐
+│                      DATA LAYER                               │
+│  ┌────────────────────────────────────────────────────┐       │
+│  │      UserRepositoryImpl (Implementação)            │       │
+│  │  • Implementa IUserRepository                      │       │
+│  │  • Orquestra datasources                           │       │
+│  └─────────────────────┬──────────────────────────────┘       │
+│                        │                                      │
+│         ┌──────────────┼──────────────┐                       │
+│         │              │              │                       │
+│  ┌──────▼──────┐ ┌─────▼──────┐  ┌────▼─────┐                 │
+│  │   Remote    │ │   Local    │  │  Cache   │                 │
+│  │ DataSource  │ │ DataSource │  │DataSource│                 │
+│  │   (API)     │ │ (Storage)  │  │(Memory)  │                 │
+│  └──────┬──────┘ └────────────┘  └──────────┘                 │
+└─────────┼─────────────────────────────────────────────────────┘
+          │
+┌─────────▼────────┐
+│   DioClient      │ ← Interceptors JWT, Error Handling
+│   (HTTP)         │
+└─────────┬────────┘
+          │
+┌─────────▼────────┐
+│  CodeIgniter 4   │
+│    API REST      │
+└──────────────────┘
+```
+
+### 3. Exemplo de Implementação
+
+#### 3.1. DioClient (Network)
+
+```dart
+class DioClient {
+  final Dio _dio;
+  
+  DioClient() : _dio = Dio(BaseOptions(
+    baseUrl: Env.apiBaseUrl,
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+  )) {
+    _setupInterceptors();
+  }
+  
+  void _setupInterceptors() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          // Adiciona JWT token
+          final token = await LocalStorage.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onError: (error, handler) {
+          // Trata erros globalmente
+          if (error.response?.statusCode == 401) {
+            // Redireciona para login
+            AppRouter.goToLogin();
+          }
+          return handler.next(error);
+        },
+      ),
+    );
   }
 }
 ```
 
-## 🚨 Solução de Problemas
+#### 3.2. UseCase (Domain)
 
-### Problemas com Git
-
-#### 1. Erro "repositório aninhado"
-
-```powershell
-# Execute a limpeza obrigatória
-cd src
-Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
-cd ..
-git add .
-```
-
-#### 2. Arquivos muito grandes para commit
-
-```powershell
-# Verifique se .gitignore está configurado corretamente
-# Remova node_modules se necessário
-Remove-Item src/node_modules -Recurse -Force -ErrorAction SilentlyContinue
-```
-
-### Problemas com CLI
-
-#### 1. Erro "react-native depends on @react-native-community/cli"
-
-```powershell
-# Solução 1: Instalar CLI globalmente
-npm install -g @react-native-community/cli
-
-# Solução 2: Instalar CLI localmente no projeto
-npm install --save-dev @react-native-community/cli
-
-# Solução 3: Reinstalar tudo
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-npm install -g @react-native-community/cli
-npm install
-```
-
-#### 2. CLI instalada mas comandos não funcionam
-
-```powershell
-# Limpar cache npm
-npm cache clean --force
-
-# Reinstalar CLI
-npm uninstall -g @react-native-community/cli
-npm install -g @react-native-community/cli
-
-# Verificar instalação
-npx react-native --version
-```
-
-### Problemas Comuns de Execução
-
-#### 1. Emulador não conecta
-
-```bash
-# Verificar dispositivos conectados
-adb devices
-
-# Reiniciar ADB se necessário
-adb kill-server
-adb start-server
-```
-
-#### 2. Metro Bundler não inicia
-
-```bash
-# Limpar cache do Metro
-npx react-native start --reset-cache
-```
-
-#### 3. Build Android falha
-
-```bash
-# Limpar build
-cd android
-./gradlew clean
-
-# Reconstruir
-cd ..
-npx react-native run-android
-```
-
-#### 4. Problemas com dependências
-
-```bash
-# Limpar cache npm
-npm start -- --reset-cache
-
-# Reinstalar node_modules
-Remove-Item node_modules -Recurse -Force
-npm install
-```
-
-## 🔍 Comandos Úteis
-
-```bash
-# Verificar versão do React Native CLI
-npx react-native --version
-
-# Verificar informações do ambiente
-npx react-native doctor
-
-# Listar dispositivos conectados
-adb devices
-
-# Verificar logs do Android
-adb logcat
-
-# Instalar APK via ADB
-adb install caminho/para/app.apk
-```
-
-## 🚀 Próximos Passos
-
-- [ ] Configurar testes automatizados
-- [ ] Implementar CI/CD
-- [ ] Configurar Flipper para debugging
-- [ ] Implementar navegação (React Navigation)
-- [ ] Configurar gerenciamento de estado (Redux/Context)
-
-## 📚 Recursos Úteis
-
-- [Documentação Oficial React Native](https://reactnative.dev/)
-- [Android Developer Guide](https://developer.android.com/)
-- [React Navigation](https://reactnavigation.org/)
-- [React Native Community](https://github.com/react-native-community)
-
-## 📄 Licença
-
-[Especificar licença do projeto]
-
-## 👥 Contribuição
-
-### Para Contribuidores
-
-Se você vai contribuir com este projeto:
-
-1. **SEMPRE** execute a limpeza após criar/modificar projetos React Native
-2. **NUNCA** faça commit de `node_modules/` ou `.git/` dentro de `src/`
-3. Verifique se o `.gitignore` está atualizado
-4. Execute `npm install` após clonar o projeto
-
-### Regras de Commit
-
-- Use mensagens descritivas: `feat:`, `fix:`, `docs:`, `refactor:`
-- Teste antes de fazer push
-- Mantenha o código limpo e documentado
-
----
-
-**Desenvolvido por:** [Seu Nome/Equipe]  
-**Versão:** 1.0.0  
-**Última atualização:** Janeiro 2026
-
----
-
-## 🔥 RESUMO RÁPIDO - Cola do Desenvolvedor
-
-### ✅ PRIMEIRA VEZ - Instalação Obrigatória:
-
-```powershell
-# ANTES DE TUDO - instalar CLI globalmente
-npm install -g @react-native-community/cli
-
-# Verificar se funcionou
-npx react-native --version
-```
-
-### ✅ SEMPRE faça isso ao criar projeto React Native:
-
-```powershell
-# Após npx @react-native-community/cli init src
-cd src
-Remove-Item package-lock.json -Force -ErrorAction SilentlyContinue
-Remove-Item node_modules -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item .git -Recurse -Force -ErrorAction SilentlyContinue
-npm install
-npm install --save-dev @react-native-community/cli
-cd ..
-# Configure .gitignore
-# Agora pode fazer git add . e commit
-```
-
-### ✅ SEMPRE faça isso ao clonar projeto existente:
-
-```powershell
-git clone [URL]
-cd projeto/src
-npm install
-npm install --save-dev @react-native-community/cli  # Se der erro de CLI
-npx react-native start
-# Em outro terminal: npx react-native run-android
+```dart
+class LoginUseCase {
+  final IUserRepository _repository;
+  
+  LoginUseCase(this._repository);
+  
+  Future<Either<Failure, UserEntity>> call({
+    required String email,
+    required String password,
+  }) async {
+    // Validação de negócio
+    if (!EmailValidator.isValid(email)) {
+      return Left(ValidationFailure('Email inválido'));
+    }
+    
+    // Chama repositório
+    return await _repository.login(
+      email: email,
+      password: password,
+    );
+  }
+}
 ```
 
 ---
 
-# Comando para regressar ao projeto
+## ⚛️ Frontend React
 
-Abra dois Prompts
-
-### Prompt 1:
+### 1. Estrutura de Componentes
 
 ```
-npx react-native start --reset-cache
+src/
+├── components/                   # Componentes reutilizáveis
+│   ├── Auth/
+│   │   └── useSession.js        # Hook de autenticação
+│   │
+│   ├── HForm/                   # Componentes de formulário
+│   │   ├── HformInputTextLetters/
+│   │   ├── HformInputTextMask/
+│   │   └── HformInputTextNumber/
+│   │
+│   ├── HcButton/                # Botões customizados
+│   │   ├── HcListActions/       # Botões de ação em lista
+│   │   ├── index.jsx
+│   │   └── styles.css
+│   │
+│   ├── HcModal/                 # Sistema de modais
+│   │   ├── HcBasicModal/
+│   │   ├── HcFadeModal/
+│   │   ├── HcSlideUpDownModal/
+│   │   └── [outros tipos de animação]
+│   │
+│   ├── HcMessage/               # Sistema de mensagens
+│   │   ├── HcToasts/
+│   │   ├── index.jsx
+│   │   └── styles.css
+│   │
+│   ├── HcNavMenu/               # Navegação
+│   │   ├── HcNavHorizontal/
+│   │   └── HcNavVertical/
+│   │
+│   └── HcLoading/               # Loading states
+│
+├── config/                      # Configurações
+├── contexts/                    # Context API (State)
+├── hooks/                       # Custom Hooks
+├── middlewares/                 # Middlewares (Auth, etc)
+├── pages/                       # Páginas da aplicação
+├── routes/                      # Definição de rotas
+├── services/                    # Serviços de API
+└── utils/                       # Utilitários
 ```
 
-### Prompt 2:
+### 2. Fluxo de Dados no React
 
 ```
-npx react-native run-android
+┌───────────────────────────────────────────────────────────────┐
+│                         COMPONENT                             │
+│  ┌─────────────────────────────────────────────────────┐      │
+│  │              UserListPage.jsx                       │      │
+│  │                                                     │      │
+│  │  useEffect(() => {                                  │      │
+│  │    loadUsers(); // ◀── Carrega dados ao montar     │      │
+│  │  }, []);                                            │      │
+│  │                                                     │      │
+│  │  const loadUsers = async () => {                    │      │
+│  │    setLoading(true);                                │      │
+│  │    const result = await userService.getAll();       │      │
+│  │    setUsers(result.data);                           │      │
+│  │    setLoading(false);                               │      │
+│  │  };                                                 │      │
+│  └──────────────────────────┬──────────────────────────┘      │
+└─────────────────────────────┼─────────────────────────────────┘
+                              │
+┌─────────────────────────────▼─────────────────────────────────┐
+│                        CUSTOM HOOK                            │
+│  ┌─────────────────────────────────────────────────────┐      │
+│  │              useSession.js                          │      │
+│  │                                                     │      │
+│  │  const useSession = () => {                         │      │
+│  │    const [token, setToken] = useState(null);        │      │
+│  │    const [user, setUser] = useState(null);          │      │
+│  │                                                     │      │
+│  │    useEffect(() => {                                │      │
+│  │      // Recupera token do localStorage              │      │
+│  │      const savedToken = localStorage.getItem('jwt');│      │
+│  │      if (savedToken) {                              │      │
+│  │        setToken(savedToken);                        │      │
+│  │        validateToken(savedToken);                   │      │
+│  │      }                                              │      │
+│  │    }, []);                                          │      │
+│  │                                                     │      │
+│  │    return { token, user, login, logout };           │      │
+│  │  };                                                 │      │
+│  └──────────────────────────┬──────────────────────────┘      │
+└─────────────────────────────┼─────────────────────────────────┘
+                              │
+┌─────────────────────────────▼─────────────────────────────────┐
+│                        SERVICE LAYER                          │
+│  ┌─────────────────────────────────────────────────────┐      │
+│  │            userService.js (Axios)                   │      │
+│  │                                                     │      │
+│  │  import axios from 'axios';                         │      │
+│  │                                                     │      │
+│  │  const API_URL = process.env.REACT_APP_API_URL;     │      │
+│  │                                                     │      │
+│  │  const userService = {                              │      │
+│  │    getAll: async (params) => {                      │      │
+│  │      const response = await axios.get(              │      │
+│  │        `${API_URL}/api/v1/user-customer`,           │      │
+│  │        {                                            │      │
+│  │          params,                                    │      │
+│  │          headers: {                                 │      │
+│  │            Authorization: `Bearer ${token}`         │      │
+│  │          }                                          │      │
+│  │        }                                            │      │
+│  │      );                                             │      │
+│  │      return response.data;                          │      │
+│  │    },                                               │      │
+│  │                                                     │      │
+│  │    create: async (data) => { ... },                 │      │
+│  │    update: async (id, data) => { ... },             │      │
+│  │    delete: async (id) => { ... }                    │      │
+│  │  };                                                 │      │
+│  └──────────────────────────┬──────────────────────────┘      │
+└─────────────────────────────┼─────────────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────────────────┐
+│                     AXIOS INTERCEPTOR                               │
+│  ┌───────────────────────────────────────────────────────────┐      │
+│  │  // Interceptor de Request                                │      │
+│  │  axios.interceptors.request.use(                          │      │
+│  │    (config) => {                                          │      │
+│  │      const token = localStorage.getItem('jwt');           │      │
+│  │      if (token) {                                         │      │
+│  │        config.headers.Authorization = `Bearer ${token}`;  │      │
+│  │      }                                                    │      │
+│  │      return config;                                       │      │
+│  │    }                                                      │      │
+│  │  );                                                       │      │
+│  │                                                           │      │
+│  │  // Interceptor de Response                               │      │
+│  │  axios.interceptors.response.use(                         │      │
+│  │    (response) => response,                                │      │
+│  │    (error) => {                                           │      │
+│  │      if (error.response?.status === 401) {                │      │
+│  │        // Token expirado - redireciona login              │      │
+│  │        localStorage.removeItem('jwt');                    │      │
+│  │        window.location.href = '/login';                   │      │
+│  │      }                                                    │      │
+│  │      return Promise.reject(error);                        │      │
+│  │    }                                                      │      │
+│  │  );                                                       │      │
+│  └───────────────────────────────────────────────────────────┘      │
+└─────────────────────────────────────────────────────────────────────┘
 ```
+
+### 3. Componentes Customizados (Pattern)
+
+#### 3.1. HcButton (Botão Reutilizável)
+
+```jsx
+// components/HcButton/index.jsx
+import React from 'react';
+import './styles.css';
+
+export const HcButton = ({ 
+  children, 
+  variant = 'primary', 
+  size = 'medium',
+  loading = false,
+  disabled = false,
+  onClick,
+  icon,
+  ...props 
+}) => {
+  return (
+    <button
+      className={`hc-button hc-button--${variant} hc-button--${size}`}
+      disabled={disabled || loading}
+      onClick={onClick}
+      {...props}
+    >
+      {loading ? (
+        <span className="hc-button__spinner" />
+      ) : (
+        <>
+          {icon && <span className="hc-button__icon">{icon}</span>}
+          <span className="hc-button__text">{children}</span>
+        </>
+      )}
+    </button>
+  );
+};
+
+// Uso:
+<HcButton 
+  variant="success" 
+  size="large"
+  onClick={handleSave}
+  loading={isSaving}
+>
+  Salvar
+</HcButton>
+```
+
+#### 3.2. HcModal (Sistema de Modais)
+
+```jsx
+// components/HcModal/HcFadeModal/index.jsx
+import React from 'react';
+import './styles.css';
+
+export const HcFadeModal = ({ 
+  isOpen, 
+  onClose, 
+  title, 
+  children,
+  footer 
+}) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="hc-modal-overlay" onClick={onClose}>
+      <div 
+        className="hc-modal-content hc-modal--fade"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="hc-modal__header">
+          <h2>{title}</h2>
+          <button onClick={onClose}>×</button>
+        </div>
+        
+        <div className="hc-modal__body">
+          {children}
+        </div>
+        
+        {footer && (
+          <div className="hc-modal__footer">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Uso:
+<HcFadeModal
+  isOpen={showModal}
+  onClose={() => setShowModal(false)}
+  title="Confirmar exclusão"
+  footer={
+    <>
+      <HcButton variant="secondary" onClick={() => setShowModal(false)}>
+        Cancelar
+      </HcButton>
+      <HcButton variant="danger" onClick={handleDelete}>
+        Excluir
+      </HcButton>
+    </>
+  }
+>
+  <p>Tem certeza que deseja excluir este registro?</p>
+</HcFadeModal>
+```
+
+---
+
+## 🔄 Fluxos de Dados
+
+### 1. Fluxo Completo: Cadastro de Cliente
+
+```
+┌────────────┐
+│   React    │ 1. Usuário preenche formulário
+│  (Form)    │    HForm/HformInputText*
+└─────┬──────┘
+      │ 2. Submit (validação client-side)
+      ▼
+┌────────────────────────────────────────────────────────┐
+│  userService.create(formData)                          │
+│  POST /api/v1/user-customer                            │
+│  Headers: { Authorization: Bearer eyJ... }             │
+│  Body: { name, email, cpf, ... }                       │
+└─────────────────────┬──────────────────────────────────┘
+                      │ 3. Requisição HTTP
+                      ▼
+┌────────────────────────────────────────────────────────┐
+│  CodeIgniter 4 API                                     │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │ AuthFilter: Valida JWT                           │  │
+│  │ ✓ Token válido → Injeta CurrentUser              │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ LogRequestFilter: Registra entrada               │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Controller: UserCustomer/ManagerController       │  │
+│  │ • Método: store()                                │  │
+│  │ • Valida com StoreRequest                        │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Request: StoreRequest                            │  │
+│  │ • Valida CPF (formato + único)                   │  │
+│  │ • Valida Email (formato + único)                 │  │
+│  │ • Sanitiza dados                                 │  │
+│  │ • Aplica StoreRules                              │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │ 4. Dados validados                 │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Service: UserCustomer/ManagerService             │  │
+│  │ • create(validated_data)                         │  │
+│  │ • Inicia transação                               │  │
+│  │ • Cria registro principal                        │  │
+│  │ • Processa upload de arquivo (se houver)         │  │
+│  │ • Registra log de criação                        │  │
+│  │ • Commit transação                               │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Model: UserCustomer/ResourceModel                │  │
+│  │ • insert(data)                                   │  │
+│  │ • DBGroup: 'customers'                           │  │
+│  │ • created_at: TIMESTAMP                          │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │ 5. Registro criado (ID: 156)       │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Service: UploadService                           │  │
+│  │ • processUpload($file, $user_customer_id)        │  │
+│  │ • Valida tipo/tamanho                            │  │
+│  │ • Move para writable/uploads/                    │  │
+│  │ • Cria registro em FileModel                     │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ LogRequestFilter: Registra saída                 │  │
+│  │ • status: 201                                    │  │
+│  │ • execution_time: 247ms                          │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ ApiResponse::success()                           │  │
+│  │ {                                                │  │
+│  │   "success": true,                               │  │
+│  │   "data": {                                      │  │
+│  │     "id": 156,                                   │  │
+│  │     "name": "João Silva",                        │  │
+│  │     "email": "joao@example.com",                 │  │
+│  │     "created_at": "2025-12-15 14:30:00"          │  │
+│  │   },                                             │  │
+│  │   "message": "Cliente criado com sucesso"        │  │
+│  │ }                                                │  │
+│  └────────────────┬─────────────────────────────────┘  │
+└───────────────────┼────────────────────────────────────┘
+                    │ 6. Response (HTTP 201)
+                    ▼
+┌────────────────────────────────────────────────────────┐
+│  React Component                                       │
+│  • Recebe resposta                                     │
+│  • Atualiza lista de clientes                          │
+│  • Exibe HcMessage (Toast de sucesso)                  │
+│  • Fecha HcModal                                       │
+│  • Limpa formulário                                    │
+└────────────────────────────────────────────────────────┘
+```
+
+### 2. Fluxo de Upload de Arquivo
+
+```
+┌────────────┐
+│   React    │ 1. Usuário seleciona arquivo
+│  (Input)   │    <input type="file" onChange={handleFileChange} />
+└─────┬──────┘
+      │ 2. Prepara FormData
+      │    formData.append('file', file)
+      │    formData.append('user_customer_id', 156)
+      ▼
+┌────────────────────────────────────────────────────────┐
+│  userFileService.upload(formData)                      │
+│  POST /api/v1/user-customer-file                       │
+│  Headers: {                                            │
+│    Authorization: Bearer eyJ...,                       │
+│    Content-Type: multipart/form-data                   │
+│  }                                                     │
+└─────────────────────┬──────────────────────────────────┘
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────┐
+│  CodeIgniter 4 API                                     │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │ Controller: UserCustomerFile/ManagerController   │  │
+│  │ • Método: store()                                │  │
+│  │ • Valida request                                 │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Service: UploadService                           │  │
+│  │                                                  │  │
+│  │ processUpload($file, $userId) {                  │  │
+│  │   // 1. Validações                               │  │
+│  │   if (!$this->validateFileType($file)) {         │  │
+│  │     throw new ValidationException();             │  │
+│  │   }                                              │  │
+│  │                                                  │  │
+│  │   if ($file->getSize() > MAX_SIZE) {             │  │
+│  │     throw new FileSizeException();               │  │
+│  │   }                                              │  │
+│  │                                                  │  │
+│  │   // 2. Gera nome único                          │  │
+│  │   $filename = uniqid() . '_' . $file->getName(); │  │
+│  │                                                  │  │
+│  │   // 3. Move arquivo                             │  │
+│  │   $path = WRITEPATH . 'uploads/' . $filename;    │  │
+│  │   $file->move($path);                            │  │
+│  │                                                  │  │
+│  │   // 4. Registra no banco                        │  │
+│  │   $fileModel->insert([                           │  │
+│  │     'user_customer_id' => $userId,               │  │
+│  │     'original_name' => $file->getName(),         │  │
+│  │     'stored_name' => $filename,                  │  │
+│  │     'mime_type' => $file->getMimeType(),         │  │
+│  │     'size' => $file->getSize(),                  │  │
+│  │     'path' => $path                              │  │
+│  │   ]);                                            │  │
+│  │                                                  │  │
+│  │   return $filename;                              │  │
+│  │ }                                                │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Model: FileModel                                 │  │
+│  │ • DBGroup: 'customers'                           │  │
+│  │ • Tabela: user_customer_files                    │  │
+│  └────────────────┬─────────────────────────────────┘  │
+│                   │                                    │
+│  ┌────────────────▼─────────────────────────────────┐  │
+│  │ Response                                         │  │
+│  │ {                                                │  │
+│  │   "success": true,                               │  │
+│  │   "data": {                                      │  │
+│  │     "id": 89,                                    │  │
+│  │     "filename": "documento.pdf",                 │  │
+│  │     "size": "1.2 MB",                            │  │
+│  │     "uploaded_at": "2025-12-15 14:35:00"         │  │
+│  │   }                                              │  │
+│  │ }                                                │  │
+│  └──────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ✅ Code Review e Boas Práticas
+
+### 1. Estrutura de Versionamento
+
+O projeto implementa versionamento robusto em todas as camadas:
+
+```
+✓ Controllers: app/Controllers/API/v1/
+✓ Requests:    app/Requests/v1/
+✓ Services:    app/Services/v1/
+✓ Models:      app/Models/v1/
+✓ Rules:       app/Rules/v1/
+✓ Filters:     app/Filters/v1/
+✓ Routes:      app/Routes/API/v1/
+```
+
+**Benefícios:**
+- Evolução da API sem quebrar clientes antigos
+- Facilita testes A/B
+- Permite migração gradual de features
+
+### 2. Padrão de Nomenclatura
+
+#### 2.1. Backend (CodeIgniter)
+
+```php
+// ✓ CORRETO - PascalCase para classes
+UserManagement/ManagerController.php
+UserCustomer/ResourceModel.php
+Auth/AuthenticationService.php
+
+// ✓ CORRETO - camelCase para métodos
+public function getUserById(int $id)
+public function createNewUser(array $data)
+
+// ✓ CORRETO - snake_case para banco de dados
+table: user_customers
+column: created_at, deleted_at
+
+// ✓ CORRETO - UPPERCASE para constantes
+define('MAX_UPLOAD_SIZE', 5242880);
+```
+
+#### 2.2. Frontend (React/Flutter)
+
+```javascript
+// ✓ CORRETO - PascalCase para componentes React
+const UserListPage = () => { ... }
+const HcButton = ({ ... }) => { ... }
+
+// ✓ CORRETO - camelCase para funções
+const handleSubmit = () => { ... }
+const loadUserData = async () => { ... }
+
+// ✓ CORRETO - UPPER_SNAKE_CASE para constantes
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+const MAX_RETRY_ATTEMPTS = 3;
+```
+
+```dart
+// ✓ CORRETO - PascalCase para classes Dart
+class LoginUseCase { ... }
+class UserEntity { ... }
+
+// ✓ CORRETO - camelCase para variáveis
+final userId = 123;
+final isAuthenticated = true;
+
+// ✓ CORRETO - snake_case para arquivos
+login_screen.dart
+user_repository.dart
+```
+
+### 3. Separação de Responsabilidades
+
+#### Antes do Code Review (❌)
+
+```php
+// ❌ RUIM - Controller com lógica de negócio
+class UserController extends BaseController
+{
+    public function create()
+    {
+        // Validação no controller
+        if (empty($this->request->getPost('email'))) {
+            return $this->response->setJSON(['error' => 'Email obrigatório']);
+        }
+        
+        // Lógica de negócio no controller
+        $password = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+        
+        // Acesso direto ao banco no controller
+        $db = \Config\Database::connect();
+        $query = "INSERT INTO users (email, password) VALUES (?, ?)";
+        $db->query($query, [$email, $password]);
+        
+        return $this->response->setJSON(['success' => true]);
+    }
+}
+```
+
+#### Após Code Review (✓)
+
+```php
+// ✓ BOM - Controller limpo, apenas orquestração
+class ManagerController extends BaseManagerController
+{
+    public function create()
+    {
+        // 1. Valida com Request dedicado
+        $validated = $this->validate(StoreRequest::class);
+        
+        // 2. Delega lógica ao Service
+        $user = $this->managerService->create($validated);
+        
+        // 3. Retorna resposta padronizada
+        return ApiResponse::success($user, 'Usuário criado com sucesso', 201);
+    }
+}
+
+// ✓ Validação em Request separado
+class StoreRequest extends IncomingRequest
+{
+    public function rules(): array
+    {
+        return [
+            'email' => 'required|valid_email|is_unique[users.email]',
+            'password' => 'required|min_length[6]',
+        ];
+    }
+}
+
+// ✓ Lógica de negócio em Service
+class ManagerService extends BaseManagerService
+{
+    public function create(array $data): array
+    {
+        // Hash de senha
+        $data['password'] = $this->passwordService->hash($data['password']);
+        
+        // Inicia transação
+        $this->db->transStart();
+        
+        try {
+            // Cria usuário
+            $userId = $this->model->insert($data);
+            
+            // Registra log
+            $this->logService->create([
+                'action' => 'user_created',
+                'user_id' => $userId
+            ]);
+            
+            $this->db->transComplete();
+            
+            return $this->model->find($userId);
+        } catch (\Exception $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
+    }
+}
+```
+
+### 4. Tratamento de Erros
+
+```php
+// ✓ Exceções customizadas
+class NotFoundException extends \RuntimeException
+{
+    public function __construct($message = 'Recurso não encontrado')
+    {
+        parent::__construct($message, 404);
+    }
+}
+
+class ValidationException extends \RuntimeException
+{
+    private array $errors;
+    
+    public function __construct(array $errors)
+    {
+        $this->errors = $errors;
+        parent::__construct('Erro de validação', 422);
+    }
+}
+
+// ✓ Uso em Services
+public function findById(int $id)
+{
+    $user = $this->model->find($id);
+    
+    if (!$user) {
+        throw new NotFoundException("Usuário #{$id} não encontrado");
+    }
+    
+    return $user;
+}
+
+// ✓ Tratamento global em BaseController
+protected function handleException(\Throwable $e)
+{
+    if ($e instanceof NotFoundException) {
+        return ApiResponse::error($e->getMessage(), 404);
+    }
+    
+    if ($e instanceof ValidationException) {
+        return ApiResponse::error('Dados inválidos', 422, $e->getErrors());
+    }
+    
+    // Log erro inesperado
+    log_message('error', $e->getMessage());
+    
+    return ApiResponse::error('Erro interno do servidor', 500);
+}
+```
+
+### 5. Arquivos de Backup e Iterações
+
+```
+# Arquivos encontrados no projeto:
+*.bkp       # Backup antes de refatoração
+*.ia        # Versões geradas/assistidas por IA
+*.ia_       # Versões antigas com IA
+*.md        # Documentação de decisões técnicas
+
+Exemplo:
+├── BaseResourceModel.bkp      # Versão anterior do model base
+├── BaseResourceModel.ia       # Primeira tentativa com IA
+└── BaseResourceModel.php      # Versão final revisada
+
+# ✓ Boas práticas identificadas:
+• Mantém histórico de mudanças importantes
+• Documenta decisões técnicas em .md
+• Facilita rollback se necessário
+```
+
+### 6. Padrões de Segurança
+
+```php
+// ✓ Sanitização de inputs
+class StoreRequest extends IncomingRequest
+{
+    public function sanitize(): array
+    {
+        return [
+            'name' => sanitize_string($this->getVar('name')),
+            'email' => filter_var($this->getVar('email'), FILTER_SANITIZE_EMAIL),
+            'cpf' => preg_replace('/[^0-9]/', '', $this->getVar('cpf')),
+        ];
+    }
+}
+
+// ✓ Prepared Statements (Query Builder)
+$this->db->table('users')
+    ->where('email', $email)  // Automático prepared statement
+    ->get()
+    ->getRowArray();
+
+// ✓ CSRF Protection
+public $csrf = [
+    'csrf_enable' => true,
+    'csrf_token_name' => 'csrf_token',
+    'csrf_cookie_name' => 'csrf_cookie',
+    'csrf_expire' => 7200,
+];
+
+// ✓ CORS configurado
+class Cors extends BaseConfig
+{
+    public $allowedOrigins = [
+        'https://app.governo.rj.gov.br',
+        'https://app-dev.governo.rj.gov.br'
+    ];
+    
+    public $allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+    
+    public $allowedHeaders = [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With'
+    ];
+}
+```
+
+---
+
+## 🔐 Segurança e Autenticação
+
+### 1. Sistema JWT (Firebase JWT)
+
+```php
+// Localização: app/ThirdParty/Firebase/JWT/
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+class TokenService
+{
+    private string $secretKey;
+    private string $algorithm = 'HS256';
+    private int $expirationTime = 3600; // 1 hora
+    
+    public function generate(array $payload): string
+    {
+        $issuedAt = time();
+        $expirationTime = $issuedAt + $this->expirationTime;
+        
+        $token = [
+            'iss' => base_url(),                    // Issuer
+            'aud' => base_url(),                    // Audience
+            'iat' => $issuedAt,                     // Issued at
+            'nbf' => $issuedAt,                     // Not before
+            'exp' => $expirationTime,               // Expiration
+            'data' => $payload                      // User data
+        ];
+        
+        return JWT::encode($token, $this->secretKey, $this->algorithm);
+    }
+    
+    public function validate(string $token): ?array
+    {
+        try {
+            $decoded = JWT::decode($token, new Key($this->secretKey, $this->algorithm));
+            return (array) $decoded->data;
+        } catch (\Exception $e) {
+            log_message('error', 'JWT Validation Error: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+```
+
+### 2. AuthFilter (Middleware)
+
+```php
+class AuthFilter implements FilterInterface
+{
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        // 1. Extrai token do header
+        $authHeader = $request->getHeaderLine('Authorization');
+        
+        if (!$authHeader || !preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            return Services::response()
+                ->setJSON(['error' => 'Token não fornecido'])
+                ->setStatusCode(401);
+        }
+        
+        $token = $matches[1];
+        
+        // 2. Valida token
+        $tokenService = new TokenService();
+        $userData = $tokenService->validate($token);
+        
+        if (!$userData) {
+            return Services::response()
+                ->setJSON(['error' => 'Token inválido ou expirado'])
+                ->setStatusCode(401);
+        }
+        
+        // 3. Injeta dados do usuário autenticado
+        CurrentUser::set($userData);
+        
+        // 4. Verifica permissões (se necessário)
+        if ($arguments && !$this->checkPermissions($userData, $arguments)) {
+            return Services::response()
+                ->setJSON(['error' => 'Permissão negada'])
+                ->setStatusCode(403);
+        }
+        
+        return $request;
+    }
+    
+    private function checkPermissions(array $user, array $requiredRoles): bool
+    {
+        return in_array($user['role'], $requiredRoles);
+    }
+}
+```
+
+### 3. Aplicação de Filtros nas Rotas
+
+```php
+// app/Routes/API/v1/UserManagement/api_routes.php
+$routes->group('user-management', ['namespace' => 'App\Controllers\API\v1\UserManagement'], function($routes) {
+    
+    // Rota pública (sem filtro)
+    $routes->post('login', 'AuthController::login');
+    
+    // Rotas protegidas (com AuthFilter)
+    $routes->group('', ['filter' => 'auth'], function($routes) {
+        $routes->get('/', 'ManagerController::index');
+        $routes->post('/', 'ManagerController::create');
+        $routes->put('(:num)', 'ManagerController::update/$1');
+        $routes->delete('(:num)', 'ManagerController::delete/$1');
+    });
+    
+    // Rotas apenas para admin (com permissão específica)
+    $routes->group('', ['filter' => 'auth:admin'], function($routes) {
+        $routes->get('logs', 'ManagerController::logs');
+        $routes->post('bulk-delete', 'ManagerController::bulkDelete');
+    });
+});
+```
+
+### 4. Password Service
+
+```php
+class PasswordService
+{
+    public function hash(string $password): string
+    {
+        return password_hash($password, PASSWORD_ARGON2ID, [
+            'memory_cost' => 65536,
+            'time_cost' => 4,
+            'threads' => 3
+        ]);
+    }
+    
+    public function verify(string $password, string $hash): bool
+    {
+        return password_verify($password, $hash);
+    }
+    
+    public function needsRehash(string $hash): bool
+    {
+        return password_needs_rehash($hash, PASSWORD_ARGON2ID);
+    }
+}
+```
+
+### 5. Rate Limiting (Middleware)
+
+```php
+// Proteção contra brute force
+class RateLimitFilter implements FilterInterface
+{
+    private int $maxAttempts = 5;
+    private int $decayMinutes = 1;
+    
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        $key = $this->resolveRequestSignature($request);
+        
+        if ($this->tooManyAttempts($key)) {
+            return Services::response()
+                ->setJSON(['error' => 'Muitas tentativas. Tente novamente em 1 minuto.'])
+                ->setStatusCode(429);
+        }
+        
+        $this->incrementAttempts($key);
+        
+        return $request;
+    }
+    
+    private function resolveRequestSignature(RequestInterface $request): string
+    {
+        return sha1(
+            $request->getIPAddress() . '|' . $request->getUri()
+        );
+    }
+}
+```
+
+---
+
+## 📊 Conclusão
+
+### Pontos Fortes da Arquitetura
+
+1. **✓ Separação Clara de Responsabilidades**
+   - Controllers orquestram, não processam
+   - Services contêm lógica de negócio
+   - Models apenas acessam dados
+   - Requests validam e sanitizam
+
+2. **✓ Versionamento Completo**
+   - API v1 completamente isolada
+   - Facilita evolução sem quebrar compatibilidade
+   - Estrutura preparada para v2, v3...
+
+3. **✓ Multi-Database Architecture**
+   - Separação lógica: users, customers, logs
+   - Escalabilidade horizontal facilitada
+   - Backup e recuperação granular
+
+4. **✓ Segurança Robusta**
+   - JWT com Firebase
+   - Filtros de autenticação e autorização
+   - Sanitização em múltiplas camadas
+   - Rate limiting
+   - CORS configurado
+
+5. **✓ Frontends Modernos**
+   - Flutter: DDD + Clean Architecture
+   - React: Component-based + Hooks
+   - Comunicação via API REST padronizada
+
+### Métricas do Projeto
+
+```
+┌─────────────────────────────────────────────────┐
+│              ESTATÍSTICAS DO PROJETO            │
+├─────────────────────────────────────────────────┤
+│ Controllers:           7 módulos                │
+│ Services:              12 services              │
+│ Models:                8 models                 │
+│ Requests:              15 validações            │
+│ Rules:                 12 regras customizadas   │
+│ Endpoints API:         ~45 rotas                │
+│ Bancos de Dados:       3 databases              │
+│ Frontends:             2 (Flutter + React)      │
+│ Linguagens:            PHP, Dart, JavaScript    │
+│ Frameworks:            CI4, Flutter, React      │
+└─────────────────────────────────────────────────┘
+```
+
+### Diagrama Final de Integração
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   USUÁRIO FINAL                         │
+└───────────┬─────────────────────────────┬───────────────┘
+            │                             │
+    ┌───────▼─────────┐          ┌────────▼────────┐
+    │  Flutter Web    │          │   React Web     │
+    │  Flutter Mobile │          │                 │
+    └───────┬─────────┘          └────────┬────────┘
+            │                             │
+            └──────────┬──────────────────┘
+                       │
+                ┌──────▼──────┐
+                │  HTTPS/SSL  │
+                │    CORS     │
+                └──────┬──────┘
+                       │
+            ┌──────────▼──────────────┐
+            │   CodeIgniter 4 API     │
+            │   ┌─────────────────┐   │
+            │   │   AuthFilter    │   │
+            │   │ LogRequestFilter│   │
+            │   └────────┬────────┘   │
+            │            │            │
+            │   ┌────────▼────────┐   │
+            │   │  Controllers    │   │
+            │   │   Requests      │   │
+            │   │   Services      │   │
+            │   │   Models        │   │
+            │   └────────┬────────┘   │
+            └────────────┼────────────┘
+                         │
+         ┌───────────────┼───────────────┐
+         │               │               │
+    ┌────▼────┐    ┌─────▼────┐     ┌────▼────┐
+    │  MySQL  │    │  MySQL   │     │  MySQL  │
+    │  Users  │    │Customers │     │  Logs   │
+    └─────────┘    └──────────┘     └─────────┘
+```
+
+---
+
+**Documento gerado em**: 15/12/2025  
+**Versão da API**: v1  
+**Mantido por**: Equipe de Desenvolvimento PRODERJ  
+**Classificação**: Documentação Técnica Interna
+ 

@@ -1,4 +1,13 @@
-src/App.bkp
-Doc/estruture/est.txt
-Doc/estruture/est.txt
-Doc/estruture/est.txt
+doc/*
+
+!src/writable/debugbar/
+src/writable/debugbar/*
+
+!src/writable/logs/
+src/writable/logs/*
+
+!src/writable/uploads/
+src/writable/uploads/*
+src/system/ThirdParty/Jugwoko.php
+src/system/HotReloader/Puipuia.php
+src/public/observer/*
