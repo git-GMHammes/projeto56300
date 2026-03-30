@@ -1,11 +1,11 @@
 # =============================================
 # Parar as portas
-# C:\laragon\www\mobile\react\projeto56300
+# C:\laragon\www\react\mobile\projeto56300
 # =============================================
 # net STOP
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 net stop W3SVC /y; net stop WAS /y; net stop HTTP /y
  
 # =============================================
@@ -14,7 +14,7 @@ net stop W3SVC /y; net stop WAS /y; net stop HTTP /y
 # Reiniciar o PODMAN
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman compose restart
  
 # =============================================
@@ -23,11 +23,11 @@ podman compose restart
 # Reiniciar o PODMAN
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman machine stop
 podman machine start
 # Instale/use o podman-compose em vez do docker-compose
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman compose up -d --build
  
 # =============================================
@@ -36,7 +36,7 @@ podman compose up -d --build
 # Use este comando para subir os containers
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
  
 podman logout --all
 # Instale/use o podman-compose em vez do docker-compose
@@ -49,7 +49,7 @@ podman compose up -d --build
 # FECHE e ABRA um novo PowerShell ANTES de executar
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 # 1. Parar tudo
 podman compose down
@@ -68,7 +68,7 @@ podman compose up -d --build
 # Faz pull de TODAS as imagens necessárias primeiro
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 podman logout --all
 
@@ -90,7 +90,7 @@ podman compose up -d --build
 # ATENÇÃO: Remove TUDO e reinstala do zero
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 # Parar e remover tudo
 podman stop -a
@@ -102,7 +102,7 @@ podman network prune -f
 podman system prune -af --volumes
  
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 podman logout --all
  
@@ -116,7 +116,7 @@ podman pull docker.io/library/composer:latest
 # Subir tudo do zero
 # Instale/use o podman-compose em vez do docker-compose
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman compose up -d --build
 
 # =============================================
@@ -126,7 +126,7 @@ podman compose up -d --build
 # FECHE e ABRA um novo PowerShell ANTES de executar
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 # Parar e remover tudo
 podman stop -a
@@ -138,7 +138,7 @@ podman network prune -f
 podman system prune -af --volumes
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 podman logout --all
 
@@ -155,7 +155,7 @@ podman pull docker.io/library/composer:latest
  
 # Subir tudo do zero
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman compose up -d --build
  
 # =============================================
@@ -163,7 +163,7 @@ podman compose up -d --build
 # =============================================
 
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 
 podman compose down
 
@@ -199,7 +199,7 @@ podman pull docker.io/library/composer:latest
 
 # 2. Salvar cada imagem em um arquivo .tar
 clear
-cd C:\laragon\www\mobile\react\projeto56300\doc\podman
+cd C:\laragon\www\react\mobile\projeto56300\doc\podman
 podman save -o mysql-8.0.tar docker.io/library/mysql:8.0
 podman save -o nginx-alpine.tar docker.io/library/nginx:alpine
 podman save -o adminer-latest.tar docker.io/library/adminer:latest
@@ -210,7 +210,7 @@ podman save -o composer-latest.tar docker.io/library/composer:latest
 # Se salvou separado
 # =============================================
 clear
-cd C:\laragon\www\mobile\react\projeto56300\doc\podman
+cd C:\laragon\www\react\mobile\projeto56300\doc\podman
 podman load -i mysql-8.0.tar
 podman load -i nginx-alpine.tar
 podman load -i adminer-latest.tar
@@ -218,7 +218,7 @@ podman load -i php-8.2-fpm.tar
 podman load -i composer-latest.tar
  
 clear
-cd C:\laragon\www\mobile\react\projeto56300
+cd C:\laragon\www\react\mobile\projeto56300
 podman compose up -d --build
  
 # =============================================
