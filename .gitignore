@@ -1,0 +1,139 @@
+# =============================================================
+# .gitignore — projeto56300
+# Stack: CodeIgniter 4 · Vue 3 + Vite + Pinia · Docker · npm
+# =============================================================
+
+# -------------------------------------------------------------
+# PHP — CodeIgniter 4
+# -------------------------------------------------------------
+
+# Dependências Composer (instalar via: composer install)
+src/vendor/
+
+# Arquivo de ambiente ativo (contém credenciais/configurações locais)
+# O template de exemplo é src/env (arquivo sem ponto — permanece versionado)
+src/.env
+
+# Arquivos de runtime gerados automaticamente
+src/writable/cache/*
+src/writable/debugbar/*
+src/writable/logs/*
+src/writable/session/*
+src/writable/uploads/*
+
+# Manter os diretórios no repositório via .gitkeep
+!src/writable/cache/.gitkeep
+!src/writable/debugbar/.gitkeep
+!src/writable/logs/.gitkeep
+!src/writable/session/.gitkeep
+!src/writable/uploads/.gitkeep
+
+# Arquivos gerados de cobertura/testes PHP
+src/build/
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+*.coverage
+*.clover
+
+# PHP CS Fixer cache
+.php-cs-fixer.cache
+.php_cs.cache
+
+# -------------------------------------------------------------
+# Node.js / npm — raiz do projeto
+# -------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# -------------------------------------------------------------
+# Vue 3 + Vite (frontend)
+# -------------------------------------------------------------
+src/public/frontend/vue_vite_pinia/node_modules/
+
+# Build de produção gerado pelo Vite
+src/public/frontend/vue_vite_pinia/dist/
+
+# Arquivos de ambiente locais do Vite (sobrescrevem .env.[mode])
+# Os arquivos .env.development e .env.production sem ".local" são versionados
+src/public/frontend/vue_vite_pinia/.env.local
+src/public/frontend/vue_vite_pinia/.env.*.local
+
+# Cache interno do Vite
+src/public/frontend/vue_vite_pinia/.vite/
+
+# -------------------------------------------------------------
+# Docker
+# -------------------------------------------------------------
+
+# Volumes de dados persistentes (criados pelo docker compose up)
+docker/mysql_data/
+mysql_data/
+
+# Arquivos de override local do Docker Compose
+docker-compose.override.yml
+docker-compose.local.yml
+
+# -------------------------------------------------------------
+# Editores e IDEs
+# -------------------------------------------------------------
+
+# VS Code (manter .vscode/extensions.json se existir)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# PhpStorm / IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# NetBeans
+nbproject/
+
+# -------------------------------------------------------------
+# Sistema Operacional
+# -------------------------------------------------------------
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+# -------------------------------------------------------------
+# Logs e temporários gerais
+# -------------------------------------------------------------
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# -------------------------------------------------------------
+# Documentação interna (rascunhos/prompts de IA/backups)
+# -------------------------------------------------------------
+docs/

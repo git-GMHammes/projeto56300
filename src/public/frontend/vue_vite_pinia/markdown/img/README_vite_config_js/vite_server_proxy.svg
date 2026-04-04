@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="650" viewBox="0 0 1800 650">
+  <defs>
+    <style>
+      .bg { fill:#f6f7fb; }
+      .card { fill:#ffffff; stroke:#d9dee8; stroke-width:2; rx:18; }
+      .title { fill:#111827; font:900 22px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .subtitle { fill:#374151; font:700 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .noteTitle { fill:#111827; font:900 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .noteText { fill:#374151; font:650 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","CourierNew", monospace; }
+      .lifeline { stroke:#c9cfdd; stroke-width:2.5; stroke-dasharray:8 10; }
+      .arrow { stroke-width:4; fill:none; marker-end:url(#arrowHead); stroke-linecap:round; }
+      .arrowBack { stroke-width:4; fill:none; marker-end:url(#arrowHead); stroke-linecap:round; opacity:0.95; }
+      .label { fill:#111827; font:800 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .chip { fill:#eef2ff; stroke:#c7d2fe; stroke-width:1.5; rx:999; }
+      .chipText { fill:#1f2a6b; font:900 13px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .shadow { filter:url(#softShadow); }
+    </style>
+
+    <!-- Colors requested -->
+    <!-- Vue green -->
+    <style>
+      .vueStroke { stroke:#41b883; }
+      .vueFill { fill:#41b883; }
+      /* Vite blue */
+      .viteStroke { stroke:#3b82f6; }
+      .viteFill { fill:#3b82f6; }
+      /* CI4 orange */
+      .ciStroke { stroke:#fb923c; }
+      .ciFill { fill:#fb923c; }
+    </style>
+
+    <marker id="arrowHead" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111827"/>
+    </marker>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" x="0" y="0" width="1800" height="650"/>
+
+  <!-- Header -->
+  <text x="80" y="85" class="title">Dev Proxy Sequence (Vite → CodeIgniter 4)</text>
+  <text x="80" y="115" class="subtitle">Horizontal sequence diagram • light background • Vue/Vite/CI4 color coding</text>
+
+  <!-- Actor cards -->
+  <!-- Actor 1: Browser/Vue App -->
+  <g class="shadow">
+    <rect class="card" x="80" y="150" width="430" height="140" rx="18"/>
+    <!-- monitor icon -->
+    <g transform="translate(105,182)">
+      <rect x="0" y="0" width="72" height="46" rx="8" fill="#eafff6" stroke="#41b883" stroke-width="3"/>
+      <rect x="10" y="10" width="52" height="26" rx="5" fill="#ffffff" stroke="#41b883" stroke-width="2"/>
+      <rect x="28" y="50" width="16" height="10" rx="3" class="vueFill"/>
+      <rect x="18" y="60" width="36" height="8" rx="4" fill="#1f2937" opacity="0.25"/>
+    </g>
+    <text x="200" y="205" class="title">Browser / Vue App</text>
+    <rect class="chip" x="200" y="220" width="180" height="28" rx="999"/>
+    <text x="214" y="240" class="chipText">localhost:3000</text>
+    <text x="200" y="268" class="subtitle">Actor #1</text>
+  </g>
+
+  <!-- Actor 2: Vite Dev Server -->
+  <g class="shadow">
+    <rect class="card" x="685" y="150" width="430" height="140" rx="18"/>
+    <!-- gear icon -->
+    <g transform="translate(710,182)">
+      <circle cx="36" cy="28" r="22" fill="#eef6ff" stroke="#3b82f6" stroke-width="3"/>
+      <circle cx="36" cy="28" r="8" fill="#ffffff" stroke="#3b82f6" stroke-width="3"/>
+      <!-- simple gear teeth -->
+      <rect x="34" y="2" width="4" height="12" class="viteFill"/>
+      <rect x="34" y="42" width="4" height="12" class="viteFill"/>
+      <rect x="10" y="26" width="12" height="4" class="viteFill"/>
+      <rect x="50" y="26" width="12" height="4" class="viteFill"/>
+      <rect x="16" y="10" width="10" height="4" transform="rotate(-45 21 12)" class="viteFill"/>
+      <rect x="46" y="10" width="10" height="4" transform="rotate(45 51 12)" class="viteFill"/>
+      <rect x="16" y="42" width="10" height="4" transform="rotate(45 21 44)" class="viteFill"/>
+      <rect x="46" y="42" width="10" height="4" transform="rotate(-45 51 44)" class="viteFill"/>
+    </g>
+    <text x="805" y="205" class="title">Vite Dev Server</text>
+    <rect class="chip" x="805" y="220" width="260" height="28" rx="999"/>
+    <text x="820" y="240" class="chipText">proxy /api → backend</text>
+    <text x="805" y="268" class="subtitle">Actor #2</text>
+  </g>
+
+  <!-- Actor 3: Backend CI4 -->
+  <g class="shadow">
+    <rect class="card" x="1290" y="150" width="430" height="140" rx="18"/>
+    <!-- server icon -->
+    <g transform="translate(1315,182)">
+      <rect x="0" y="0" width="74" height="64" rx="10" fill="#fff3e8" stroke="#fb923c" stroke-width="3"/>
+      <rect x="12" y="14" width="50" height="10" rx="5" fill="#ffffff" stroke="#fb923c" stroke-width="2"/>
+      <rect x="12" y="34" width="50" height="10" rx="5" fill="#ffffff" stroke="#fb923c" stroke-width="2"/>
+      <circle cx="62" cy="52" r="4" class="ciFill"/>
+    </g>
+    <text x="1410" y="205" class="title">Backend CodeIgniter 4</text>
+    <rect class="chip" x="1410" y="220" width="220" height="28" rx="999"/>
+    <text x="1424" y="240" class="chipText">localhost:56300</text>
+    <text x="1410" y="268" class="subtitle">Actor #3</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="295" y1="300" x2="295" y2="560" class="lifeline"/>
+  <line x1="900" y1="300" x2="900" y2="560" class="lifeline"/>
+  <line x1="1505" y1="300" x2="1505" y2="560" class="lifeline"/>
+
+  <!-- Sequence arrows -->
+  <!-- Browser -> Vite -->
+  <path d="M 315 350 C 470 350, 740 350, 880 350" class="arrow vueStroke"/>
+  <text x="430" y="330" class="label">GET /api/v1/users (localhost:3000)</text>
+
+  <!-- Vite -> CI4 -->
+  <path d="M 920 410 C 1070 410, 1330 410, 1485 410" class="arrow viteStroke"/>
+  <text x="960" y="390" class="label">forward to localhost:56300/api/v1/users (invisible to browser)</text>
+
+  <!-- Return CI4 -> Vite -> Browser (two arrows) -->
+  <path d="M 1485 470 C 1330 470, 1070 470, 920 470" class="arrowBack ciStroke"/>
+  <text x="1120" y="450" class="label">JSON response</text>
+
+  <path d="M 880 520 C 740 520, 470 520, 315 520" class="arrowBack viteStroke"/>
+
+  <!-- Side note -->
+  <g class="shadow">
+    <rect class="card" x="1180" y="330" width="540" height="110" rx="18"/>
+    <text x="1210" y="370" class="noteTitle">Note</text>
+    <text x="1210" y="398" class="noteText">Only in development — Apache routes in production</text>
+    <text x="1210" y="426" class="noteText">Dev proxy keeps the browser on :3000 (CORS-friendly)</text>
+  </g>
+
+  <!-- Footer mini-legend -->
+  <g>
+    <rect x="80" y="585" width="1640" height="45" rx="14" fill="#ffffff" stroke="#d9dee8" stroke-width="2"/>
+    <circle cx="110" cy="608" r="7" class="vueFill"/>
+    <text x="128" y="614" class="subtitle">Vue/App</text>
+
+    <circle cx="260" cy="608" r="7" class="viteFill"/>
+    <text x="278" y="614" class="subtitle">Vite</text>
+
+    <circle cx="380" cy="608" r="7" class="ciFill"/>
+    <text x="398" y="614" class="subtitle">CodeIgniter 4</text>
+  </g>
+</svg>
