@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .bg { fill:#f5f6f8; }
+      .card { fill:#ffffff; stroke:#d8dde6; stroke-width:2; rx:18; }
+      .title { fill:#111827; font:800 28px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .h2 { fill:#111827; font:800 20px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .text { fill:#374151; font:600 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .muted { fill:#6b7280; font:600 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .mono { fill:#1f2937; font:700 15px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .arrow { stroke:#4b5563; stroke-width:3.5; fill:none; marker-end:url(#arrowHead); }
+      .arrowThin { stroke:#6b7280; stroke-width:2.5; fill:none; marker-end:url(#arrowHead); }
+      .pill { fill:#eef2ff; stroke:#c7d2fe; stroke-width:1.5; rx:999; }
+      .pillText { fill:#3730a3; font:800 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .outGreen { fill:#e8f7ef; stroke:#34d399; stroke-width:2; rx:16; }
+      .outBlue { fill:#e9f2ff; stroke:#60a5fa; stroke-width:2; rx:16; }
+      .outOrange { fill:#fff3e8; stroke:#fb923c; stroke-width:2; rx:16; }
+      .outTitle { fill:#0f172a; font:900 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .outBody { fill:#0f172a; font:700 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .legend { fill:#ffffff; stroke:#d8dde6; stroke-width:2; rx:16; }
+      .legendTitle { fill:#111827; font:900 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .legendText { fill:#374151; font:650 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .chip { fill:#f3f4f6; stroke:#e5e7eb; stroke-width:1.5; rx:12; }
+    </style>
+
+    <marker id="arrowHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5563"/>
+    </marker>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" x="0" y="0" width="1600" height="900"/>
+
+  <!-- Header -->
+  <text x="80" y="90" class="title">Vite/Rollup Build Architecture — manualChunks</text>
+  <text x="80" y="125" class="muted">Clean technical diagram • source → rollup chunking → hashed outputs with browser caching</text>
+
+  <!-- Left: Source Code -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="80" y="170" width="420" height="470" rx="18"/>
+    <text x="110" y="220" class="h2">Código Fonte</text>
+
+    <rect class="chip" x="110" y="250" width="360" height="56" rx="14"/>
+    <text x="130" y="284" class="mono">src/main.js</text>
+
+    <rect class="chip" x="110" y="320" width="360" height="56" rx="14"/>
+    <text x="130" y="354" class="mono">src/views/*.vue</text>
+
+    <rect class="chip" x="110" y="390" width="360" height="56" rx="14"/>
+    <text x="130" y="424" class="mono">src/stores/*.js</text>
+
+    <rect class="chip" x="110" y="460" width="360" height="56" rx="14"/>
+    <text x="130" y="494" class="mono">src/services/*.js</text>
+
+    <text x="110" y="560" class="muted">Entradas do app + dependências importadas</text>
+  </g>
+
+  <!-- Center: Rollup via Vite -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="590" y="230" width="420" height="350" rx="18"/>
+    <text x="620" y="280" class="h2">Rollup (via Vite)</text>
+
+    <rect class="pill" x="620" y="305" width="190" height="34" rx="999"/>
+    <text x="640" y="328" class="pillText">manualChunks</text>
+
+    <text x="620" y="380" class="text">Chunking strategy:</text>
+    <text x="620" y="412" class="muted">• separate vendor bundles</text>
+    <text x="620" y="440" class="muted">• smaller app entry chunk</text>
+    <text x="620" y="468" class="muted">• filenames include content hash</text>
+  </g>
+
+  <!-- Arrows source -> rollup -->
+  <path class="arrow" d="M 500 405 C 540 405, 540 405, 585 405"/>
+  <text x="520" y="385" class="muted">imports</text>
+
+  <!-- Right: Outputs -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="1110" y="170" width="430" height="470" rx="18"/>
+    <text x="1140" y="220" class="h2">Saída (chunks)</text>
+
+    <!-- Output 1: vendor vue -->
+    <rect class="outGreen" x="1140" y="250" width="370" height="110" rx="16"/>
+    <text x="1165" y="285" class="outTitle">vendor-vue-[hash].js</text>
+    <text x="1165" y="315" class="outBody">contains: vue + vue-router + pinia</text>
+
+    <!-- cache icon -->
+    <g transform="translate(1450,270)">
+      <circle cx="30" cy="30" r="22" fill="#34d399" opacity="0.15"/>
+      <path d="M30 12a18 18 0 1 1-12.7 5.3" fill="none" stroke="#059669" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M12 18l6.5 1.5L17 13" fill="none" stroke="#059669" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Output 2: vendor axios -->
+    <rect class="outBlue" x="1140" y="380" width="370" height="110" rx="16"/>
+    <text x="1165" y="415" class="outTitle">vendor-axios-[hash].js</text>
+    <text x="1165" y="445" class="outBody">contains: axios</text>
+
+    <!-- cache icon -->
+    <g transform="translate(1450,400)">
+      <circle cx="30" cy="30" r="22" fill="#60a5fa" opacity="0.15"/>
+      <path d="M30 12a18 18 0 1 1-12.7 5.3" fill="none" stroke="#2563eb" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M12 18l6.5 1.5L17 13" fill="none" stroke="#2563eb" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Output 3: main -->
+    <rect class="outOrange" x="1140" y="510" width="370" height="110" rx="16"/>
+    <text x="1165" y="545" class="outTitle">main-[hash].js</text>
+    <text x="1165" y="575" class="outBody">contains: application code</text>
+  </g>
+
+  <!-- Arrows rollup -> outputs -->
+  <path class="arrowThin" d="M 1010 330 C 1060 300, 1080 290, 1135 300"/>
+  <path class="arrowThin" d="M 1010 405 C 1060 405, 1080 405, 1135 435"/>
+  <path class="arrowThin" d="M 1010 480 C 1060 520, 1080 535, 1135 565"/>
+
+  <text x="1020" y="305" class="muted">emit vendor chunk</text>
+  <text x="1020" y="420" class="muted">emit vendor chunk</text>
+  <text x="1020" y="535" class="muted">emit entry chunk</text>
+
+  <!-- Legend -->
+  <g filter="url(#softShadow)">
+    <rect class="legend" x="80" y="690" width="1460" height="150" rx="18"/>
+    <text x="110" y="735" class="legendTitle">Legenda — estratégia de cache por hash</text>
+
+    <text x="110" y="770" class="legendText">
+      • Chunks “vendor-*-[hash].js” mudam menos: o browser pode manter em cache por mais tempo (cache hit).
+    </text>
+    <text x="110" y="800" class="legendText">
+      • O “[hash]” muda quando o conteúdo muda → invalidação automática do cache (cache busting).
+    </text>
+    <text x="110" y="830" class="legendText">
+      • “main-[hash].js” tende a mudar com mais frequência → cache menor e atualizações mais rápidas.
+    </text>
+  </g>
+</svg>

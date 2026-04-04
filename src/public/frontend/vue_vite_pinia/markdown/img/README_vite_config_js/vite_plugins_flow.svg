@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800">
+  <defs>
+    <style>
+      .bg { fill:#1a1a2e; }
+      .card { fill:#202046; stroke:#2f2f6b; stroke-width:2; rx:16; }
+      .title { fill:#ffffff; font:700 26px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .text { fill:#d7d7ff; font:500 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .code { fill:#b7c7ff; font:600 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .muted { fill:#a9a9d6; font:500 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+      .arrow { stroke:#646cff; stroke-width:4; fill:none; marker-end:url(#arrowHead); }
+      .arrowVue { stroke:#41b883; stroke-width:4; fill:none; marker-end:url(#arrowHeadVue); }
+      .chip { fill:#2a2a5a; stroke:#3a3aa0; stroke-width:1.5; rx:10; }
+      .chipVue { fill:#1f3a3a; stroke:#41b883; stroke-width:1.5; rx:10; }
+      .chipVite { fill:#2a244a; stroke:#646cff; stroke-width:1.5; rx:10; }
+      .label { fill:#ffffff; font:700 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; letter-spacing:0.3px; }
+      .stepNum { fill:#ffffff; font:700 20px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+    </style>
+
+    <marker id="arrowHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#646cff"/>
+    </marker>
+    <marker id="arrowHeadVue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#41b883"/>
+    </marker>
+
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#41b883" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#646cff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#41b883" stop-opacity="0.15"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" x="0" y="0" width="1400" height="800"/>
+  <rect x="60" y="60" width="1280" height="680" rx="22" fill="url(#glow)" opacity="0.9"/>
+
+  <!-- Header -->
+  <text x="90" y="120" class="title">Vite → Vue SFC Transform Pipeline</text>
+  <text x="90" y="150" class="muted">Minimal technical flow • dark theme • monospace labels</text>
+
+  <!-- Step 1: Input -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="90" y="220" width="340" height="260" rx="18"/>
+    <text x="120" y="260" class="stepNum">1</text>
+    <text x="150" y="260" class="title" font-size="22">Input</text>
+
+    <rect class="chip" x="120" y="295" width="280" height="42" rx="12"/>
+    <text x="140" y="322" class="label">.vue file enters</text>
+
+    <text x="120" y="370" class="code">&lt;template&gt;...&lt;/template&gt;</text>
+    <text x="120" y="405" class="code">&lt;script setup&gt;...&lt;/script&gt;</text>
+    <text x="120" y="440" class="code">&lt;style scoped&gt;...&lt;/style&gt;</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <path class="arrow" d="M 440 350 C 520 350, 520 350, 600 350"/>
+  <text x="485" y="330" class="text" font-size="16">to plugin</text>
+
+  <!-- Step 2: Plugin Vue -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="610" y="180" width="520" height="360" rx="18"/>
+    <text x="640" y="220" class="stepNum">2</text>
+    <text x="670" y="220" class="title" font-size="22">Vue Plugin</text>
+
+    <rect class="chipVite" x="640" y="245" width="460" height="44" rx="12"/>
+    <text x="660" y="273" class="label">@vitejs/plugin-vue</text>
+
+    <!-- Template -->
+    <rect class="chipVue" x="640" y="310" width="460" height="64" rx="14"/>
+    <text x="660" y="338" class="label">Template Compilation</text>
+    <text x="660" y="360" class="muted">process &lt;template&gt; with Vue compiler</text>
+
+    <!-- Script setup -->
+    <rect class="chip" x="640" y="390" width="460" height="64" rx="14"/>
+    <text x="660" y="418" class="label">Script Setup Transform</text>
+    <text x="660" y="440" class="muted">transform macros in &lt;script setup&gt;</text>
+
+    <!-- Style scoped -->
+    <rect class="chipVue" x="640" y="470" width="460" height="64" rx="14"/>
+    <text x="660" y="498" class="label">Scoped Style Processing</text>
+    <text x="660" y="520" class="muted">inject scope hash for &lt;style scoped&gt;</text>
+
+    <!-- Accent dots -->
+    <circle cx="1085" cy="267" r="6" fill="#646cff"/>
+    <circle cx="1065" cy="267" r="6" fill="#41b883"/>
+  </g>
+
+  <!-- Arrow 2 -->
+  <path class="arrowVue" d="M 1135 350 C 1210 350, 1210 350, 1285 350"/>
+  <text x="1180" y="330" class="text" font-size="16">emit</text>
+
+  <!-- Step 3: Output -->
+  <g filter="url(#softShadow)">
+    <rect class="card" x="1245" y="220" width="260" height="260" rx="18" transform="translate(-165,0)"/>
+    <text x="1105" y="260" class="stepNum">3</text>
+    <text x="1135" y="260" class="title" font-size="22">Output</text>
+
+    <rect class="chipVite" x="1105" y="295" width="280" height="42" rx="12"/>
+    <text x="1125" y="322" class="label">pure ESM module</text>
+
+    <text x="1105" y="370" class="code">export default { ... }</text>
+    <text x="1105" y="405" class="code">// compiled render()</text>
+    <text x="1105" y="440" class="code">// scopeId: "data-v-..."</text>
+
+    <rect class="chip" x="1105" y="470" width="280" height="42" rx="12"/>
+    <text x="1125" y="497" class="label">.js</text>
+  </g>
+
+  <!-- Legend -->
+  <g>
+    <rect class="card" x="90" y="560" width="1290" height="150" rx="18" opacity="0.95"/>
+    <text x="120" y="605" class="title" font-size="20">Legend</text>
+
+    <rect class="chipVue" x="120" y="630" width="210" height="44" rx="12"/>
+    <text x="140" y="658" class="label">Vue</text>
+    <text x="220" y="658" class="muted" fill="#41b883">#41b883</text>
+
+    <rect class="chipVite" x="360" y="630" width="210" height="44" rx="12"/>
+    <text x="380" y="658" class="label">Vite</text>
+    <text x="460" y="658" class="muted" fill="#646cff">#646cff</text>
+
+    <rect class="chip" x="600" y="630" width="520" height="44" rx="12"/>
+    <text x="620" y="658" class="label">Code labels: monospace</text>
+
+    <text x="120" y="700" class="muted">Arrows are labeled in English as requested.</text>
+  </g>
+</svg>
