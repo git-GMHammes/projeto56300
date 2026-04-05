@@ -92,6 +92,53 @@ const gridEx3 = [
     ],
   },
 ]
+// ── Row Factory — Exemplo 3: componentes reais — FieldPhone via JSON ─────────
+const gridEx4 = [
+  {
+    line: '1',
+    wrapper_class: 'rounded p-3 mb-3',
+    row_classes: 'row g-3',
+    total_cols: 12,
+    columns: [
+      {
+        'col-md': 4,
+        class: 'rounded p-3',
+        content: {
+          component: FieldPhone,
+          props: {
+            id: 'nome', name: 'nome', label: 'Nome', modelValue: form.nome,
+            required: true, allowNumbers: false, allowSpecial: false,
+            placeholder: 'Apenas letras'
+          },
+        },
+      },
+      {
+        'col-md': 4,
+        class: 'rounded p-3',
+        content: {
+          component: FieldPhone,
+          props: {
+            id: 'codigo', name: 'codigo', label: 'Código', modelValue: form.codigo,
+            allowLetters: false, allowSpecial: false,
+            placeholder: 'Apenas dígitos'
+          },
+        },
+      },
+      {
+        'col-md': 4,
+        class: 'rounded p-3',
+        content: {
+          component: FieldPhone,
+          props: {
+            id: 'cidade', name: 'cidade', label: 'Cidade', modelValue: form.cidade,
+            options: ['Porto Alegre', 'São Paulo', 'Curitiba', 'Florianópolis'],
+            placeholder: 'Digite ou escolha'
+          },
+        },
+      },
+    ],
+  },
+]
 </script>
 
 <template>
