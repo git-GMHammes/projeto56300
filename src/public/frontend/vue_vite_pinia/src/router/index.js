@@ -12,76 +12,70 @@ import { tokenService } from '@/services/tokenService'
  * Lazy loading em todas as views → reduz o bundle inicial.
  */
 const routes = [
+  // localhost:3000/#/
   {
     path: '/',
     redirect: '/dashboard',
   },
+
+  // localhost:3000/#/login
   {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login.vue'),
     meta: { requiresAuth: false, title: 'Login' },
   },
+
+  // localhost:3000/#/forgot-password
   {
-    path: '/recuperar-senha',
-    name: 'RecuperarSenha',
-    component: () => import('@/views/RecuperarSenha.vue'),
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPassword.vue'),
     meta: { requiresAuth: false, title: 'Recuperar Senha' },
   },
+
+  // localhost:3000/#/register
   {
-    path: '/cadastro',
-    name: 'Cadastro',
-    component: () => import('@/views/Cadastro.vue'),
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/Register.vue'),
     meta: { requiresAuth: false, title: 'Criar Conta' },
   },
+
+  // localhost:3000/#/dashboard
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('@/views/Dashboard.vue'),
     meta: { requiresAuth: true, title: 'Dashboard' },
   },
+
+  // localhost:3000/#/hub/:service
   {
     path: '/hub/:service',
     name: 'ServiceHub',
     component: () => import('@/views/ServiceHub.vue'),
     meta: { requiresAuth: true, title: 'Serviço' },
   },
+
+  // localhost:3000/#/test-module/blank-canvas
   {
-    // ── Módulo de Testes: Component Factory & Benchmark ──────────────────────
-    // Isolado do guard de autenticação (requiresAuth: false).
-    // Bootstrap 5 é injetado via CDN pelo layout e removido ao sair.
-    path: '/modulo-teste',
-    component: () => import('@/views/modulo-teste/ModuloTesteLayout.vue'),
-    meta: { requiresAuth: false, title: 'Módulo Teste' },
-    children: [
-      {
-        path: '',
-        redirect: 'blank-canvas',
-      },
-      {
-        path: 'blank-canvas',
-        name: 'BlankCanvas',
-        component: () => import('@/views/modulo-teste/BlankCanvas.vue'),
-        meta: { requiresAuth: false, title: 'Blank Canvas' },
-      },
-      {
-        // Placeholder — implementado na próxima iteração
-        path: 'benchmarking-grid',
-        name: 'BenchmarkingGrid',
-        component: () => import('@/views/modulo-teste/BlankCanvas.vue'), // temporário
-        meta: { requiresAuth: false, title: 'Benchmarking Grid' },
-      },
-      {
-        // Placeholder — implementado na próxima iteração
-        path: 'interatividade-js',
-        name: 'InteratividadeJs',
-        component: () => import('@/views/modulo-teste/BlankCanvas.vue'), // temporário
-        meta: { requiresAuth: false, title: 'Interatividade JS' },
-      },
-    ],
+    path: '/test-module/blank-canvas',
+    name: 'BlankCanvas',
+    component: () => import('@/views/test-module/BlankCanvas.vue'),
+    meta: { requiresAuth: false, title: 'Blank Canvas' },
   },
+
+  // localhost:3000/#/free
   {
-    // Rota coringa — redireciona qualquer URL desconhecida para o dashboard
+    path: '/free',
+    name: 'Free',
+    component: () => import('@/views/Free.vue'),
+    meta: { requiresAuth: false, title: 'Livre' },
+  },
+
+  // localhost:3000/#/:pathMatch — coringa, redireciona qualquer URL desconhecida para o dashboard
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/dashboard',
   },
@@ -107,7 +101,7 @@ router.beforeEach((to) => {
   }
 
   // Já autenticado tentando acessar login, cadastro ou recuperar senha → vai para dashboard
-  if (['Login', 'Cadastro', 'RecuperarSenha'].includes(to.name) && authenticated) {
+  if (['Login', 'Register', 'ForgotPassword'].includes(to.name) && authenticated) {
     return { name: 'Dashboard' }
   }
 })
