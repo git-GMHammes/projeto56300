@@ -40,7 +40,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
   // ── Actions ───────────────────────────────────────────────────────────────
 
-  /** Alterna entre modo claro e escuro e aplica a classe no <html> */
+  /** Alterna entre modo claro e escuro e aplica o tema no <html> */
   function toggleTheme() {
     theme.value = theme.value === 'light' ? 'dark' : 'light'
     applyTheme()
@@ -53,10 +53,14 @@ export const useSettingsStore = defineStore('settings', () => {
 
   /**
    * Aplica o tema salvo ao elemento <html>.
+   * Bootstrap 5.3 usa data-bs-theme='dark'|'light'.
+   * A classe 'dark' é mantida como bridge para componentes ainda não migrados.
    * Deve ser chamado ao montar a aplicação (onMounted na view raiz).
    */
   function applyTheme() {
-    document.documentElement.classList.toggle('dark', isDarkMode.value)
+    const isDark = isDarkMode.value
+    document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light')
+    document.documentElement.classList.toggle('dark', isDark)
   }
 
   return {

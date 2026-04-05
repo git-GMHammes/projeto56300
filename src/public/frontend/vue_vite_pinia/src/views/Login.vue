@@ -24,42 +24,27 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div
-    class="min-h-screen flex items-center justify-center p-4
-           bg-gradient-to-br from-primary-50 via-white to-blue-50
-           dark:from-slate-950 dark:via-slate-900 dark:to-slate-950"
-  >
-    <div class="w-full max-w-md animate-fade-in">
+  <div class="min-vh-100 d-flex align-items-center justify-content-center p-3 auth-bg">
+    <div class="auth-card-wrapper animate-fade-in">
 
       <!-- ── Logo ──────────────────────────────────────────────────────── -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center h-16 w-16 rounded-2xl
-                    bg-primary-600 dark:bg-primary-500 text-white text-3xl
-                    shadow-lg shadow-primary-200 dark:shadow-primary-900/40 mb-4">
+      <div class="text-center mb-4">
+        <div class="icon-box-lg rounded-4 bg-primary text-white shadow
+                    d-inline-flex align-items-center justify-content-center mb-3">
           🔌
         </div>
-        <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
-          HUB de Serviços
-        </h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Painel Multi-tenant · Faça login para continuar
-        </p>
+        <h1 class="h4 fw-bolder text-body mb-1">HUB de Serviços</h1>
+        <p class="text-muted small mb-0">Painel Multi-tenant · Faça login para continuar</p>
       </div>
 
       <!-- ── Card do formulário ─────────────────────────────────────────── -->
-      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl
-                  border border-gray-100 dark:border-slate-700 p-8">
+      <div class="card border-0 rounded-4 shadow-lg p-4">
 
-        <form class="space-y-5" @submit.prevent="handleLogin" novalidate>
+        <form class="vstack gap-4" @submit.prevent="handleLogin" novalidate>
 
           <!-- Usuário -->
           <div>
-            <label
-              for="user"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
-            >
-              Usuário
-            </label>
+            <label for="user" class="form-label fw-medium">Usuário</label>
             <input
               id="user"
               v-model.trim="form.user"
@@ -67,27 +52,19 @@ async function handleLogin() {
               autocomplete="username"
               required
               placeholder="seu.usuario"
-              class="form-input"
+              class="form-control"
             />
           </div>
 
           <!-- Senha -->
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Senha
-              </label>
-              <router-link
-                to="/recuperar-senha"
-                class="text-xs text-primary-600 dark:text-primary-400 hover:underline"
-              >
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <label for="password" class="form-label fw-medium mb-0">Senha</label>
+              <router-link to="/recuperar-senha" class="small text-primary text-decoration-none">
                 Esqueceu a senha?
               </router-link>
             </div>
-            <div class="relative">
+            <div class="input-group">
               <input
                 id="password"
                 v-model="form.password"
@@ -95,15 +72,14 @@ async function handleLogin() {
                 autocomplete="current-password"
                 required
                 placeholder="••••••••"
-                class="form-input pr-10"
+                class="form-control"
               />
               <button
                 type="button"
-                class="absolute inset-y-0 right-0 flex items-center px-3
-                       text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                class="btn btn-outline-secondary"
                 @click="showPassword = !showPassword"
               >
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg class="icon-xs" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path v-if="showPassword" stroke-linecap="round" stroke-linejoin="round"
                     d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97
                        0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88
@@ -119,14 +95,8 @@ async function handleLogin() {
 
           <!-- Mensagem de erro -->
           <transition name="fade">
-            <div
-              v-if="errorMsg"
-              class="flex items-center gap-2.5 p-3 rounded-lg
-                     bg-red-50 dark:bg-red-900/20
-                     border border-red-200 dark:border-red-700
-                     text-red-600 dark:text-red-400 text-sm"
-            >
-              <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div v-if="errorMsg" class="alert alert-danger d-flex align-items-center gap-2 py-2 small mb-0">
+              <svg class="icon-xs flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732
                      4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -149,18 +119,15 @@ async function handleLogin() {
         </form>
 
         <!-- ── Links auxiliares ──────────────────────────────────────────── -->
-        <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div class="mt-4 text-center small text-muted">
           Não tem uma conta?
-          <router-link
-            to="/cadastro"
-            class="ml-1 font-medium text-primary-600 dark:text-primary-400 hover:underline"
-          >
+          <router-link to="/cadastro" class="ms-1 fw-medium text-primary text-decoration-none">
             Criar conta
           </router-link>
         </div>
       </div>
 
-      <p class="text-center text-xs text-gray-400 dark:text-gray-600 mt-6">
+      <p class="text-center small text-muted mt-4 mb-0">
         Plataforma HUB Multi-Serviços · {{ new Date().getFullYear() }}
       </p>
 
