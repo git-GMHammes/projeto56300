@@ -9,3 +9,4 @@
  */
 
 export { default as FieldInput } from './FieldInput.vue'
+export { default as FieldPhone } from './FieldPhone.vue'
