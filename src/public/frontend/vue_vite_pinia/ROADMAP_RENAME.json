@@ -1,0 +1,747 @@
+{
+  "roadmap": {
+    "project": "HUB de Serviços — Vue 3 + Vite + Pinia",
+    "base_path": "src/public/frontend/vue_vite_pinia/src",
+    "generated_at": "2026-04-05",
+    "author": "Claude Code — Análise Automatizada",
+    "objective": "Renomear TODOS os arquivos e pastas cujos nomes estão em Português/BR para Inglês/EUA. Conteúdo interno e comentários permanecem em Português/BR.",
+    "legend": {
+      "status_ok": "Nome já está em Inglês — nenhuma ação necessária",
+      "status_rename": "Nome está em Português — REQUER renomeação",
+      "status_update": "Arquivo em Inglês, mas possui referências internas a nomes que serão renomeados — REQUER atualização de conteúdo"
+    },
+
+    "inventory": {
+      "description": "Inventário completo de TODOS os arquivos e pastas dentro de /src",
+      "folders": [
+        {
+          "id": "F01",
+          "current_path": "src/api",
+          "status": "ok",
+          "proposed_path": "src/api",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F02",
+          "current_path": "src/assets",
+          "status": "ok",
+          "proposed_path": "src/assets",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F03",
+          "current_path": "src/components",
+          "status": "ok",
+          "proposed_path": "src/components",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F04",
+          "current_path": "src/components/common",
+          "status": "ok",
+          "proposed_path": "src/components/common",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F05",
+          "current_path": "src/components/layout",
+          "status": "ok",
+          "proposed_path": "src/components/layout",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F06",
+          "current_path": "src/components/widgets",
+          "status": "ok",
+          "proposed_path": "src/components/widgets",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F07",
+          "current_path": "src/composables",
+          "status": "ok",
+          "proposed_path": "src/composables",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F08",
+          "current_path": "src/router",
+          "status": "ok",
+          "proposed_path": "src/router",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F09",
+          "current_path": "src/services",
+          "status": "ok",
+          "proposed_path": "src/services",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F10",
+          "current_path": "src/stores",
+          "status": "ok",
+          "proposed_path": "src/stores",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F11",
+          "current_path": "src/utils",
+          "status": "ok",
+          "proposed_path": "src/utils",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F12",
+          "current_path": "src/views",
+          "status": "ok",
+          "proposed_path": "src/views",
+          "notes": "Nome em Inglês — sem alteração"
+        },
+        {
+          "id": "F13",
+          "current_path": "src/views/modulo-teste",
+          "status": "rename",
+          "proposed_path": "src/views/test-module",
+          "translation": "modulo-teste → test-module",
+          "notes": "Nome em Português — RENOMEAR pasta"
+        }
+      ],
+      "files": [
+        {
+          "id": "A01",
+          "group": "Entry Point",
+          "current_path": "src/main.js",
+          "proposed_path": "src/main.js",
+          "status": "ok",
+          "description": "Inicialização do app Vue 3 com Pinia e Router",
+          "references_renamed": false
+        },
+        {
+          "id": "A02",
+          "group": "API",
+          "current_path": "src/api/axios-config.js",
+          "proposed_path": "src/api/axios-config.js",
+          "status": "ok",
+          "description": "Instância Axios com interceptors de request/response, injeção de Bearer token e tratamento de erros",
+          "references_renamed": false
+        },
+        {
+          "id": "A03",
+          "group": "Assets",
+          "current_path": "src/assets/main.scss",
+          "proposed_path": "src/assets/main.scss",
+          "status": "ok",
+          "description": "Estilos globais da aplicação",
+          "references_renamed": false
+        },
+        {
+          "id": "A04",
+          "group": "Assets",
+          "current_path": "src/assets/bootstrap-custom.scss",
+          "proposed_path": "src/assets/bootstrap-custom.scss",
+          "status": "ok",
+          "description": "Customizações Bootstrap 5.3",
+          "references_renamed": false
+        },
+        {
+          "id": "A05",
+          "group": "Assets",
+          "current_path": "src/assets/dark-mode.scss",
+          "proposed_path": "src/assets/dark-mode.scss",
+          "status": "ok",
+          "description": "Estilos do tema escuro",
+          "references_renamed": false
+        },
+        {
+          "id": "A06",
+          "group": "Components / Common",
+          "current_path": "src/components/common/BaseButton.vue",
+          "proposed_path": "src/components/common/BaseButton.vue",
+          "status": "ok",
+          "description": "Botão reutilizável com variantes de estilo",
+          "references_renamed": false
+        },
+        {
+          "id": "A07",
+          "group": "Components / Common",
+          "current_path": "src/components/common/BaseCard.vue",
+          "proposed_path": "src/components/common/BaseCard.vue",
+          "status": "ok",
+          "description": "Card genérico com slots de header, body e footer",
+          "references_renamed": false
+        },
+        {
+          "id": "A08",
+          "group": "Components / Common",
+          "current_path": "src/components/common/SkeletonLoader.vue",
+          "proposed_path": "src/components/common/SkeletonLoader.vue",
+          "status": "ok",
+          "description": "Skeleton animado para estado de carregamento",
+          "references_renamed": false
+        },
+        {
+          "id": "A09",
+          "group": "Components / Layout",
+          "current_path": "src/components/layout/AppNavbar.vue",
+          "proposed_path": "src/components/layout/AppNavbar.vue",
+          "status": "ok",
+          "description": "Navbar fixo superior com toggle de tema, dados do usuário e logout",
+          "references_renamed": false
+        },
+        {
+          "id": "A10",
+          "group": "Components / Layout",
+          "current_path": "src/components/layout/AppSidebar.vue",
+          "proposed_path": "src/components/layout/AppSidebar.vue",
+          "status": "ok",
+          "description": "Sidebar colapsável com menu de navegação e overlay mobile",
+          "references_renamed": false
+        },
+        {
+          "id": "A11",
+          "group": "Components / Layout",
+          "current_path": "src/components/layout/AppFooter.vue",
+          "proposed_path": "src/components/layout/AppFooter.vue",
+          "status": "ok",
+          "description": "Rodapé da aplicação",
+          "references_renamed": false
+        },
+        {
+          "id": "A12",
+          "group": "Components / Widgets",
+          "current_path": "src/components/widgets/ApiWidget.vue",
+          "proposed_path": "src/components/widgets/ApiWidget.vue",
+          "status": "ok",
+          "description": "Widget genérico combinando BaseCard + SkeletonLoader + fetch de API com slot de conteúdo",
+          "references_renamed": false
+        },
+        {
+          "id": "A13",
+          "group": "Composables",
+          "current_path": "src/composables/useApiWidget.js",
+          "proposed_path": "src/composables/useApiWidget.js",
+          "status": "ok",
+          "description": "Composable para fetch de API com estados de loading/error e suporte a envelope { success, data, meta, message }",
+          "references_renamed": false
+        },
+        {
+          "id": "A14",
+          "group": "Router",
+          "current_path": "src/router/index.js",
+          "proposed_path": "src/router/index.js",
+          "status": "update",
+          "description": "Configuração de rotas Vue Router com Hash History, lazy loading e navigation guards",
+          "references_renamed": true,
+          "references_detail": [
+            "import de '@/views/RecuperarSenha.vue' → '@/views/ForgotPassword.vue'",
+            "import de '@/views/Cadastro.vue' → '@/views/Register.vue'",
+            "import de '@/views/modulo-teste/BlankCanvas.vue' → '@/views/test-module/BlankCanvas.vue'",
+            "import de '@/views/Livre.vue' → '@/views/Free.vue'",
+            "route path '/recuperar-senha' → '/forgot-password'",
+            "route path '/cadastro' → '/register'",
+            "route path '/modulo-teste/blank-canvas' → '/test-module/blank-canvas'",
+            "route path '/livre' → '/free'",
+            "route name 'RecuperarSenha' → 'ForgotPassword'",
+            "route name 'Cadastro' → 'Register'",
+            "route name 'Livre' → 'Free'",
+            "navigation guard: array ['Login', 'Cadastro', 'RecuperarSenha'] → ['Login', 'Register', 'ForgotPassword']",
+            "comentário '// localhost:3000/#/recuperar-senha' → '// localhost:3000/#/forgot-password'",
+            "comentário '// localhost:3000/#/cadastro' → '// localhost:3000/#/register'",
+            "comentário '// localhost:3000/#/modulo-teste/blank-canvas' → '// localhost:3000/#/test-module/blank-canvas'",
+            "comentário '// localhost:3000/#/livre' → '// localhost:3000/#/free'"
+          ]
+        },
+        {
+          "id": "A15",
+          "group": "Services",
+          "current_path": "src/services/apiFactory.js",
+          "proposed_path": "src/services/apiFactory.js",
+          "status": "ok",
+          "description": "Factory que gera serviços com operações CRUD, busca, soft delete e restore para qualquer módulo",
+          "references_renamed": false
+        },
+        {
+          "id": "A16",
+          "group": "Services",
+          "current_path": "src/services/tokenService.js",
+          "proposed_path": "src/services/tokenService.js",
+          "status": "ok",
+          "description": "Abstração de armazenamento de token e dados do usuário no localStorage",
+          "references_renamed": false
+        },
+        {
+          "id": "A17",
+          "group": "Services",
+          "current_path": "src/services/userService.js",
+          "proposed_path": "src/services/userService.js",
+          "status": "ok",
+          "description": "Serviço do módulo de usuários gerado pela apiFactory",
+          "references_renamed": false
+        },
+        {
+          "id": "A18",
+          "group": "Services",
+          "current_path": "src/services/paymentService.js",
+          "proposed_path": "src/services/paymentService.js",
+          "status": "ok",
+          "description": "Serviço do módulo de pagamentos com métodos customizados: process, refund, getStatement, getSummary",
+          "references_renamed": false
+        },
+        {
+          "id": "A19",
+          "group": "Services",
+          "current_path": "src/services/externalService.js",
+          "proposed_path": "src/services/externalService.js",
+          "status": "ok",
+          "description": "Serviço para integrações com APIs externas",
+          "references_renamed": false
+        },
+        {
+          "id": "A20",
+          "group": "Stores",
+          "current_path": "src/stores/auth.js",
+          "proposed_path": "src/stores/auth.js",
+          "status": "ok",
+          "description": "Store de autenticação: login, logout, register, recoverPassword, refreshUser; persiste token no localStorage",
+          "references_renamed": false
+        },
+        {
+          "id": "A21",
+          "group": "Stores",
+          "current_path": "src/stores/dashboardStore.js",
+          "proposed_path": "src/stores/dashboardStore.js",
+          "status": "ok",
+          "description": "Store do dashboard com carregamento paralelo via Promise.allSettled e refresh individual por widget",
+          "references_renamed": false
+        },
+        {
+          "id": "A22",
+          "group": "Stores",
+          "current_path": "src/stores/settings.js",
+          "proposed_path": "src/stores/settings.js",
+          "status": "ok",
+          "description": "Store de preferências: tema, sidebar, idioma, paginação; persiste no localStorage via watcher",
+          "references_renamed": false
+        },
+        {
+          "id": "A23",
+          "group": "Utils",
+          "current_path": "src/utils/formatters.js",
+          "proposed_path": "src/utils/formatters.js",
+          "status": "ok",
+          "description": "Funções puras de formatação: moeda BRL, data, CPF, CNPJ, telefone, truncate, timeAgo PT-BR, iniciais",
+          "references_renamed": false
+        },
+        {
+          "id": "A24",
+          "group": "Views",
+          "current_path": "src/views/Login.vue",
+          "proposed_path": "src/views/Login.vue",
+          "status": "ok",
+          "description": "Página de login com formulário usuário/senha, toggle show/hide e links para cadastro e recuperação",
+          "references_renamed": false
+        },
+        {
+          "id": "A25",
+          "group": "Views",
+          "current_path": "src/views/Cadastro.vue",
+          "proposed_path": "src/views/Register.vue",
+          "status": "rename",
+          "translation": "Cadastro → Register",
+          "description": "Formulário de cadastro multi-etapas: credenciais (step 1) + dados do cliente (step 2)",
+          "references_renamed": false
+        },
+        {
+          "id": "A26",
+          "group": "Views",
+          "current_path": "src/views/RecuperarSenha.vue",
+          "proposed_path": "src/views/ForgotPassword.vue",
+          "status": "rename",
+          "translation": "RecuperarSenha → ForgotPassword",
+          "description": "Página de recuperação de senha por e-mail",
+          "references_renamed": false
+        },
+        {
+          "id": "A27",
+          "group": "Views",
+          "current_path": "src/views/Dashboard.vue",
+          "proposed_path": "src/views/Dashboard.vue",
+          "status": "ok",
+          "description": "Dashboard principal com KPI cards, ApiWidgets independentes (usuários e pagamentos) e atalhos de módulos",
+          "references_renamed": false
+        },
+        {
+          "id": "A28",
+          "group": "Views",
+          "current_path": "src/views/ServiceHub.vue",
+          "proposed_path": "src/views/ServiceHub.vue",
+          "status": "ok",
+          "description": "Página genérica de serviço acessada via /hub/:service",
+          "references_renamed": false
+        },
+        {
+          "id": "A29",
+          "group": "Views",
+          "current_path": "src/views/Livre.vue",
+          "proposed_path": "src/views/Free.vue",
+          "status": "rename",
+          "translation": "Livre → Free",
+          "description": "Página pública/livre sem requisito de autenticação",
+          "references_renamed": false
+        },
+        {
+          "id": "A30",
+          "group": "Views / test-module",
+          "current_path": "src/views/modulo-teste/BlankCanvas.vue",
+          "proposed_path": "src/views/test-module/BlankCanvas.vue",
+          "status": "ok",
+          "description": "Página em branco do módulo de testes para experimentação",
+          "notes": "Nome do arquivo já está em Inglês — move apenas por causa da pasta pai renomeada",
+          "references_renamed": false
+        },
+        {
+          "id": "A31",
+          "group": "Views / test-module",
+          "current_path": "src/views/modulo-teste/ModuloTesteLayout.vue",
+          "proposed_path": "src/views/test-module/TestModuleLayout.vue",
+          "status": "rename",
+          "translation": "ModuloTesteLayout → TestModuleLayout",
+          "description": "Layout wrapper do módulo de testes",
+          "references_renamed": false
+        }
+      ]
+    },
+
+    "rename_plan": {
+      "description": "Lista COMPLETA de todas as renomeações necessárias, organizadas por tipo",
+      "total_folders_to_rename": 1,
+      "total_files_to_rename": 4,
+      "total_files_to_update_content": 1,
+      "total_files_no_action": 26,
+
+      "folders": [
+        {
+          "step": 1,
+          "id": "F13",
+          "action": "RENAME_FOLDER",
+          "current_name": "modulo-teste",
+          "proposed_name": "test-module",
+          "current_full_path": "src/views/modulo-teste",
+          "proposed_full_path": "src/views/test-module",
+          "reason": "Nome em Português — kebab-case mantido conforme convenção de pastas do projeto",
+          "must_do_before": "Renomear antes dos arquivos internos para evitar conflitos de path"
+        }
+      ],
+
+      "files": [
+        {
+          "step": 2,
+          "id": "A25",
+          "action": "RENAME_FILE",
+          "current_name": "Cadastro.vue",
+          "proposed_name": "Register.vue",
+          "current_full_path": "src/views/Cadastro.vue",
+          "proposed_full_path": "src/views/Register.vue",
+          "translation_rationale": "'Cadastro' = ato de cadastrar/registrar um novo usuário. Equivalente direto em Inglês: 'Register'",
+          "dependency": "router/index.js deve ser atualizado após esta renomeação"
+        },
+        {
+          "step": 3,
+          "id": "A26",
+          "action": "RENAME_FILE",
+          "current_name": "RecuperarSenha.vue",
+          "proposed_name": "ForgotPassword.vue",
+          "current_full_path": "src/views/RecuperarSenha.vue",
+          "proposed_full_path": "src/views/ForgotPassword.vue",
+          "translation_rationale": "'RecuperarSenha' = recuperar senha. Padrão da indústria em Inglês para este fluxo: 'ForgotPassword'",
+          "dependency": "router/index.js deve ser atualizado após esta renomeação"
+        },
+        {
+          "step": 4,
+          "id": "A29",
+          "action": "RENAME_FILE",
+          "current_name": "Livre.vue",
+          "proposed_name": "Free.vue",
+          "current_full_path": "src/views/Livre.vue",
+          "proposed_full_path": "src/views/Free.vue",
+          "translation_rationale": "'Livre' = livre/público/sem restrição. Equivalente em Inglês: 'Free' (acesso livre)",
+          "dependency": "router/index.js deve ser atualizado após esta renomeação"
+        },
+        {
+          "step": 5,
+          "id": "A31",
+          "action": "RENAME_FILE",
+          "current_name": "ModuloTesteLayout.vue",
+          "proposed_name": "TestModuleLayout.vue",
+          "current_full_path": "src/views/modulo-teste/ModuloTesteLayout.vue",
+          "proposed_full_path": "src/views/test-module/TestModuleLayout.vue",
+          "translation_rationale": "'ModuloTeste' = módulo de teste. PascalCase mantido conforme convenção de componentes Vue",
+          "dependency": "Pasta modulo-teste deve já ter sido renomeada para test-module (Step 1)",
+          "note": "Este arquivo também move de pasta — realizar após Step 1"
+        }
+      ],
+
+      "content_updates": [
+        {
+          "step": 6,
+          "id": "A14",
+          "action": "UPDATE_CONTENT",
+          "file": "src/router/index.js",
+          "reason": "Arquivo em Inglês, mas possui imports e configurações apontando para arquivos e caminhos renomeados",
+          "changes": [
+            {
+              "type": "import",
+              "line_approx": 33,
+              "current": "component: () => import('@/views/RecuperarSenha.vue')",
+              "proposed": "component: () => import('@/views/ForgotPassword.vue')"
+            },
+            {
+              "type": "import",
+              "line_approx": 41,
+              "current": "component: () => import('@/views/Cadastro.vue')",
+              "proposed": "component: () => import('@/views/Register.vue')"
+            },
+            {
+              "type": "import",
+              "line_approx": 65,
+              "current": "component: () => import('@/views/modulo-teste/BlankCanvas.vue')",
+              "proposed": "component: () => import('@/views/test-module/BlankCanvas.vue')"
+            },
+            {
+              "type": "import",
+              "line_approx": 72,
+              "current": "component: () => import('@/views/Livre.vue')",
+              "proposed": "component: () => import('@/views/Free.vue')"
+            },
+            {
+              "type": "route_path",
+              "line_approx": 29,
+              "current": "path: '/recuperar-senha'",
+              "proposed": "path: '/forgot-password'"
+            },
+            {
+              "type": "route_path",
+              "line_approx": 39,
+              "current": "path: '/cadastro'",
+              "proposed": "path: '/register'"
+            },
+            {
+              "type": "route_path",
+              "line_approx": 63,
+              "current": "path: '/modulo-teste/blank-canvas'",
+              "proposed": "path: '/test-module/blank-canvas'"
+            },
+            {
+              "type": "route_path",
+              "line_approx": 70,
+              "current": "path: '/livre'",
+              "proposed": "path: '/free'"
+            },
+            {
+              "type": "route_name",
+              "line_approx": 30,
+              "current": "name: 'RecuperarSenha'",
+              "proposed": "name: 'ForgotPassword'"
+            },
+            {
+              "type": "route_name",
+              "line_approx": 40,
+              "current": "name: 'Cadastro'",
+              "proposed": "name: 'Register'"
+            },
+            {
+              "type": "route_name",
+              "line_approx": 71,
+              "current": "name: 'Livre'",
+              "proposed": "name: 'Free'"
+            },
+            {
+              "type": "navigation_guard",
+              "line_approx": 104,
+              "current": "['Login', 'Cadastro', 'RecuperarSenha'].includes(to.name)",
+              "proposed": "['Login', 'Register', 'ForgotPassword'].includes(to.name)"
+            },
+            {
+              "type": "comment",
+              "line_approx": 29,
+              "current": "// localhost:3000/#/recuperar-senha",
+              "proposed": "// localhost:3000/#/forgot-password"
+            },
+            {
+              "type": "comment",
+              "line_approx": 39,
+              "current": "// localhost:3000/#/cadastro",
+              "proposed": "// localhost:3000/#/register"
+            },
+            {
+              "type": "comment",
+              "line_approx": 61,
+              "current": "// localhost:3000/#/modulo-teste/blank-canvas",
+              "proposed": "// localhost:3000/#/test-module/blank-canvas"
+            },
+            {
+              "type": "comment",
+              "line_approx": 69,
+              "current": "// localhost:3000/#/livre",
+              "proposed": "// localhost:3000/#/free"
+            }
+          ]
+        }
+      ]
+    },
+
+    "impact_analysis": {
+      "description": "Mapeamento de quais arquivos referenciam os itens que serão renomeados",
+      "items": [
+        {
+          "renamed_item": "src/views/Cadastro.vue → Register.vue",
+          "referenced_in": [
+            {
+              "file": "src/router/index.js",
+              "lines": [41, 42],
+              "action_required": "Atualizar import e route name"
+            }
+          ]
+        },
+        {
+          "renamed_item": "src/views/RecuperarSenha.vue → ForgotPassword.vue",
+          "referenced_in": [
+            {
+              "file": "src/router/index.js",
+              "lines": [33, 34],
+              "action_required": "Atualizar import e route name"
+            }
+          ]
+        },
+        {
+          "renamed_item": "src/views/Livre.vue → Free.vue",
+          "referenced_in": [
+            {
+              "file": "src/router/index.js",
+              "lines": [72, 73],
+              "action_required": "Atualizar import e route name"
+            }
+          ]
+        },
+        {
+          "renamed_item": "src/views/modulo-teste/ → test-module/",
+          "referenced_in": [
+            {
+              "file": "src/router/index.js",
+              "lines": [65],
+              "action_required": "Atualizar import path de BlankCanvas.vue"
+            }
+          ]
+        }
+      ]
+    },
+
+    "execution_order": {
+      "description": "Ordem OBRIGATÓRIA de execução para evitar erros de referência",
+      "phases": [
+        {
+          "phase": 1,
+          "name": "Renomear Pasta",
+          "description": "Renomear a pasta primeiro para que os arquivos internos já estejam no local correto",
+          "tasks": [
+            {
+              "order": 1,
+              "action": "git mv src/views/modulo-teste src/views/test-module",
+              "or_manual": "Renomear manualmente a pasta modulo-teste para test-module",
+              "affects": ["F13", "A30", "A31"]
+            }
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Renomear Arquivos de Views",
+          "description": "Renomear os arquivos .vue com nomes em Português",
+          "tasks": [
+            {
+              "order": 2,
+              "action": "git mv src/views/Cadastro.vue src/views/Register.vue",
+              "affects": ["A25"]
+            },
+            {
+              "order": 3,
+              "action": "git mv src/views/RecuperarSenha.vue src/views/ForgotPassword.vue",
+              "affects": ["A26"]
+            },
+            {
+              "order": 4,
+              "action": "git mv src/views/Livre.vue src/views/Free.vue",
+              "affects": ["A29"]
+            },
+            {
+              "order": 5,
+              "action": "git mv src/views/test-module/ModuloTesteLayout.vue src/views/test-module/TestModuleLayout.vue",
+              "note": "Executa APÓS Phase 1 (pasta já renomeada)",
+              "affects": ["A31"]
+            }
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Atualizar Conteúdo do Router",
+          "description": "Atualizar imports, paths de rotas, nomes de rotas e navigation guard em router/index.js",
+          "tasks": [
+            {
+              "order": 6,
+              "file": "src/router/index.js",
+              "total_changes": 16,
+              "change_groups": [
+                "4 imports lazy-loading atualizados",
+                "4 route paths atualizados",
+                "3 route names atualizados",
+                "1 array no navigation guard atualizado",
+                "4 comentários de URL atualizados"
+              ]
+            }
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Verificação Final",
+          "description": "Confirmar que não há referências quebradas",
+          "tasks": [
+            {
+              "order": 7,
+              "action": "Buscar por 'Cadastro', 'RecuperarSenha', 'modulo-teste', 'Livre' em todo /src para garantir que não há referências remanescentes",
+              "command_suggestion": "grep -r 'Cadastro\\|RecuperarSenha\\|modulo-teste\\|Livre' src/"
+            },
+            {
+              "order": 8,
+              "action": "Executar npm run dev para verificar que o servidor de desenvolvimento inicia sem erros"
+            },
+            {
+              "order": 9,
+              "action": "Testar navegação para todas as rotas: /login, /register, /forgot-password, /free, /dashboard, /hub/:service, /test-module/blank-canvas"
+            }
+          ]
+        }
+      ]
+    },
+
+    "summary_table": {
+      "total_items_analyzed": 44,
+      "breakdown": {
+        "folders_analyzed": 13,
+        "folders_ok": 12,
+        "folders_to_rename": 1,
+        "files_analyzed": 31,
+        "files_ok": 26,
+        "files_to_rename": 4,
+        "files_to_update_content_only": 1
+      },
+      "items_requiring_action": [
+        { "id": "F13", "type": "FOLDER", "action": "RENAME", "current": "src/views/modulo-teste",                             "proposed": "src/views/test-module" },
+        { "id": "A25", "type": "FILE",   "action": "RENAME", "current": "src/views/Cadastro.vue",                             "proposed": "src/views/Register.vue" },
+        { "id": "A26", "type": "FILE",   "action": "RENAME", "current": "src/views/RecuperarSenha.vue",                       "proposed": "src/views/ForgotPassword.vue" },
+        { "id": "A29", "type": "FILE",   "action": "RENAME", "current": "src/views/Livre.vue",                                "proposed": "src/views/Free.vue" },
+        { "id": "A31", "type": "FILE",   "action": "RENAME", "current": "src/views/modulo-teste/ModuloTesteLayout.vue",       "proposed": "src/views/test-module/TestModuleLayout.vue" },
+        { "id": "A14", "type": "FILE",   "action": "UPDATE_CONTENT", "current": "src/router/index.js",                        "proposed": "src/router/index.js (16 alterações internas)" }
+      ]
+    }
+  }
+}

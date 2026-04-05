@@ -83,7 +83,7 @@ const fabricas = [
         <router-link
           v-for="fabrica in fabricas"
           :key="fabrica.slug"
-          :to="fabrica.status === 'ativo' ? `/modulo-teste/${fabrica.slug}` : ''"
+          :to="fabrica.status === 'ativo' ? `/test-module/${fabrica.slug}` : ''"
           custom
           v-slot="{ navigate, isActive }"
         >
