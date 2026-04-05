@@ -15,6 +15,9 @@ src/components/form-fields/
 ├── FieldInput.vue             ← <input> text, hidden, email, password...
 ├── README_FieldInput_vue.md   ← documentação detalhada do FieldInput
 │
+├── FieldPhone.vue             ← celular/telefone com máscara e validação DDD ANATEL
+├── README_FieldPhone.md       ← documentação detalhada do FieldPhone
+│
 │   (próximas fábricas)
 ├── FieldSelect.vue            ← <select> com opções estáticas ou dinâmicas
 ├── FieldTextarea.vue          ← <textarea> com contagem de caracteres
@@ -29,16 +32,17 @@ src/components/form-fields/
 
 ## Índice de componentes
 
-| Componente | Status | Descrição | Documentação |
-|------------|--------|-----------|--------------|
-| `FieldInput` | ✅ Disponível | Campos `<input>` com validação de caracteres, datalist, readonly/disabled/required | [README_FieldInput_vue.md](README_FieldInput_vue.md) |
-| `FieldSelect` | 🔜 Em breve | Dropdown com opções estáticas e carregamento assíncrono | — |
-| `FieldTextarea` | 🔜 Em breve | Área de texto com limite de caracteres e contagem | — |
-| `FieldCheckbox` | 🔜 Em breve | Checkbox individual ou grupo com v-model array | — |
-| `FieldRadio` | 🔜 Em breve | Grupo de opções exclusivas | — |
-| `FieldSwitch` | 🔜 Em breve | Toggle estilizado Bootstrap | — |
-| `FieldFile` | 🔜 Em breve | Upload com preview de imagem e validação de tipo/tamanho | — |
-| `FieldDate` | 🔜 Em breve | Campo de data com máscara e validação de intervalo | — |
+| Componente      | Status        | Descrição                                                                          | Documentação                                         |
+| --------------- | ------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `FieldInput`    | ✅ Disponível | Campos `<input>` com validação de caracteres, datalist, readonly/disabled/required | [README_FieldInput_vue.md](README_FieldInput_vue.md) |
+| `FieldPhone`    | ✅ Disponível | Celular/Telefone com máscara dinâmica e validação de DDD ANATEL                    | [README_FieldPhone_vue.md](README_FieldPhone_vue.md) |
+| `FieldSelect`   | 🔜 Em breve   | Dropdown com opções estáticas e carregamento assíncrono                            | —                                                    |
+| `FieldTextarea` | 🔜 Em breve   | Área de texto com limite de caracteres e contagem                                  | —                                                    |
+| `FieldCheckbox` | 🔜 Em breve   | Checkbox individual ou grupo com v-model array                                     | —                                                    |
+| `FieldRadio`    | 🔜 Em breve   | Grupo de opções exclusivas                                                         | —                                                    |
+| `FieldSwitch`   | 🔜 Em breve   | Toggle estilizado Bootstrap                                                        | —                                                    |
+| `FieldFile`     | 🔜 Em breve   | Upload com preview de imagem e validação de tipo/tamanho                           | —                                                    |
+| `FieldDate`     | 🔜 Em breve   | Campo de data com máscara e validação de intervalo                                 | —                                                    |
 
 ---
 
@@ -46,24 +50,25 @@ src/components/form-fields/
 
 ```js
 // Importação nomeada via barrel (recomendado)
-import { FieldInput } from '@/components/form-fields'
+import { FieldInput, FieldPhone } from "@/components/form-fields";
 
 // Importação direta (melhor tree-shaking em bundles grandes)
-import FieldInput from '@/components/form-fields/FieldInput.vue'
+import FieldInput from "@/components/form-fields/FieldInput.vue";
+import FieldPhone from "@/components/form-fields/FieldPhone.vue";
 ```
 
 ---
 
 ## Convenções desta coleção
 
-| Convenção | Detalhe |
-|-----------|---------|
-| **Nome** | Sempre prefixo `Field` + tipo em PascalCase |
-| **v-model** | Todos os campos implementam `modelValue` / `emit('update:modelValue')` |
-| **Validação** | Evento `@validation` emite `{ id, valid, errors[] }` para controle do form pai |
-| **Bootstrap** | Classes Bootstrap 5 aplicadas via props — sem CSS próprio salvo exceções |
-| **Acessibilidade** | `for/id` sempre vinculados, `aria-*` onde necessário |
-| **Props booleanas** | Todas com `default: false` — o comportamento restritivo é opt-in |
+| Convenção           | Detalhe                                                                        |
+| ------------------- | ------------------------------------------------------------------------------ |
+| **Nome**            | Sempre prefixo `Field` + tipo em PascalCase                                    |
+| **v-model**         | Todos os campos implementam `modelValue` / `emit('update:modelValue')`         |
+| **Validação**       | Evento `@validation` emite `{ id, valid, errors[] }` para controle do form pai |
+| **Bootstrap**       | Classes Bootstrap 5 aplicadas via props — sem CSS próprio salvo exceções       |
+| **Acessibilidade**  | `for/id` sempre vinculados, `aria-*` onde necessário                           |
+| **Props booleanas** | Todas com `default: false` — o comportamento restritivo é opt-in               |
 
 ---
 
