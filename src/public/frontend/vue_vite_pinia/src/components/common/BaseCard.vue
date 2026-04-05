@@ -16,33 +16,37 @@ defineProps({
 
 <template>
   <div
-    class="rounded-xl bg-white dark:bg-slate-800 transition-shadow duration-200 overflow-hidden"
+    class="card overflow-hidden"
     :class="[
-      !flat     ? 'shadow-sm hover:shadow-md' : '',
-      bordered  ? 'border border-gray-200 dark:border-slate-700' : '',
+      !flat    ? 'shadow-sm hover-shadow' : '',
+      bordered ? 'border' : 'border-0',
     ]"
   >
     <!-- Slot: cabeçalho (opcional) -->
     <div
       v-if="$slots.header"
-      class="flex items-center justify-between px-5 py-3.5
-             border-b border-gray-100 dark:border-slate-700"
+      class="card-header d-flex align-items-center justify-content-between"
     >
       <slot name="header" />
     </div>
 
     <!-- Slot: conteúdo principal -->
-    <div :class="!noPadding ? 'px-5 py-4' : ''">
+    <div :class="!noPadding ? 'card-body' : 'p-0'">
       <slot />
     </div>
 
     <!-- Slot: rodapé (opcional) -->
-    <div
-      v-if="$slots.footer"
-      class="px-5 py-3 border-t border-gray-100 dark:border-slate-700
-             bg-gray-50 dark:bg-slate-700/40"
-    >
+    <div v-if="$slots.footer" class="card-footer">
       <slot name="footer" />
     </div>
   </div>
 </template>
+
+<style scoped>
+.hover-shadow {
+  transition: box-shadow 0.2s ease;
+}
+.hover-shadow:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+}
+</style>

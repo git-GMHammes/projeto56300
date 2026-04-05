@@ -24,42 +24,70 @@ const menuItems = [
   <!-- Overlay para fechar sidebar em mobile -->
   <div
     v-if="settingsStore.sidebarOpen"
-    class="fixed inset-0 z-20 bg-black/30 lg:hidden"
+    class="sidebar-overlay d-lg-none position-fixed top-0 start-0 end-0 bottom-0"
     @click="settingsStore.toggleSidebar"
   />
 
   <aside
-    class="fixed top-16 left-0 bottom-0 z-30 w-60
-           bg-white dark:bg-slate-900
-           border-r border-gray-200 dark:border-slate-700
-           flex flex-col
-           transition-transform duration-300 ease-in-out"
-    :class="settingsStore.sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="sidebar position-fixed border-end d-flex flex-column"
+    :class="settingsStore.sidebarOpen ? 'sidebar-open' : 'sidebar-closed'"
   >
     <!-- Itens de navegação -->
-    <nav class="flex-1 overflow-y-auto p-3 space-y-0.5">
+    <nav class="flex-fill overflow-y-auto p-3">
       <router-link
         v-for="item in menuItems"
         :key="item.to"
         :to="item.to"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-               text-gray-600 dark:text-gray-400
-               hover:bg-primary-50 dark:hover:bg-primary-900/20
-               hover:text-primary-700 dark:hover:text-primary-300
-               transition-colors no-underline"
-        active-class="bg-primary-50 dark:bg-primary-900/25
-                      text-primary-700 dark:text-primary-300 font-semibold"
+        class="sidebar-link nav-link d-flex align-items-center gap-3 rounded-3 fw-medium text-decoration-none mb-1"
+        active-class="active"
       >
-        <span class="text-base leading-none shrink-0">{{ item.icon }}</span>
-        <span class="truncate">{{ item.label }}</span>
+        <span class="flex-shrink-0">{{ item.icon }}</span>
+        <span class="text-truncate">{{ item.label }}</span>
       </router-link>
     </nav>
 
     <!-- Rodapé do sidebar com versão -->
-    <div class="p-4 border-t border-gray-100 dark:border-slate-700">
-      <p class="text-xs text-center text-gray-300 dark:text-gray-600">
-        v{{ appVersion }}
-      </p>
+    <div class="p-4 border-top">
+      <p class="small text-center text-muted mb-0">v{{ appVersion }}</p>
     </div>
   </aside>
 </template>
+
+<style scoped>
+/* Overlay semitransparente em mobile */
+.sidebar-overlay {
+  z-index: 1020;
+  background: rgb(0 0 0 / 0.3);
+}
+
+/* Sidebar principal */
+.sidebar {
+  top: 4rem;      /* altura da navbar */
+  left: 0;
+  bottom: 0;
+  width: 15rem;   /* equivalente ao w-60 do Tailwind */
+  z-index: 1025;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-open  { transform: translateX(0); }
+.sidebar-closed { transform: translateX(-100%); }
+
+/* Links de navegação */
+.sidebar-link {
+  color: var(--bs-secondary-color);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.sidebar-link:hover {
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
+}
+
+.sidebar-link.active {
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
+  font-weight: 600;
+}
+</style>

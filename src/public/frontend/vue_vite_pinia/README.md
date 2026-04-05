@@ -8,12 +8,14 @@
 vue_vite_pinia/
 ├── .env.development / .env.production
 ├── index.html · package.json · vite.config.js
-├── tailwind.config.js · postcss.config.js
+├── postcss.config.js
 ├── dist/
 │   └── .htaccess          ← Apache SPA + cache + gzip + segurança
 └── src/
     ├── main.js · App.vue
-    ├── assets/main.css    ← Tailwind + utilitários (.form-input, .badge-*)
+    ├── assets/main.scss         ← Bootstrap 5.3 + utilitários globais
+    ├── assets/bootstrap-custom.scss ← Variáveis Sass ($primary, $border-radius…)
+    ├── assets/dark-mode.scss    ← CSS vars dark mode (data-bs-theme='dark')
     ├── api/
     │   └── axios-config.js   ← Interceptors Auth + erros normalizados
     ├── services/

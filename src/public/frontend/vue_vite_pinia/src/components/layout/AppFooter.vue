@@ -4,8 +4,8 @@ const appName = import.meta.env.VITE_APP_NAME ?? 'HUB de Serviços'
 </script>
 
 <template>
-  <footer class="py-4 px-6 border-t border-gray-100 dark:border-slate-800">
-    <p class="text-xs text-center text-gray-400 dark:text-gray-600">
+  <footer class="py-3 px-4 border-top">
+    <p class="small text-center text-muted mb-0">
       © {{ year }} {{ appName }} — Todos os direitos reservados.
     </p>
   </footer>

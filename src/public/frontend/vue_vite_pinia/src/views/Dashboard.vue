@@ -26,202 +26,200 @@ onMounted(() => {
 
 /** Mapa de badge de status de pagamento */
 const statusBadge = {
-  paid:    'badge-green',
-  pending: 'badge-yellow',
-  failed:  'badge-red',
-  default: 'badge-gray',
+  paid:    'badge text-bg-success',
+  pending: 'badge text-bg-warning',
+  failed:  'badge text-bg-danger',
+  default: 'badge text-bg-secondary',
 }
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-slate-950 flex flex-col">
+  <div class="min-vh-100 d-flex flex-column">
 
     <!-- Navbar fixa -->
     <AppNavbar @toggle-sidebar="settingsStore.toggleSidebar" />
 
     <!-- Layout: sidebar + main -->
-    <div class="flex flex-1 pt-16">
+    <div class="d-flex flex-fill pt-navbar">
       <AppSidebar />
 
       <!-- Conteúdo principal — margem acompanha estado do sidebar -->
       <main
-        class="flex-1 min-w-0 p-5 lg:p-6 transition-all duration-300 animate-fade-in"
-        :class="settingsStore.sidebarOpen ? 'lg:ml-60' : ''"
+        class="flex-fill min-w-0 p-4 animate-fade-in"
+        :class="settingsStore.sidebarOpen ? 'sidebar-push' : ''"
+        style="transition: margin-left 0.3s ease;"
       >
 
         <!-- ── Cabeçalho da página ───────────────────────────────────────── -->
-        <div class="mb-6 flex items-start justify-between gap-4 flex-wrap">
+        <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-4">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              Painel Principal
-            </h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-              Olá, <strong class="text-gray-700 dark:text-gray-300">{{ authStore.userFullName }}</strong>!
+            <h1 class="h4 fw-bold text-body mb-1">Painel Principal</h1>
+            <p class="small text-muted mb-0">
+              Olá, <strong class="text-body-secondary">{{ authStore.userFullName }}</strong>!
               Aqui está o resumo de todos os serviços conectados.
             </p>
           </div>
           <!-- Última atualização -->
-          <span
-            v-if="dashboardStore.lastFetchedAt"
-            class="text-xs text-gray-400 dark:text-gray-500 mt-1 shrink-0"
-          >
+          <span v-if="dashboardStore.lastFetchedAt" class="small text-muted flex-shrink-0 mt-1">
             Atualizado às {{ dashboardStore.lastFetchedAt.toLocaleTimeString('pt-BR') }}
           </span>
         </div>
 
         <!-- ── Linha 1: KPI Cards ────────────────────────────────────────── -->
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div class="row row-cols-2 row-cols-xl-4 g-3 mb-4">
 
           <!-- KPI: Usuários -->
-          <BaseCard>
-            <SkeletonLoader v-if="dashboardStore.users.loading" type="stat" />
-            <div v-else class="flex items-center gap-3">
-              <div class="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center
-                          justify-center text-2xl shrink-0">👥</div>
-              <div class="min-w-0">
-                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 tabular-nums">
-                  {{ formatNumber(dashboardStore.totalUsers) }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Usuários</p>
+          <div class="col">
+            <BaseCard>
+              <SkeletonLoader v-if="dashboardStore.users.loading" type="stat" />
+              <div v-else class="d-flex align-items-center gap-3">
+                <div class="icon-box rounded-3 bg-primary bg-opacity-10
+                            d-flex align-items-center justify-content-center">👥</div>
+                <div class="min-w-0">
+                  <p class="h4 fw-bolder text-body font-monospace mb-0">
+                    {{ formatNumber(dashboardStore.totalUsers) }}
+                  </p>
+                  <p class="small text-muted text-truncate mb-0">Usuários</p>
+                </div>
               </div>
-            </div>
-          </BaseCard>
+            </BaseCard>
+          </div>
 
           <!-- KPI: Pagamentos -->
-          <BaseCard>
-            <SkeletonLoader v-if="dashboardStore.payments.loading" type="stat" />
-            <div v-else class="flex items-center gap-3">
-              <div class="h-12 w-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center
-                          justify-center text-2xl shrink-0">💳</div>
-              <div class="min-w-0">
-                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 tabular-nums">
-                  {{ formatNumber(dashboardStore.totalPayments) }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Pagamentos</p>
+          <div class="col">
+            <BaseCard>
+              <SkeletonLoader v-if="dashboardStore.payments.loading" type="stat" />
+              <div v-else class="d-flex align-items-center gap-3">
+                <div class="icon-box rounded-3 bg-success bg-opacity-10
+                            d-flex align-items-center justify-content-center">💳</div>
+                <div class="min-w-0">
+                  <p class="h4 fw-bolder text-body font-monospace mb-0">
+                    {{ formatNumber(dashboardStore.totalPayments) }}
+                  </p>
+                  <p class="small text-muted text-truncate mb-0">Pagamentos</p>
+                </div>
               </div>
-            </div>
-          </BaseCard>
+            </BaseCard>
+          </div>
 
           <!-- KPI: APIs conectadas (estático) -->
-          <BaseCard>
-            <div class="flex items-center gap-3">
-              <div class="h-12 w-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center
-                          justify-center text-2xl shrink-0">🔌</div>
-              <div class="min-w-0">
-                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">20+</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">APIs Ativas</p>
+          <div class="col">
+            <BaseCard>
+              <div class="d-flex align-items-center gap-3">
+                <div class="icon-box rounded-3 kpi-purple
+                            d-flex align-items-center justify-content-center">🔌</div>
+                <div class="min-w-0">
+                  <p class="h4 fw-bolder text-body mb-0">20+</p>
+                  <p class="small text-muted text-truncate mb-0">APIs Ativas</p>
+                </div>
               </div>
-            </div>
-          </BaseCard>
+            </BaseCard>
+          </div>
 
           <!-- KPI: Status do sistema -->
-          <BaseCard>
-            <div class="flex items-center gap-3">
-              <div class="h-12 w-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center
-                          justify-center text-2xl shrink-0">⚡</div>
-              <div class="min-w-0">
-                <p class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">Online</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Status</p>
+          <div class="col">
+            <BaseCard>
+              <div class="d-flex align-items-center gap-3">
+                <div class="icon-box rounded-3 bg-success bg-opacity-10
+                            d-flex align-items-center justify-content-center">⚡</div>
+                <div class="min-w-0">
+                  <p class="h5 fw-bolder text-success mb-0">Online</p>
+                  <p class="small text-muted text-truncate mb-0">Status</p>
+                </div>
               </div>
-            </div>
-          </BaseCard>
+            </BaseCard>
+          </div>
         </div>
 
         <!-- ── Linha 2: Widgets de API (fetch independente por widget) ────── -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <div class="row row-cols-1 row-cols-lg-2 g-3 mb-4">
 
           <!-- Widget: Últimos Usuários -->
-          <ApiWidget
-            title="Últimos Usuários"
-            icon="👥"
-            skeleton-type="avatar"
-            :skeleton-lines="5"
-            :fetch-fn="() => userService.getAll({ limit: 5 })"
-          >
-            <template #default="{ data }">
-              <div
-                v-if="data?.length"
-                class="divide-y divide-gray-100 dark:divide-slate-700 -mx-5 -mb-4"
-              >
-                <div
-                  v-for="user in data"
-                  :key="user.id"
-                  class="flex items-center gap-3 px-5 py-3
-                         hover:bg-gray-50 dark:hover:bg-slate-700/40 transition-colors"
-                >
-                  <div class="h-9 w-9 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center
-                              justify-center text-primary-700 dark:text-primary-300 text-xs font-bold shrink-0">
-                    {{ getInitials(user.name || user.email || '?') }}
+          <div class="col">
+            <ApiWidget
+              title="Últimos Usuários"
+              icon="👥"
+              skeleton-type="avatar"
+              :skeleton-lines="5"
+              :fetch-fn="() => userService.getAll({ limit: 5 })"
+            >
+              <template #default="{ data }">
+                <div v-if="data?.length" class="list-group list-group-flush mx-n3 mb-n3">
+                  <div
+                    v-for="user in data"
+                    :key="user.id"
+                    class="list-group-item d-flex align-items-center gap-3 px-3 py-3"
+                  >
+                    <div class="avatar-sm rounded-circle bg-primary bg-opacity-10 text-primary
+                                d-flex align-items-center justify-content-center fw-bold small">
+                      {{ getInitials(user.name || user.email || '?') }}
+                    </div>
+                    <div class="min-w-0 flex-fill">
+                      <p class="small fw-medium text-body text-truncate mb-0">
+                        {{ user.name || '—' }}
+                      </p>
+                      <p class="small text-muted text-truncate mb-0">{{ user.email }}</p>
+                    </div>
+                    <span class="small text-muted flex-shrink-0">
+                      {{ formatDate(user.created_at) }}
+                    </span>
                   </div>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                      {{ user.name || '—' }}
-                    </p>
-                    <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ user.email }}</p>
-                  </div>
-                  <span class="text-xs text-gray-400 shrink-0">
-                    {{ formatDate(user.created_at) }}
-                  </span>
                 </div>
-              </div>
-              <p v-else class="text-sm text-gray-400 py-6 text-center">
-                Nenhum usuário encontrado.
-              </p>
-            </template>
-          </ApiWidget>
+                <p v-else class="small text-muted text-center py-4 mb-0">
+                  Nenhum usuário encontrado.
+                </p>
+              </template>
+            </ApiWidget>
+          </div>
 
           <!-- Widget: Últimos Pagamentos -->
-          <ApiWidget
-            title="Últimos Pagamentos"
-            icon="💳"
-            skeleton-type="table"
-            :skeleton-lines="4"
-            :fetch-fn="() => paymentService.getAll({ limit: 5 })"
-          >
-            <template #default="{ data }">
-              <div
-                v-if="data?.length"
-                class="divide-y divide-gray-100 dark:divide-slate-700 -mx-5 -mb-4"
-              >
-                <div
-                  v-for="pay in data"
-                  :key="pay.id"
-                  class="flex items-center justify-between gap-3 px-5 py-3
-                         hover:bg-gray-50 dark:hover:bg-slate-700/40 transition-colors"
-                >
-                  <div class="min-w-0">
-                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                      {{ pay.description || `Pagamento #${pay.id}` }}
-                    </p>
-                    <p class="text-xs text-gray-400">{{ formatDate(pay.created_at) }}</p>
-                  </div>
-                  <div class="flex items-center gap-2 shrink-0">
-                    <span :class="statusBadge[pay.status] ?? statusBadge.default">
-                      {{ pay.status ?? '—' }}
-                    </span>
-                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 tabular-nums">
-                      {{ formatCurrency(pay.amount) }}
-                    </span>
+          <div class="col">
+            <ApiWidget
+              title="Últimos Pagamentos"
+              icon="💳"
+              skeleton-type="table"
+              :skeleton-lines="4"
+              :fetch-fn="() => paymentService.getAll({ limit: 5 })"
+            >
+              <template #default="{ data }">
+                <div v-if="data?.length" class="list-group list-group-flush mx-n3 mb-n3">
+                  <div
+                    v-for="pay in data"
+                    :key="pay.id"
+                    class="list-group-item d-flex align-items-center justify-content-between gap-3 px-3 py-3"
+                  >
+                    <div class="min-w-0">
+                      <p class="small fw-medium text-body text-truncate mb-0">
+                        {{ pay.description || `Pagamento #${pay.id}` }}
+                      </p>
+                      <p class="small text-muted mb-0">{{ formatDate(pay.created_at) }}</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                      <span :class="statusBadge[pay.status] ?? statusBadge.default">
+                        {{ pay.status ?? '—' }}
+                      </span>
+                      <span class="small fw-semibold text-body font-monospace">
+                        {{ formatCurrency(pay.amount) }}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <p v-else class="text-sm text-gray-400 py-6 text-center">
-                Nenhum pagamento encontrado.
-              </p>
-            </template>
-          </ApiWidget>
+                <p v-else class="small text-muted text-center py-4 mb-0">
+                  Nenhum pagamento encontrado.
+                </p>
+              </template>
+            </ApiWidget>
+          </div>
 
         </div>
 
         <!-- ── Linha 3: Atalhos para módulos ─────────────────────────────── -->
         <BaseCard>
           <template #header>
-            <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">
-              🗂️ Módulos Disponíveis
-            </span>
+            <span class="small fw-semibold text-body">🗂️ Módulos Disponíveis</span>
           </template>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-            <router-link
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-6 g-3">
+            <div
               v-for="item in [
                 { label: 'Usuários',   icon: '👥', to: '/hub/users' },
                 { label: 'Pagamentos', icon: '💳', to: '/hub/payments' },
@@ -229,27 +227,33 @@ const statusBadge = {
                 { label: 'Config.',    icon: '⚙️', to: '/hub/settings' },
               ]"
               :key="item.to"
-              :to="item.to"
-              class="flex flex-col items-center gap-2 p-4 rounded-xl
-                     border border-gray-100 dark:border-slate-700
-                     hover:border-primary-200 dark:hover:border-primary-700
-                     hover:bg-primary-50 dark:hover:bg-primary-900/20
-                     transition-all duration-150 no-underline group"
+              class="col"
             >
-              <span class="text-3xl group-hover:scale-110 transition-transform duration-150">
-                {{ item.icon }}
-              </span>
-              <span class="text-xs font-medium text-gray-600 dark:text-gray-400
-                           group-hover:text-primary-600 dark:group-hover:text-primary-300 text-center">
-                {{ item.label }}
-              </span>
-            </router-link>
+              <router-link
+                :to="item.to"
+                class="card module-card border text-decoration-none p-3
+                       d-flex flex-column align-items-center gap-2 h-100"
+              >
+                <span class="fs-3 module-icon">{{ item.icon }}</span>
+                <span class="small fw-medium text-muted text-center">{{ item.label }}</span>
+              </router-link>
+            </div>
           </div>
         </BaseCard>
 
       </main>
     </div>
 
-    <AppFooter :class="settingsStore.sidebarOpen ? 'lg:ml-60' : ''" class="transition-all duration-300" />
+    <AppFooter
+      :class="settingsStore.sidebarOpen ? 'sidebar-push' : ''"
+      style="transition: margin-left 0.3s ease;"
+    />
   </div>
 </template>
+
+<style scoped>
+/* Ícone KPI roxo — sem variável semântica Bootstrap para purple */
+.kpi-purple {
+  background-color: rgba(139, 92, 246, 0.15);
+}
+</style>

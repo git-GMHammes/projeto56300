@@ -56,15 +56,15 @@ watch(error, (val) => { if (val)  emit('error', val) })
   <BaseCard>
     <!-- ── Header ──────────────────────────────────────────────────────── -->
     <template #header>
-      <div class="flex items-center gap-2 min-w-0 flex-1">
-        <span v-if="icon" class="text-lg leading-none shrink-0">{{ icon }}</span>
-        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
+      <div class="d-flex align-items-center gap-2 min-w-0 flex-fill">
+        <span v-if="icon" class="flex-shrink-0">{{ icon }}</span>
+        <h3 class="small fw-semibold text-body mb-0 text-truncate">
           {{ title }}
         </h3>
         <!-- Contador de registros (vindo do meta da API) -->
         <span
           v-if="meta?.total != null"
-          class="ml-auto shrink-0 text-xs text-gray-400 dark:text-gray-500 tabular-nums"
+          class="ms-auto flex-shrink-0 small text-muted font-monospace"
         >
           {{ meta.total }} reg.
         </span>
@@ -74,14 +74,13 @@ watch(error, (val) => { if (val)  emit('error', val) })
       <button
         v-if="refreshable"
         :disabled="isLoading"
-        class="ml-3 p-1 rounded text-gray-400 hover:text-primary-500 dark:hover:text-primary-400
-               transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+        class="btn btn-link btn-sm p-1 text-muted ms-2 flex-shrink-0"
         title="Recarregar"
         @click="refresh"
       >
         <svg
-          class="h-4 w-4"
-          :class="{ 'animate-spin': isLoading }"
+          class="icon-sm"
+          :class="{ 'spin': isLoading }"
           fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
         >
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -101,12 +100,12 @@ watch(error, (val) => { if (val)  emit('error', val) })
     <!-- ── Corpo: erro ─────────────────────────────────────────────────── -->
     <div
       v-else-if="error"
-      class="flex flex-col items-center py-8 gap-2 text-center"
+      class="d-flex flex-column align-items-center py-5 gap-2 text-center"
     >
-      <span class="text-3xl">⚠️</span>
-      <p class="text-sm text-red-500 dark:text-red-400 max-w-xs">{{ error }}</p>
+      <span class="fs-2">⚠️</span>
+      <p class="small text-danger mb-0" style="max-width: 20rem;">{{ error }}</p>
       <button
-        class="mt-1 text-xs text-primary-500 hover:text-primary-700 hover:underline transition-colors"
+        class="btn btn-link btn-sm p-0 mt-1"
         @click="refresh"
       >
         Tentar novamente
@@ -119,3 +118,18 @@ watch(error, (val) => { if (val)  emit('error', val) })
     </template>
   </BaseCard>
 </template>
+
+<style scoped>
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+</style>

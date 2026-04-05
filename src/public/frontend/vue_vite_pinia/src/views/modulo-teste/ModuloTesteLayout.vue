@@ -1,43 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-// ─── Injeção dinâmica do Bootstrap 5 via CDN ──────────────────────────────────
-// Carregado apenas enquanto o módulo de teste estiver ativo.
-// Removido ao sair para não afetar o restante do app (Tailwind).
-
-const BOOTSTRAP_CSS_ID = 'bootstrap-cdn-css'
-const BOOTSTRAP_JS_ID  = 'bootstrap-cdn-js'
-
-function injectBootstrap() {
-  // CSS
-  if (!document.getElementById(BOOTSTRAP_CSS_ID)) {
-    const link  = document.createElement('link')
-    link.id     = BOOTSTRAP_CSS_ID
-    link.rel    = 'stylesheet'
-    link.href   = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'
-    link.crossOrigin = 'anonymous'
-    document.head.appendChild(link)
-  }
-
-  // JS Bundle (inclui Popper)
-  if (!document.getElementById(BOOTSTRAP_JS_ID)) {
-    const script   = document.createElement('script')
-    script.id      = BOOTSTRAP_JS_ID
-    script.src     = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'
-    script.crossOrigin = 'anonymous'
-    script.defer   = true
-    document.head.appendChild(script)
-  }
-}
-
-function removeBootstrap() {
-  document.getElementById(BOOTSTRAP_CSS_ID)?.remove()
-  document.getElementById(BOOTSTRAP_JS_ID)?.remove()
-}
-
-onMounted(injectBootstrap)
-onUnmounted(removeBootstrap)
+// Bootstrap 5.3 agora disponível globalmente via npm (instalado na Fase 1).
+// Os injects/removes de CDN foram removidos.
 
 // ─── Estado da sidebar ────────────────────────────────────────────────────────
 const sidebarAberta = ref(true)
@@ -70,7 +36,7 @@ const fabricas = [
 </script>
 
 <template>
-  <!-- Container raiz: sem estilos Tailwind para não conflitar com Bootstrap -->
+  <!-- Container raiz: inline styles isolam o design dark deste módulo do tema global -->
   <div id="modulo-teste-root" style="display: flex; min-height: 100vh; font-family: system-ui, sans-serif;">
 
     <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
@@ -167,7 +133,7 @@ const fabricas = [
 
       <!-- Rodapé da sidebar -->
       <div v-if="sidebarAberta" style="padding: 0.75rem 1rem; border-top: 1px solid #313244; font-size: 0.65rem; color: #45475a; line-height: 1.5;">
-        Bootstrap <strong style="color: #89b4fa;">5.3.x</strong> via CDN<br>
+        Bootstrap <strong style="color: #89b4fa;">5.3.x</strong> via npm<br>
         Vue 3 + Vite + Pinia
       </div>
     </aside>
