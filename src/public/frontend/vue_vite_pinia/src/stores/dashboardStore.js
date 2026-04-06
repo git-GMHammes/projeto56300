@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { userService }    from '@/services/userService'
-import { paymentService } from '@/services/paymentService'
+import { userCustomerViewService } from '@/services/userCustomerViewService'
 
 /**
  * Estado inicial padrão para qualquer domínio de API no HUB.
@@ -16,31 +15,31 @@ const createDomainState = () => ({
 
 /**
  * Store central do Dashboard HUB.
- * Consolida dados de N APIs em um único estado reativo.
+ * Consolida dados da view user_customer_view em um único estado reativo.
  *
  * Arquitetura:
- * - Cada domínio de API tem seu próprio "slice" de estado isolado.
+ * - Cada domínio tem seu próprio "slice" de estado isolado.
  * - initDashboard() dispara TODAS as chamadas em paralelo (Promise.allSettled).
- * - Uma falha em uma API não bloqueia as demais.
+ * - Uma falha em uma chamada não bloqueia as demais.
  * - refreshWidget() permite recarregar apenas um widget sem afetar os outros.
  */
 export const useDashboardStore = defineStore('dashboard', () => {
   // ── Estado por domínio ────────────────────────────────────────────────────
-  const users    = ref(createDomainState())
-  const payments = ref(createDomainState())
-  const lastFetchedAt = ref(null)
+  const customers        = ref(createDomainState())
+  const deletedCustomers = ref(createDomainState())
+  const lastFetchedAt    = ref(null)
 
   // ── Getters ───────────────────────────────────────────────────────────────
   const isAnyLoading = computed(() =>
-    users.value.loading || payments.value.loading,
+    customers.value.loading || deletedCustomers.value.loading,
   )
-  const totalUsers    = computed(() => users.value.meta?.total    ?? users.value.data.length)
-  const totalPayments = computed(() => payments.value.meta?.total ?? payments.value.data.length)
+  const totalCustomers        = computed(() => customers.value.meta?.total        ?? customers.value.data.length)
+  const totalDeletedCustomers = computed(() => deletedCustomers.value.meta?.total ?? deletedCustomers.value.data.length)
 
   // ── Mapa de serviços (facilita refreshWidget dinâmico) ────────────────────
   const serviceMap = {
-    users:    { service: userService,    state: users },
-    payments: { service: paymentService, state: payments },
+    customers:        { fetchFn: (p) => userCustomerViewService.getAll(p),        state: customers },
+    deletedCustomers: { fetchFn: (p) => userCustomerViewService.getDeletedAll(p), state: deletedCustomers },
   }
 
   // ── Actions ───────────────────────────────────────────────────────────────
@@ -50,18 +49,17 @@ export const useDashboardStore = defineStore('dashboard', () => {
    * Usa Promise.allSettled para que falhas individuais sejam isoladas.
    */
   async function initDashboard() {
-    // Marca todos como loading simultaneamente
     Object.values(serviceMap).forEach(({ state }) => {
       state.value.loading = true
       state.value.error   = null
     })
 
     const results = await Promise.allSettled([
-      userService.getAll({ limit: 10 }),
-      paymentService.getAll({ limit: 10 }),
+      userCustomerViewService.getAll({ limit: 10 }),
+      userCustomerViewService.getDeletedAll({ limit: 10 }),
     ])
 
-    const domains = ['users', 'payments']
+    const domains = ['customers', 'deletedCustomers']
 
     results.forEach((result, index) => {
       const domain = domains[index]
@@ -85,7 +83,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   /**
    * Recarrega apenas um widget específico sem afetar os demais.
-   * @param {'users'|'payments'} domain
+   * @param {'customers'|'deletedCustomers'} domain
    * @param {{ limit?: number }} params
    */
   async function refreshWidget(domain, params = { limit: 10 }) {
@@ -95,12 +93,12 @@ export const useDashboardStore = defineStore('dashboard', () => {
       return
     }
 
-    const { service, state } = entry
+    const { fetchFn, state } = entry
     state.value.loading = true
     state.value.error   = null
 
     try {
-      const { data } = await service.getAll(params)
+      const { data } = await fetchFn(params)
       state.value.data = data?.data ?? []
       state.value.meta = data?.meta ?? null
     } catch (err) {
@@ -113,9 +111,9 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   return {
     // Estado por domínio
-    users, payments, lastFetchedAt,
+    customers, deletedCustomers, lastFetchedAt,
     // Getters
-    isAnyLoading, totalUsers, totalPayments,
+    isAnyLoading, totalCustomers, totalDeletedCustomers,
     // Ações
     initDashboard, refreshWidget,
   }

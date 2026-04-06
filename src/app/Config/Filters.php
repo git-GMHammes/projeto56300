@@ -55,11 +55,13 @@ class Filters extends BaseFilters
         'before' => [
             // 'forcehttps', // Desabilitado: redireciona HTTP→HTTPS antes do authFilter rodar (usar só em produção com HTTPS configurado)
             'pagecache',  // Web Page Caching
+            'cors',       // CORS: roda mesmo quando rota não existe (ex: OPTIONS preflight → 404)
         ],
         'after' => [
             'pagecache',   // Web Page Caching
             'performance', // Performance Metrics
             'toolbar',     // Debug Toolbar
+            'cors',        // CORS: garante headers na resposta em qualquer situação
         ],
     ];
 
@@ -77,6 +79,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
+            'cors',
             'authFilter' => [
                 'except' => [
                     '/',
@@ -90,6 +93,7 @@ class Filters extends BaseFilters
         'after' => [
             // 'honeypot',
             // 'secureheaders',
+            'cors',
         ],
     ];
 

@@ -1,10 +1,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useSettingsStore } from '@/stores/settings'
-import { userService }      from '@/services/userService'
-import { paymentService }   from '@/services/paymentService'
-import { formatDate, formatCurrency, toTitleCase } from '@/utils/formatters'
+import { useSettingsStore }          from '@/stores/settings'
+import { userCustomerViewService }   from '@/services/userCustomerViewService'
+import { formatDate, toTitleCase }   from '@/utils/formatters'
 
 import AppNavbar   from '@/components/layout/AppNavbar.vue'
 import AppSidebar  from '@/components/layout/AppSidebar.vue'
@@ -29,14 +28,8 @@ const serviceMap = {
   users: {
     label:   'Usuários',
     icon:    '👥',
-    service: userService,
-    columns: ['id', 'name', 'email', 'created_at'],
-  },
-  payments: {
-    label:   'Pagamentos',
-    icon:    '💳',
-    service: paymentService,
-    columns: ['id', 'description', 'amount', 'status', 'created_at'],
+    service: userCustomerViewService,
+    columns: ['id', 'uc_name', 'uc_mail', 'uc_profile', 'uc_whatsapp', 'uc_created_at'],
   },
 }
 
@@ -53,19 +46,14 @@ const fetchFn = computed(() =>
 /** Formata o valor de uma célula conforme a coluna */
 function formatCell(col, value) {
   if (value == null) return '—'
-  if (col === 'amount')     return formatCurrency(value)
   if (col.endsWith('_at')) return formatDate(value)
   return value
 }
 
-/** Classe de badge de status */
+/** Classe de badge por perfil */
 const statusBadgeClass = {
-  paid:    'badge text-bg-success',
-  active:  'badge text-bg-success',
-  pending: 'badge text-bg-warning',
-  failed:  'badge text-bg-danger',
-  deleted: 'badge text-bg-danger',
-  inactive:'badge text-bg-secondary',
+  admin: 'badge text-bg-primary',
+  user:  'badge text-bg-secondary',
 }
 </script>
 
@@ -171,8 +159,8 @@ const statusBadgeClass = {
                         class="px-3 py-3 text-truncate"
                         style="max-width: 200px;"
                       >
-                        <!-- Status: exibe badge colorido -->
-                        <span v-if="col === 'status'" :class="statusBadgeClass[row[col]] ?? 'badge text-bg-secondary'">
+                        <!-- Perfil: exibe badge colorido -->
+                        <span v-if="col === 'uc_profile'" :class="statusBadgeClass[row[col]] ?? 'badge text-bg-secondary'">
                           {{ row[col] ?? '—' }}
                         </span>
                         <!-- Demais colunas: formatação automática -->

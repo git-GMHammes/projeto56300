@@ -41,7 +41,7 @@ class ResourceTableController extends BaseResourceController
     // -------------------------------------------------------------------------
 
     /**
-     * POST /api/v1/user-customer/find?page=1&limit=20&sort=id&order=desc
+     * POST {{www}}/index.php/api/v1/user-customer/find?page=1&limit=20&sort=id&order=desc
      *
      * Body JSON: { "campo": "valor", "outro": "valor" }
      * Cada chave é um campo da tabela; cada valor é um escalar para WHERE exato.
@@ -63,7 +63,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * POST /api/v1/user-customer/get-grouped?page=1&limit=20&sort=id&order=desc
+     * POST {{www}}/index.php/api/v1/user-customer/get-grouped?page=1&limit=20&sort=id&order=desc
      *
      * Body JSON: { "coluna": ["valor1", "valor2"], "outra_coluna": ["valorX"] }
      * Cada chave é um campo da tabela; cada valor é um array de strings aceitas.
@@ -101,7 +101,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/search?q=termo&page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer/search?q=termo&page=1&limit=20&sort=id&order=desc
      */
     public function search(): ResponseInterface
     {
@@ -118,7 +118,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/get/{id}
+     * GET {{www}}/index.php/api/v1/user-customer/get/{id}
      */
     public function get(int $id): ResponseInterface
     {
@@ -138,7 +138,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/get-all?page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer/get-all?page=1&limit=20&sort=id&order=desc
      */
     public function getAll(): ResponseInterface
     {
@@ -154,7 +154,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/get-no-pagination?sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer/get-no-pagination?sort=id&order=desc
      */
     public function getNoPagination(): ResponseInterface
     {
@@ -172,7 +172,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/get-deleted/{id}
+     * GET {{www}}/index.php/api/v1/user-customer/get-deleted/{id}
      */
     public function getDeleted(int $id): ResponseInterface
     {
@@ -192,7 +192,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer/get-deleted-all?page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer/get-deleted-all?page=1&limit=20&sort=id&order=desc
      */
     public function getDeletedAll(): ResponseInterface
     {
@@ -212,7 +212,7 @@ class ResourceTableController extends BaseResourceController
     // -------------------------------------------------------------------------
 
     /**
-     * POST /api/v1/user-customer/create
+     * POST {{www}}/index.php/api/v1/user-customer/create
      *
      * Body JSON: campos do user_customer conforme CreateRequest
      */
@@ -238,7 +238,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * PUT /api/v1/user-customer/update/{id}
+     * PUT {{www}}/index.php/api/v1/user-customer/update/{id}
      *
      * Body JSON: campos a atualizar conforme UpdateRequest
      */
@@ -268,7 +268,7 @@ class ResourceTableController extends BaseResourceController
     // -------------------------------------------------------------------------
 
     /**
-     * DELETE /api/v1/user-customer/delete-soft/{id}
+     * DELETE {{www}}/index.php/api/v1/user-customer/delete-soft/{id}
      */
     public function deleteSoft(int $id): ResponseInterface
     {
@@ -288,7 +288,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * PATCH /api/v1/user-customer/delete-restore/{id}
+     * PATCH {{www}}/index.php/api/v1/user-customer/delete-restore/{id}
      */
     public function deleteRestore(int $id): ResponseInterface
     {
@@ -308,7 +308,7 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * DELETE /api/v1/user-customer/delete-hard/{id}
+     * DELETE {{www}}/index.php/api/v1/user-customer/delete-hard/{id}
      */
     public function deleteHard(int $id): ResponseInterface
     {
@@ -328,8 +328,8 @@ class ResourceTableController extends BaseResourceController
     }
 
     /**
-     * DELETE /api/v1/user-customer/clear-deleted
-     * DELETE /api/v1/user-customer/clear-deleted/{id}
+     * DELETE {{www}}/index.php/api/v1/user-customer/clear-deleted
+     * DELETE {{www}}/index.php/api/v1/user-customer/clear-deleted/{id}
      */
     public function clearDeleted(?int $id = null): ResponseInterface
     {
