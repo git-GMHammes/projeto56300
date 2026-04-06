@@ -54,7 +54,10 @@ export const useAuthStore = defineStore('auth', () => {
     error.value     = null
 
     try {
-      const { data } = await api.post('/api/v1/auth/login', credentials)
+      const { data } = await api.post('/api/v1/auth/login', {
+        um_user:     credentials.user,
+        um_password: credentials.password,
+      })
 
       token.value = data.data.token
       user.value  = data.data.user

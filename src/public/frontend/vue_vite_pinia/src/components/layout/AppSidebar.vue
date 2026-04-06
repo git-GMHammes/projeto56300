@@ -12,11 +12,8 @@ const appVersion    = import.meta.env.VITE_APP_VERSION ?? '1.0.0'
  * @type {{ label: string, icon: string, to: string }[]}
  */
 const menuItems = [
-  { label: 'Dashboard',    icon: '📊', to: '/dashboard'      },
-  { label: 'Usuários',     icon: '👥', to: '/hub/users'      },
-  { label: 'Pagamentos',   icon: '💳', to: '/hub/payments'   },
-  { label: 'Relatórios',   icon: '📈', to: '/hub/reports'    },
-  { label: 'Configurações',icon: '⚙️', to: '/hub/settings'   },
+  { label: 'Dashboard', icon: '📊', to: '/dashboard'  },
+  { label: 'Usuários',  icon: '👥', to: '/hub/users'  },
 ]
 </script>
 

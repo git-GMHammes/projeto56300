@@ -50,9 +50,9 @@ export function useApiWidget(fetchFn, options = {}) {
       const response = await fetchFn()
       const payload  = response.data
 
-      // Suporte ao envelope padrão da API CI4: { success, data, meta, message }
-      data.value = payload?.data  ?? payload
-      meta.value = payload?.meta  ?? null
+      // Suporte ao envelope padrão da API CI4: { success, data, pagination, message }
+      data.value = payload?.data       ?? payload
+      meta.value = payload?.pagination ?? payload?.meta ?? null
     } catch (err) {
       error.value = err.message ?? 'Erro inesperado ao buscar dados.'
       console.error('[useApiWidget]', err)

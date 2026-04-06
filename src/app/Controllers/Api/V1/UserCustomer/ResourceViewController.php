@@ -39,7 +39,7 @@ class ResourceViewController extends BaseResourceController
     // -------------------------------------------------------------------------
 
     /**
-     * POST /api/v1/user-customer-view/find?page=1&limit=20&sort=id&order=desc
+     * POST {{www}}/index.php/api/v1/user-customer-view/find?page=1&limit=20&sort=id&order=desc
      *
      * Body JSON: { "campo": "valor", "outro": "valor" }
      * Cada chave é um campo da view; cada valor é um escalar para WHERE exato.
@@ -61,7 +61,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * POST /api/v1/user-customer-view/get-grouped?page=1&limit=20&sort=id&order=desc
+     * POST {{www}}/index.php/api/v1/user-customer-view/get-grouped?page=1&limit=20&sort=id&order=desc
      *
      * Body JSON: { "coluna": ["valor1", "valor2"], "outra_coluna": ["valorX"] }
      * Cada chave é um campo da view; cada valor é um array de strings aceitas.
@@ -99,7 +99,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/search?q=termo&page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer-view/search?q=termo&page=1&limit=20&sort=id&order=desc
      */
     public function search(): ResponseInterface
     {
@@ -116,7 +116,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/get/{id}
+     * GET {{www}}/index.php/api/v1/user-customer-view/get/{id}
      */
     public function get(int $id): ResponseInterface
     {
@@ -136,7 +136,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/get-all?page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer-view/get-all?page=1&limit=20&sort=id&order=desc
      */
     public function getAll(): ResponseInterface
     {
@@ -152,7 +152,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/get-no-pagination?sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer-view/get-no-pagination?sort=id&order=desc
      */
     public function getNoPagination(): ResponseInterface
     {
@@ -170,7 +170,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/get-deleted/{id}
+     * GET {{www}}/index.php/api/v1/user-customer-view/get-deleted/{id}
      */
     public function getDeleted(int $id): ResponseInterface
     {
@@ -190,7 +190,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * GET /api/v1/user-customer-view/get-deleted-all?page=1&limit=20&sort=id&order=desc
+     * GET {{www}}/index.php/api/v1/user-customer-view/get-deleted-all?page=1&limit=20&sort=id&order=desc
      */
     public function getDeletedAll(): ResponseInterface
     {

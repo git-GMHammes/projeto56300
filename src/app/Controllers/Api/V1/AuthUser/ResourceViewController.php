@@ -39,7 +39,7 @@ class ResourceViewController extends BaseResourceController
     // -------------------------------------------------------------------------
 
     /**
-     * POST /api/v1/auth/login
+     * POST {{www}}/index.php/api/v1/auth/login
      *
      * Autentica o usuário e retorna um token JWT.
      */
@@ -72,7 +72,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * POST /api/v1/auth/recover-password
+     * POST {{www}}/index.php/api/v1/auth/recover-password
      *
      * Verifica se o e-mail existe e envia o e-mail de recuperação de senha.
      */
@@ -102,7 +102,7 @@ class ResourceViewController extends BaseResourceController
     }
 
     /**
-     * POST /api/v1/auth/logout
+     * POST {{www}}/index.php/api/v1/auth/logout
      *
      * Valida o token Bearer e encerra a sessão do usuário.
      * O token é extraído do header Authorization e repassado ao Processor.
