@@ -137,3 +137,4 @@ $RECYCLE.BIN/
 # Documentação interna (rascunhos/prompts de IA/backups)
 # -------------------------------------------------------------
 docs/
+.claude/worktrees/eager-herschel/
