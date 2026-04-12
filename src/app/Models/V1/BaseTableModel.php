@@ -5,12 +5,16 @@ namespace App\Models\V1;
 use CodeIgniter\Model;
 
 /**
- * Modelo base para a API V1.
+ * Model base para tabelas físicas na API V1.
  *
- * Fornece paginação padronizada, busca textual, agrupamento e sanitização
- * de parâmetros de ordenação. Todos os Models da V1 devem herdar desta classe.
+ * Fornece o conjunto completo de operações:
+ * leitura paginada, busca textual, agrupamento, verificação de unicidade,
+ * soft delete (find/restore/clear) e utilitários internos.
+ *
+ * Os SqlTableModel de cada módulo devem herdar desta classe,
+ * declarar $table, $allowedFields e sobrescrever os arrays de configuração.
  */
-abstract class BaseModel extends Model
+abstract class BaseTableModel extends Model
 {
     protected $DBGroup          = 'default';
     protected $primaryKey       = 'id';
@@ -31,14 +35,14 @@ abstract class BaseModel extends Model
     protected $hidden = [];
 
     /**
-     * Campos permitidos para ordenação — sobrescrever nos filhos conforme a tabela/view.
+     * Campos permitidos para ordenação — sobrescrever nos filhos conforme a tabela.
      */
     protected array $sortableFields = ['id', 'created_at', 'updated_at'];
 
     /**
-     * Campos que usam LIKE %valor% no findPaginated/findPaginatedView.
+     * Campos que usam LIKE %valor% no findPaginated.
      * Todos os outros campos usam WHERE exato (=).
-     * Sobrescrever nos filhos com os campos de texto da tabela/view.
+     * Sobrescrever nos filhos com os campos de texto da tabela.
      */
     protected array $likeFields = [];
 
@@ -144,11 +148,7 @@ abstract class BaseModel extends Model
      * Listagem filtrada paginada com filtros multivalorados.
      *
      * Cada chave de $multiFilters é um campo da tabela; cada valor é um array
-     * de strings aceitas. Gera WHERE field IN (...) por chave, sem GROUP BY —
-     * todos os registros correspondentes são retornados individualmente.
-     *
-     * Exemplo: ['profile' => ['Cliente VIP', 'Cliente Premium'], 'user_id' => ['80']]
-     * → WHERE profile IN ('Cliente VIP','Cliente Premium') AND user_id IN ('80')
+     * de strings aceitas. Gera WHERE field IN (...) por chave — sem GROUP BY.
      *
      * @param array $multiFilters Mapa [campo => array_de_valores]
      */
@@ -169,7 +169,6 @@ abstract class BaseModel extends Model
             }
 
             if (in_array($field, $this->likeFields, true)) {
-                // Campo de texto: LIKE %valor% com OR entre múltiplos valores
                 $builder->groupStart();
                 foreach (array_values($values) as $index => $value) {
                     $index === 0
@@ -178,7 +177,6 @@ abstract class BaseModel extends Model
                 }
                 $builder->groupEnd();
             } else {
-                // Campo numérico/relacional: WHERE field IN (v1, v2, ...)
                 $builder->whereIn($field, array_values($values));
             }
         }
@@ -206,12 +204,115 @@ abstract class BaseModel extends Model
     }
 
     // -------------------------------------------------------------------------
+    // Verificações de unicidade
+    // -------------------------------------------------------------------------
+
+    /**
+     * Verifica se já existe registro ativo com o valor informado no campo dado.
+     *
+     * @param string   $field     Campo a verificar
+     * @param mixed    $value     Valor a buscar
+     * @param int|null $excludeId ID a ignorar (usado no update)
+     */
+    public function existsByField(string $field, mixed $value, ?int $excludeId = null): bool
+    {
+        $builder = $this->db->table($this->table)
+            ->where($field, $value)
+            ->where('deleted_at IS NULL', null, false);
+
+        if ($excludeId !== null) {
+            $builder->where("{$this->primaryKey} !=", $excludeId);
+        }
+
+        return $builder->countAllResults() > 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // Consultas com soft delete
+    // -------------------------------------------------------------------------
+
+    /**
+     * Busca registro pelo ID, incluindo os soft-deleted (para restauração).
+     */
+    public function findWithDeleted(int $id): ?array
+    {
+        return $this->withDeleted()->find($id);
+    }
+
+    /**
+     * Busca registro pelo ID somente se estiver soft-deleted.
+     */
+    public function findOnlyDeleted(int $id): ?array
+    {
+        return $this->onlyDeleted()->find($id);
+    }
+
+    /**
+     * Lista registros soft-deleted com paginação.
+     */
+    public function findDeletedPaginated(
+        int $page = 1,
+        int $limit = 20,
+        string $sort = 'id',
+        string $order = 'desc'
+    ): array {
+        [$sort, $order] = $this->sanitizeSort($sort, $order);
+
+        $builder = $this->db->table($this->table)
+            ->where('deleted_at IS NOT NULL', null, false);
+
+        $total = $builder->countAllResults(false);
+
+        $data = $builder
+            ->orderBy($sort, $order)
+            ->limit($limit, ($page - 1) * $limit)
+            ->get()
+            ->getResultArray();
+
+        return $this->buildPaginatedResult($data, $total, $page, $limit);
+    }
+
+    /**
+     * Restaura um registro soft-deleted zerando o campo deleted_at.
+     *
+     * Usa o builder direto para contornar $allowedFields,
+     * já que deleted_at é gerenciado pelo framework, não pela aplicação.
+     */
+    public function restore(int $id): void
+    {
+        $this->db->table($this->table)
+            ->where($this->primaryKey, $id)
+            ->update(['deleted_at' => null]);
+    }
+
+    /**
+     * Remove permanentemente (hard delete) todos os registros soft-deleted,
+     * ou apenas um específico se $id for informado.
+     *
+     * @return int Quantidade de registros removidos
+     */
+    public function clearDeleted(?int $id = null): int
+    {
+        $builder = $this->db->table($this->table)
+            ->where('deleted_at IS NOT NULL', null, false);
+
+        if ($id !== null) {
+            $builder->where($this->primaryKey, $id);
+        }
+
+        $affected = $builder->countAllResults(false);
+        $builder->delete();
+
+        return $affected;
+    }
+
+    // -------------------------------------------------------------------------
     // Utilitários internos
     // -------------------------------------------------------------------------
 
     /**
      * Aplica filtros ao builder: LIKE %valor% para campos em $likeFields,
-     * WHERE exato (=) para os demais. Reutilizado em findPaginated e findPaginatedView.
+     * WHERE exato (=) para os demais.
      *
      * @param \CodeIgniter\Database\BaseBuilder $builder
      * @param array $filters Mapa [campo => valor]
@@ -233,7 +334,6 @@ abstract class BaseModel extends Model
 
     /**
      * Valida e sanitiza os parâmetros de ordenação para prevenir SQL Injection.
-     * Retorna valores seguros baseados em $sortableFields.
      *
      * @return array{0: string, 1: string} [$sort, $order]
      */

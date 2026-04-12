@@ -16,6 +16,8 @@ $routes->get('get-no-pagination', 'Api\V1\UserManagement\ResourceTableController
 $routes->get('get-deleted/(:num)', 'Api\V1\UserManagement\ResourceTableController::getDeleted/$1');
 // {{www}}/index.php/api/v1/user-management/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\UserManagement\ResourceTableController::getDeletedAll');
+// {{www}}/index.php/api/v1/user-management/get-with-deleted/{id}
+$routes->get('get-with-deleted/(:num)', 'Api\V1\UserManagement\ResourceTableController::getWithDeleted/$1');
 // {{www}}/index.php/api/v1/user-management/create
 $routes->post('create', 'Api\V1\UserManagement\ResourceTableController::create');
 // {{www}}/index.php/api/v1/user-management/update/{id}
