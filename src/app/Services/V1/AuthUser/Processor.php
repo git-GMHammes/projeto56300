@@ -4,21 +4,27 @@ namespace App\Services\V1\AuthUser;
 
 use App\Libraries\JwtHelper;
 use App\Models\V1\AuthUser\SqlViewModel;
-use App\Services\V1\BaseService;
+use App\Services\V1\BaseViewService;
 
 /**
  * Service de autenticação do módulo AuthUser.
  *
- * Contém TODAS as regras de negócio de autenticação:
+ * Contém todas as regras de negócio de autenticação:
  *   - Consulta do usuário via Model
- *   - Verificação da senha com password_verify
- *   - Geração do token JWT
- *   - Montagem do payload de resposta
+ *   - Verificação de senha com password_verify
+ *   - Geração e revogação de token JWT
+ *   - Envio de e-mail de recuperação de senha via view
  *
  * Nunca acessa Request nem Response diretamente.
  */
-class Processor extends BaseService
+class Processor extends BaseViewService
 {
+    /** Tempo de vida do token JWT em segundos (10 horas). */
+    private const JWT_TTL = 36000;
+
+    /** View do template de e-mail de recuperação de senha. */
+    private const EMAIL_VIEW_RECOVERY = 'emails/recovery_password';
+
     protected SqlViewModel $viewModel;
 
     public function __construct()
@@ -34,10 +40,11 @@ class Processor extends BaseService
      * Autentica o usuário pelo campo user e password.
      *
      * Fluxo:
-     *   1. Buscar usuário ativo pelo campo um_user na view
-     *   2. Verificar senha com password_verify
-     *   3. Gerar token JWT com payload (sub, cpf, iat, exp)
-     *   4. Retornar token e dados do usuário
+     *   1. Sanitizar entrada
+     *   2. Buscar usuário ativo pelo campo um_user na view
+     *   3. Verificar senha com password_verify
+     *   4. Gerar token JWT com payload (sub, cpf, iat, exp)
+     *   5. Retornar token e dados do usuário (sem senha)
      *
      * @param  string $user     Identificador do usuário (campo um_user)
      * @param  string $password Senha em texto plano para verificação
@@ -47,39 +54,26 @@ class Processor extends BaseService
      */
     public function authenticate(string $user, string $password): array
     {
-        // Sanitizar entrada
-        $user = $this->sanitizeString($user);
-
-        // Buscar usuário na view pelo campo um_user
+        $user   = $this->sanitizeString($user);
         $record = $this->viewModel->findByUser($user);
 
-        if ($record === null) {
+        if ($record === null || !password_verify($password, $record['um_password'])) {
             throw new \InvalidArgumentException('Credenciais inválidas');
         }
 
-        // Verificar senha com password_verify
-        if (!password_verify($password, $record['um_password'])) {
-            throw new \InvalidArgumentException('Credenciais inválidas');
-        }
-
-        // Montar payload JWT
-        $ttl     = 36000;
         $payload = [
             'sub' => $record['uc_user_id'],
             'cpf' => $record['uc_cpf'],
         ];
 
-        // Gerar token JWT (iat e exp são adicionados internamente pelo JwtHelper)
-        $token = JwtHelper::encode($payload, $ttl);
-
-        // Dados do usuário retornados na resposta (sem senha)
+        $token    = JwtHelper::encode($payload, self::JWT_TTL);
         $userData = $record;
         unset($userData['um_password']);
 
         return [
             'token'      => $token,
             'token_type' => 'Bearer',
-            'expires_in' => $ttl,
+            'expires_in' => self::JWT_TTL,
             'user'       => $userData,
         ];
     }
@@ -89,12 +83,12 @@ class Processor extends BaseService
     // -------------------------------------------------------------------------
 
     /**
-     * Verifica se o e-mail existe na view e envia e-mail de recuperação de senha.
+     * Verifica se o e-mail existe na view e envia o e-mail de recuperação.
      *
      * Fluxo:
-     *   1. Buscar usuário ativo pelo campo uc_mail na view
-     *   2. Lançar exceção se não encontrado
-     *   3. Montar template HTML genérico de teste
+     *   1. Sanitizar entrada
+     *   2. Buscar usuário ativo pelo campo uc_mail na view
+     *   3. Renderizar template HTML via view()
      *   4. Enviar via SMTP usando o remetente de recuperação
      *
      * @param  string $mail E-mail informado pelo usuário (campo uc_mail)
@@ -105,92 +99,21 @@ class Processor extends BaseService
      */
     public function sendRecoveryEmail(string $mail): array
     {
-        // Sanitizar entrada
-        $mail = $this->sanitizeString($mail);
-
-        // Buscar usuário na view pelo campo uc_mail
+        $mail   = $this->sanitizeString($mail);
         $record = $this->viewModel->findByMail($mail);
 
         if ($record === null) {
             throw new \InvalidArgumentException('E-mail não encontrado');
         }
 
-        // Carregar configurações de e-mail
-        $emailConfig = config('Email');
-        $recovery    = $emailConfig->recoveryEmail;
+        $name = $record['uc_name'] ?? 'Usuário';
 
-        // Montar template HTML genérico de teste
-        $name    = $record['uc_name'] ?? 'Usuário';
-        $subject = 'Recuperação de Senha - Sistema Habilidade';
-        $body    = '<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Recuperação de Senha</title>
-</head>
-<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 30px 0;">
-    <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <tr>
-            <td style="background-color: #2c3e50; padding: 24px 32px;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 20px;">Sistema Habilidade</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 32px;">
-              <h2 style="color: #2c3e50; margin-top: 0;">Recuperação de Senha</h2>
-              <p style="color: #555555; font-size: 15px;">Olá, <strong>' . htmlspecialchars($name) . '</strong>!</p>
-              <p style="color: #555555; font-size: 15px;">
-                Recebemos uma solicitação de recuperação de senha para o e-mail
-                <strong>' . htmlspecialchars($mail) . '</strong>.
-              </p>
-              <p style="color: #555555; font-size: 15px;">
-                Este é um e-mail de teste. Em produção, aqui estará o link para redefinição de senha.
-              </p>
-              <table cellpadding="0" cellspacing="0" style="margin: 24px 0;">
-                <tr>
-                  <td style="background-color: #2c3e50; border-radius: 4px; padding: 12px 24px;">
-                    <a href="#" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: bold;">
-                      Redefinir Senha
-                    </a>
-                  </td>
-                </tr>
-              </table>
-              <p style="color: #999999; font-size: 13px;">
-                Se você não solicitou a recuperação de senha, ignore este e-mail.
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: #f9f9f9; padding: 16px 32px; border-top: 1px solid #eeeeee;">
-              <p style="color: #aaaaaa; font-size: 12px; margin: 0;">
-                Sistema Habilidade &mdash; E-mail gerado automaticamente, não responda.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>';
-
-        // Configurar e enviar e-mail com remetente de recuperação
-        $email = \Config\Services::email();
-        $email->initialize([
-            'SMTPUser' => $recovery['SMTPUser'],
-            'SMTPPass' => $recovery['SMTPPass'],
+        $body = view(self::EMAIL_VIEW_RECOVERY, [
+            'name' => $name,
+            'mail' => $mail,
         ]);
-        $email->setFrom($recovery['email'], $recovery['name']);
-        $email->setTo($mail);
-        $email->setSubject($subject);
-        $email->setMessage($body);
 
-        if (!$email->send()) {
-            throw new \RuntimeException('Falha ao enviar o e-mail de recuperação: ' . $email->printDebugger(['headers']));
-        }
+        $this->dispatchEmail($mail, $name, 'Recuperação de Senha - Sistema Habilidade', $body);
 
         return [
             'uc_mail' => $mail,
@@ -203,13 +126,13 @@ class Processor extends BaseService
     // -------------------------------------------------------------------------
 
     /**
-     * Valida o token JWT e retorna os dados de identificação do usuário.
+     * Valida o token JWT e o revoga no cache pelo tempo restante de expiração.
      *
-     * Como o JWT é stateless (sem blacklist), o logout é do lado do cliente.
-     * O servidor apenas confirma que o token era válido no momento do logout.
+     * Como o JWT é stateless, o logout é confirmado pelo servidor via blacklist
+     * em cache. O cliente descarta o token localmente.
      *
      * @param  string $token Token JWT recebido no header Authorization
-     * @return array         Dados de identificação (sub, exp)
+     * @return array         Dados de identificação (user_id)
      *
      * @throws \InvalidArgumentException Se o token for inválido ou expirado
      */
@@ -221,8 +144,8 @@ class Processor extends BaseService
             throw new \InvalidArgumentException($e->getMessage());
         }
 
-        // Revogar o token: gravar no cache até o momento de expiração original
         $ttl = max(0, ($payload['exp'] ?? 0) - time());
+
         if ($ttl > 0) {
             cache()->save('jwt_revoked_' . hash('sha256', $token), true, $ttl);
         }
@@ -230,5 +153,40 @@ class Processor extends BaseService
         return [
             'user_id' => $payload['sub'] ?? null,
         ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Auxiliares privados
+    // -------------------------------------------------------------------------
+
+    /**
+     * Configura e envia o e-mail via SMTP usando o remetente de recuperação.
+     *
+     * @param string $to      Endereço do destinatário
+     * @param string $name    Nome do destinatário (para log)
+     * @param string $subject Assunto do e-mail
+     * @param string $body    Corpo HTML já renderizado
+     *
+     * @throws \RuntimeException Se o envio falhar
+     */
+    private function dispatchEmail(string $to, string $name, string $subject, string $body): void
+    {
+        $recovery = config('Email')->recoveryEmail;
+
+        $email = \Config\Services::email();
+        $email->initialize([
+            'SMTPUser' => $recovery['SMTPUser'],
+            'SMTPPass' => $recovery['SMTPPass'],
+        ]);
+        $email->setFrom($recovery['email'], $recovery['name']);
+        $email->setTo($to);
+        $email->setSubject($subject);
+        $email->setMessage($body);
+
+        if (!$email->send()) {
+            log_message('error', "[AuthUser::sendRecoveryEmail] Falha ao enviar para {$to}: " . $email->printDebugger(['headers']));
+
+            throw new \RuntimeException('Falha ao enviar o e-mail de recuperação.');
+        }
     }
 }

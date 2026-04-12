@@ -3,18 +3,23 @@
 namespace App\Services\V1;
 
 /**
- * Service base para a API V1.
+ * Service base para módulos somente leitura via View na API V1.
  *
- * Fornece utilitários de sanitização, formatação e normalização de dados
- * compartilhados por todos os Services da V1.
- * Nenhuma regra de negócio específica de módulo deve existir aqui.
+ * Fornece:
+ *  - Utilitários: sanitização, formatação, remoção de máscaras, paginação
+ *  - Leitura genérica sobre views SQL: find, getGrouped, search, get,
+ *    getAll, getNoPagination, getDeleted, getDeletedAll
+ *
+ * Os Processors de módulos com view devem herdar desta classe e declarar
+ * $this->viewModel no construtor.
+ *
+ * Módulos que também possuem tabela física devem herdar de BaseTableService,
+ * que estende esta classe com escrita, exclusão e leitura de tabela.
+ *
+ * @property object $viewModel Model da view (somente leitura)
  */
-abstract class BaseService
+abstract class BaseViewService
 {
-    // -------------------------------------------------------------------------
-    // Sanitização
-    // -------------------------------------------------------------------------
-
     /**
      * Campos que possuem máscara e devem ser armazenados/consultados apenas com dígitos.
      * Cobre tanto a tabela (cpf, whatsapp, phone, zip_code)
@@ -24,6 +29,10 @@ abstract class BaseService
         'cpf', 'whatsapp', 'phone', 'zip_code',
         'uc_cpf', 'uc_whatsapp', 'uc_phone', 'uc_zip_code',
     ];
+
+    // -------------------------------------------------------------------------
+    // Sanitização
+    // -------------------------------------------------------------------------
 
     /**
      * Remove tags HTML e espaços em branco extras de uma string.
@@ -60,10 +69,6 @@ abstract class BaseService
      * Remove máscaras (parênteses, traços, pontos, espaços) dos campos definidos
      * em MASKED_FIELDS, mantendo apenas dígitos.
      *
-     * Funciona para valores escalares (create/update/find) e para arrays de valores
-     * (get-grouped). Deve ser chamado APÓS sanitizeData em operações de escrita,
-     * e diretamente nos filtros de leitura antes de montar a query.
-     *
      * @param array $data Mapa [campo => valor_escalar] ou [campo => array_de_valores]
      * @return array Dados com máscaras removidas nos campos pertinentes
      */
@@ -75,7 +80,6 @@ abstract class BaseService
             }
 
             if (\is_array($data[$field])) {
-                // Filtros multivalorados (get-grouped): remove máscara de cada elemento
                 $data[$field] = array_map(
                     static fn($v) => \is_string($v) ? preg_replace('/\D/', '', $v) : $v,
                     $data[$field]
@@ -136,10 +140,104 @@ abstract class BaseService
     protected function buildPaginationParams(array $params): array
     {
         return [
-            'page' => max(1, (int) ($params['page'] ?? 1)),
+            'page'  => max(1, (int) ($params['page'] ?? 1)),
             'limit' => min(100, max(1, (int) ($params['limit'] ?? 20))),
-            'sort' => trim((string) ($params['sort'] ?? 'id')),
+            'sort'  => trim((string) ($params['sort'] ?? 'id')),
             'order' => trim((string) ($params['order'] ?? 'desc')),
         ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Leitura — View
+    // -------------------------------------------------------------------------
+
+    /**
+     * POST /find — Consulta paginada com filtros (view).
+     */
+    public function findView(array $filters, array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->findPaginatedView(
+            $this->removeMasks($filters),
+            $p['page'], $p['limit'], $p['sort'], $p['order']
+        );
+    }
+
+    /**
+     * POST /get-grouped — Listagem filtrada paginada (view).
+     *
+     * @param array $multiFilters Mapa [campo => array_de_valores]
+     * @param array $params       Parâmetros de paginação
+     */
+    public function getGroupedView(array $multiFilters, array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->findGroupedView(
+            $this->removeMasks($multiFilters),
+            $p['page'], $p['limit'], $p['sort'], $p['order']
+        );
+    }
+
+    /**
+     * GET /search — Busca textual paginada (view).
+     */
+    public function searchView(string $term, array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->searchByTermView(
+            $term,
+            $p['page'], $p['limit'], $p['sort'], $p['order']
+        );
+    }
+
+    /**
+     * GET /get/{id} — Busca registro ativo pelo ID (view).
+     */
+    public function getView(int $id): ?array
+    {
+        return $this->viewModel->findById($id);
+    }
+
+    /**
+     * GET /get-all — Lista paginada de registros ativos (view).
+     */
+    public function getAllView(array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->findPaginatedView(
+            [], $p['page'], $p['limit'], $p['sort'], $p['order']
+        );
+    }
+
+    /**
+     * GET /get-no-pagination — Lista todos os registros ativos sem paginação (view).
+     */
+    public function getNoPaginationView(string $sort, string $order): array
+    {
+        return $this->viewModel->findAllView($sort, $order);
+    }
+
+    /**
+     * GET /get-deleted/{id} — Busca registro soft-deleted pelo ID (view).
+     */
+    public function getDeletedView(int $id): ?array
+    {
+        return $this->viewModel->findDeletedById($id);
+    }
+
+    /**
+     * GET /get-deleted-all — Lista paginada de registros soft-deleted (view).
+     */
+    public function getDeletedAllView(array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->findDeletedPaginatedView(
+            $p['page'], $p['limit'], $p['sort'], $p['order']
+        );
     }
 }
