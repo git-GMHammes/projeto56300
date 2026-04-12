@@ -1,0 +1,336 @@
+src/
+├── assets/
+│   ├── images/
+│   ├── icons/
+│   ├── fonts/
+│   └── styles/
+│       ├── variables.css
+│       ├── mixins.css
+│       └── global.css
+├── components/
+│   ├── ui/
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.module.css
+│   │   │   ├── Button.types.ts
+│   │   │   └── index.ts
+│   │   ├── Input/
+│   │   ├── Select/
+│   │   ├── Modal/
+│   │   ├── Table/
+│   │   ├── Pagination/
+│   │   ├── Loading/
+│   │   ├── EmptyState/
+│   │   ├── Card/
+│   │   ├── Badge/
+│   │   ├── Dropdown/
+│   │   ├── DatePicker/
+│   │   ├── FileUpload/
+│   │   ├── SearchBar/
+│   │   └── index.ts
+│   ├── layout/
+│   │   ├── Sidebar/
+│   │   ├── Header/
+│   │   ├── Footer/
+│   │   ├── Breadcrumb/
+│   │   ├── PageContainer/
+│   │   └── index.ts
+│   └── common/
+│       ├── DataTable/
+│       │   ├── DataTable.tsx
+│       │   ├── DataTable.module.css
+│       │   ├── DataTable.types.ts
+│       │   ├── hooks/
+│       │   │   └── useDataTable.ts
+│       │   └── index.ts
+│       ├── FormBuilder/
+│       ├── FilterPanel/
+│       ├── StatusBadge/
+│       ├── DocumentViewer/
+│       └── index.ts
+├── hooks/
+│   ├── useApi.ts
+│   ├── useAuth.ts
+│   ├── usePagination.ts
+│   ├── useForm.ts
+│   ├── useLocalStorage.ts
+│   ├── useDebounce.ts
+│   ├── useModal.ts
+│   └── index.ts
+├── services/
+│   ├── api/
+│   │   ├── axiosConfig.ts
+│   │   ├── interceptors.ts
+│   │   └── index.ts
+│   ├── modules/
+│   │   ├── authService.ts
+│   │   ├── userService.ts
+│   │   ├── estoqueService.ts
+│   │   ├── mecanicaService.ts
+│   │   ├── gestaoDocumentalService.ts
+│   │   ├── tarefasService.ts
+│   │   └── veterinariaService.ts
+│   └── index.ts
+├── contexts/
+│   ├── AuthContext.tsx
+│   ├── ThemeContext.tsx
+│   ├── NotificationContext.tsx
+│   ├── LoadingContext.tsx
+│   └── index.ts
+├── utils/
+│   ├── constants/
+│   │   ├── routes.ts
+│   │   ├── apiEndpoints.ts
+│   │   ├── permissions.ts
+│   │   └── statusCodes.ts
+│   ├── helpers/
+│   │   ├── formatters.ts
+│   │   ├── validators.ts
+│   │   ├── dateHelpers.ts
+│   │   ├── fileHelpers.ts
+│   │   └── stringHelpers.ts
+│   └── index.ts
+├── pages/
+│   ├── Auth/
+│   │   ├── Login/
+│   │   ├── Register/
+│   │   ├── ForgotPassword/
+│   │   └── index.ts
+│   ├── Dashboard/
+│   │   ├── Dashboard.tsx
+│   │   ├── Dashboard.module.css
+│   │   ├── Dashboard.types.ts
+│   │   ├── components/
+│   │   │   ├── StatsCard/
+│   │   │   ├── RecentActivity/
+│   │   │   └── QuickActions/
+│   │   └── index.ts
+│   ├── Estoque/
+│   │   ├── Dashboard/
+│   │   ├── Almoxarifados/
+│   │   │   ├── List/
+│   │   │   ├── Form/
+│   │   │   └── Detail/
+│   │   ├── Categorias/
+│   │   ├── Fornecedores/
+│   │   ├── Produtos/
+│   │   │   ├── List/
+│   │   │   ├── Form/
+│   │   │   ├── Detail/
+│   │   │   └── components/
+│   │   │       ├── ProductForm/
+│   │   │       ├── StockInfo/
+│   │   │       └── PriceHistory/
+│   │   ├── LocaisArmazenamento/
+│   │   ├── Movimentacoes/
+│   │   ├── Transacoes/
+│   │   ├── OrdensCompra/
+│   │   ├── AjustesEstoque/
+│   │   └── index.ts
+│   ├── Mecanica/
+│   │   ├── Dashboard/
+│   │   ├── MarcasVeiculos/
+│   │   ├── ModelosVeiculos/
+│   │   ├── Veiculos/
+│   │   ├── CategoriasServico/
+│   │   ├── Servicos/
+│   │   ├── MaoObra/
+│   │   ├── Pecas/
+│   │   ├── FornecedoresPecas/
+│   │   ├── FormasPagamento/
+│   │   ├── OrdensServico/
+│   │   │   ├── List/
+│   │   │   ├── Form/
+│   │   │   ├── Detail/
+│   │   │   └── components/
+│   │   │       ├── ServiceItems/
+│   │   │       ├── PartsList/
+│   │   │       └── StatusTimeline/
+│   │   ├── Pagamentos/
+│   │   ├── Despesas/
+│   │   └── index.ts
+│   ├── GestaoDocumental/
+│   │   ├── Dashboard/
+│   │   ├── CategoriasDocumento/
+│   │   ├── TiposDocumento/
+│   │   ├── Departamentos/
+│   │   ├── Entidades/
+│   │   ├── Workflows/
+│   │   ├── Modelos/
+│   │   ├── SequenciasNumeracao/
+│   │   ├── TabelasTemporalidade/
+│   │   ├── Tags/
+│   │   ├── Documentos/
+│   │   │   ├── List/
+│   │   │   ├── Form/
+│   │   │   ├── Detail/
+│   │   │   └── components/
+│   │   │       ├── DocumentUpload/
+│   │   │       ├── VersionControl/
+│   │   │       ├── SignaturePanel/
+│   │   │       └── ApprovalFlow/
+│   │   ├── Arquivos/
+│   │   ├── Assinaturas/
+│   │   ├── Aprovacoes/
+│   │   ├── Relacionamentos/
+│   │   ├── Partes/
+│   │   ├── Protocolos/
+│   │   ├── Movimentacoes/
+│   │   ├── Indices/
+│   │   ├── Descartes/
+│   │   ├── LogsAcesso/
+│   │   ├── Contratos/
+│   │   ├── Processos/
+│   │   ├── NotasFiscais/
+│   │   └── index.ts
+│   ├── Tarefas/
+│   │   ├── Dashboard/
+│   │   ├── Projetos/
+│   │   ├── Colaboradores/
+│   │   ├── CategoriasTarefa/
+│   │   ├── Tarefas/
+│   │   │   ├── List/
+│   │   │   ├── Form/
+│   │   │   ├── Detail/
+│   │   │   ├── Kanban/
+│   │   │   └── Calendar/
+│   │   └── index.ts
+│   ├── Veterinaria/
+│   │   ├── Dashboard/
+│   │   ├── Racas/
+│   │   ├── Veterinarios/
+│   │   ├── Pets/
+│   │   ├── Agendas/
+│   │   ├── Indisponibilidades/
+│   │   ├── Consultas/
+│   │   ├── Prontuarios/
+│   │   └── index.ts
+│   ├── Usuarios/
+│   │   ├── List/
+│   │   ├── Form/
+│   │   ├── Profile/
+│   │   └── index.ts
+│   ├── Configuracoes/
+│   │   ├── Geral/
+│   │   ├── Notificacoes/
+│   │   ├── Permissoes/
+│   │   └── index.ts
+│   └── index.ts
+├── routes/
+│   ├── AppRoutes.tsx
+│   ├── Auth/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Auth.types.ts
+│   │   └── index.ts
+│   ├── Dashboard/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Dashboard.types.ts
+│   │   └── index.ts
+│   ├── Estoque/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Estoque.types.ts
+│   │   └── index.ts
+│   ├── Mecanica/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Mecanica.types.ts
+│   │   └── index.ts
+│   ├── GestaoDocumental/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── GestaoDocumental.types.ts
+│   │   └── index.ts
+│   ├── Tarefas/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Tarefas.types.ts
+│   │   └── index.ts
+│   ├── Veterinaria/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Veterinaria.types.ts
+│   │   └── index.ts
+│   ├── Usuarios/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Usuarios.types.ts
+│   │   └── index.ts
+│   ├── Configuracoes/
+│   │   ├── PrivateRoutes.tsx
+│   │   ├── PublicRoutes.tsx
+│   │   ├── Configuracoes.types.ts
+│   │   └── index.ts
+│   ├── components/
+│   │   ├── RouteGuard.tsx
+│   │   ├── PrivateRoute.tsx
+│   │   ├── PublicRoute.tsx
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── useRoutePermission.ts
+│   │   └── index.ts
+│   ├── types/
+│   │   ├── route.types.ts
+│   │   ├── permission.types.ts
+│   │   └── index.ts
+│   └── index.ts
+├── store/
+│   ├── slices/
+│   │   ├── authSlice.ts
+│   │   ├── userSlice.ts
+│   │   ├── estoqueSlice.ts
+│   │   ├── mecanicaSlice.ts
+│   │   ├── gestaoDocumentalSlice.ts
+│   │   ├── tarefasSlice.ts
+│   │   ├── veterinariaSlice.ts
+│   │   └── uiSlice.ts
+│   ├── store.ts
+│   └── index.ts
+├── config/
+│   ├── appConfig.ts
+│   ├── apiConfig.ts
+│   ├── themeConfig.ts
+│   └── index.ts
+├── types/
+│   ├── global.types.ts
+│   ├── api.types.ts
+│   ├── user.types.ts
+│   └── index.ts
+├── App.tsx
+├── main.tsx
+├── vite-env.d.ts
+└── index.css
+
+public/
+├── index.html
+├── manifest.json
+├── robots.txt
+└── favicon.ico
+
+tests/
+├── unit/
+│   ├── components/
+│   ├── hooks/
+│   └── utils/
+├── integration/
+│   ├── services/
+│   └── pages/
+└── e2e/
+
+docs/
+├── architecture.md
+├── api-integration.md
+├── component-guide.md
+└── deployment.md
+
+.env
+.env.example
+.eslintrc.js
+.prettierrc
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+package.json
+README.md
