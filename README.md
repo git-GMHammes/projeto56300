@@ -217,3 +217,15 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 | Soft Delete   | `deleted_at` (CI4 nativo) |
 | Cache / Queue | Redis / Laravel Queue     |
 | Container     | Podman                    |
+
+---
+
+## Desenvolvedor
+
+| Campo    | Informação                                                                                                                                      |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nome     | Gustavo Hammes                                                                                                                                  |
+| Cargo    | Analista de Sistemas                                                                                                                            |
+| Empresa  | Habilidade .Com                                                                                                                                 |
+| Site     | [habilidade.com](https://habilidade.com)                                                                                                        |
+| LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |
