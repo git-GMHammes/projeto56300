@@ -1,8 +1,24 @@
 import React, { useState } from 'react'
+import { CpfField, CpfFieldSchema } from '../cpf'
+import { PhoneField, PhoneFieldSchema } from '../phone'
+import { CnpjField, CnpjFieldSchema } from '../cnpj'
+import { CepField, CepFieldSchema } from '../cep'
+import { MoedaField, MoedaFieldSchema } from '../moeda'
+import { DataField, DataFieldSchema } from '../data'
+import { HoraField, HoraFieldSchema } from '../hora'
+import { PisField, PisFieldSchema } from '../pis'
+import { PlacaField, PlacaFieldSchema } from '../placa'
+import { TituloField, TituloFieldSchema } from '../titulo'
+import { CnhField, CnhFieldSchema } from '../cnh'
+import { ProcessoField, ProcessoFieldSchema } from '../processo'
+import { RenavamField, RenavamFieldSchema } from '../renavam'
 
-// ─── Tipos ───────────────────────────────────────────────────────────────────
+// ─── Schema de campo texto ────────────────────────────────────────────────────
 
-export interface FormFieldSchema {
+export interface TextFieldSchema {
+  /** Discriminador — omitir ou definir como 'text' */
+  type?: 'text'
+
   /** Largura da coluna Bootstrap (1-12). Ex: 4 → col-md-4 */
   col: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
@@ -15,12 +31,12 @@ export interface FormFieldSchema {
   // ── Validações em tempo real (mostram alerta ao digitar) ──────────────────
   /** Não aceita números (ex: campo Nome) */
   noNumbers?: boolean
-  /** Não aceita letras (ex: campo CPF, Telefone) */
+  /** Não aceita letras (ex: campo Telefone) */
   noLetters?: boolean
   /** Não aceita caracteres especiais */
   noSpecialChars?: boolean
 
-  // ── Atributos específicos do input[type="text"] ───────────────────────────
+  // ── Atributos do input ────────────────────────────────────────────────────
   id?: string
   name?: string
   placeholder?: string
@@ -55,17 +71,38 @@ export interface FormFieldSchema {
   onFocus?: React.FocusEventHandler<HTMLInputElement>
 }
 
+/** Alias para compatibilidade com código existente */
+export type FormFieldSchema = TextFieldSchema
+
+// ─── Union de todos os tipos de campo ────────────────────────────────────────
+
+export type AnyFieldSchema =
+  | TextFieldSchema
+  | CpfFieldSchema
+  | PhoneFieldSchema
+  | CnpjFieldSchema
+  | CepFieldSchema
+  | MoedaFieldSchema
+  | DataFieldSchema
+  | HoraFieldSchema
+  | PisFieldSchema
+  | PlacaFieldSchema
+  | TituloFieldSchema
+  | CnhFieldSchema
+  | ProcessoFieldSchema
+  | RenavamFieldSchema
+
 export interface FormRowSchema {
-  fields: FormFieldSchema[]
+  fields: AnyFieldSchema[]
 }
 
 export interface FormGridSchema {
   rows: FormRowSchema[]
 }
 
-// ─── Validação no blur (required, minLength, maxLength, pattern) ─────────────
+// ─── Validações de campo texto ────────────────────────────────────────────────
 
-function validarBlur(field: FormFieldSchema, valor: string): string | null {
+function validarBlur(field: TextFieldSchema, valor: string): string | null {
   const nome = field.label ?? field.name ?? field.id ?? 'Campo'
 
   if (field.required && !valor.trim())
@@ -83,9 +120,7 @@ function validarBlur(field: FormFieldSchema, valor: string): string | null {
   return null
 }
 
-// ─── Validação em tempo real (noNumbers, noLetters, noSpecialChars) ──────────
-
-function validarDigitacao(field: FormFieldSchema, valor: string): string | null {
+function validarDigitacao(field: TextFieldSchema, valor: string): string | null {
   const nome = field.label ?? field.name ?? field.id ?? 'Campo'
 
   if (field.noNumbers && /\d/.test(valor))
@@ -107,6 +142,7 @@ interface FormGridProps {
 }
 
 function FormGrid({ schema }: FormGridProps) {
+  // Erros gerenciados apenas para campos texto (CPF gerencia o próprio)
   const [erros, setErros] = useState<Record<string, string>>({})
 
   function setErro(chave: string, erro: string | null) {
@@ -122,7 +158,7 @@ function FormGrid({ schema }: FormGridProps) {
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement>,
-    field: FormFieldSchema,
+    field: TextFieldSchema,
     chave: string
   ) {
     setErro(chave, validarDigitacao(field, e.target.value))
@@ -131,10 +167,9 @@ function FormGrid({ schema }: FormGridProps) {
 
   function handleBlur(
     e: React.FocusEvent<HTMLInputElement>,
-    field: FormFieldSchema,
+    field: TextFieldSchema,
     chave: string
   ) {
-    // Mantém erro de digitação se houver; só aplica blur se não tiver
     const erroDigitacao = validarDigitacao(field, e.target.value)
     setErro(chave, erroDigitacao ?? validarBlur(field, e.target.value))
     field.onBlur?.(e)
@@ -145,7 +180,144 @@ function FormGrid({ schema }: FormGridProps) {
       {schema.rows.map((row, rowIndex) => (
         <div key={rowIndex} className="row g-3">
           {row.fields.map((field, fieldIndex) => {
+            const chave = field.id ?? `r${rowIndex}f${fieldIndex}`
+
+            // ── CPF ───────────────────────────────────────────────────────
+            if (field.type === 'cpf') {
+              return (
+                <div
+                  key={fieldIndex}
+                  className={`col-md-${field.col} mb-1`}
+                  hidden={field.hidden}
+                >
+                  <CpfField field={field} />
+                </div>
+              )
+            }
+
+            // ── Telefone ──────────────────────────────────────────────────
+            if (field.type === 'phone') {
+              return (
+                <div
+                  key={fieldIndex}
+                  className={`col-md-${field.col} mb-1`}
+                  hidden={field.hidden}
+                >
+                  <PhoneField field={field} />
+                </div>
+              )
+            }
+
+            // ── CNPJ ──────────────────────────────────────────────────────
+            if (field.type === 'cnpj') {
+              return (
+                <div
+                  key={fieldIndex}
+                  className={`col-md-${field.col} mb-1`}
+                  hidden={field.hidden}
+                >
+                  <CnpjField field={field} />
+                </div>
+              )
+            }
+
+            // ── CEP ───────────────────────────────────────────────────────
+            if (field.type === 'cep') {
+              return (
+                <div
+                  key={fieldIndex}
+                  className={`col-md-${field.col} mb-1`}
+                  hidden={field.hidden}
+                >
+                  <CepField field={field} />
+                </div>
+              )
+            }
+
+            // ── Moeda ─────────────────────────────────────────────────────
+            if (field.type === 'moeda') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <MoedaField field={field} />
+                </div>
+              )
+            }
+
+            // ── Data ──────────────────────────────────────────────────────
+            if (field.type === 'data') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <DataField field={field} />
+                </div>
+              )
+            }
+
+            // ── Hora ──────────────────────────────────────────────────────
+            if (field.type === 'hora') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <HoraField field={field} />
+                </div>
+              )
+            }
+
+            // ── PIS / NIS / PASEP ─────────────────────────────────────────
+            if (field.type === 'pis') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <PisField field={field} />
+                </div>
+              )
+            }
+
+            // ── Placa de Veículo ──────────────────────────────────────────
+            if (field.type === 'placa') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <PlacaField field={field} />
+                </div>
+              )
+            }
+
+            // ── Título de Eleitor ─────────────────────────────────────────
+            if (field.type === 'titulo') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <TituloField field={field} />
+                </div>
+              )
+            }
+
+            // ── CNH ───────────────────────────────────────────────────────
+            if (field.type === 'cnh') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <CnhField field={field} />
+                </div>
+              )
+            }
+
+            // ── Processo Judicial ─────────────────────────────────────────
+            if (field.type === 'processo') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <ProcessoField field={field} />
+                </div>
+              )
+            }
+
+            // ── RENAVAM ───────────────────────────────────────────────────
+            if (field.type === 'renavam') {
+              return (
+                <div key={fieldIndex} className={`col-md-${field.col} mb-1`} hidden={field.hidden}>
+                  <RenavamField field={field} />
+                </div>
+              )
+            }
+
+            // ── Texto (padrão) ────────────────────────────────────────────
             const {
+              type: _type,
               col,
               label,
               datalist,
@@ -158,7 +330,6 @@ function FormGrid({ schema }: FormGridProps) {
               ...inputProps
             } = field
 
-            const chave = id ?? `r${rowIndex}f${fieldIndex}`
             const erro = erros[chave]
 
             const datalistId = datalist
@@ -167,9 +338,6 @@ function FormGrid({ schema }: FormGridProps) {
 
             const { value, onChange: _onChange, onBlur: _onBlur, ...restInputProps } = inputProps
 
-            // value + onChange externo → controlado
-            // value sem onChange      → defaultValue (não-controlado editável)
-            // sem value               → não-controlado
             const controlProps: React.InputHTMLAttributes<HTMLInputElement> =
               value !== undefined
                 ? _onChange !== undefined
@@ -204,7 +372,6 @@ function FormGrid({ schema }: FormGridProps) {
                     ))}
                   </datalist>
                 )}
-                {/* Espaço reservado fixo — não empurra o layout quando o erro aparece */}
                 <div className="text-danger small mt-1" style={{ minHeight: '1.25rem' }}>
                   {erro}
                 </div>
