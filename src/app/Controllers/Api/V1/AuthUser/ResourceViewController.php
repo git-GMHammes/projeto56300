@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api\V1\AuthUser;
 
-use App\Controllers\Api\V1\BaseResourceTableController;
+use App\Controllers\Api\V1\BaseResourceViewController;
 use App\Requests\V1\AuthUser\LoginRequest;
 use App\Requests\V1\AuthUser\RecoverPasswordRequest;
 use App\Services\V1\AuthUser\Processor;
@@ -21,10 +21,8 @@ use Psr\Log\LoggerInterface;
  *   2. Chama o Processor (Service)
  *   3. Retorna a resposta padronizada
  */
-class ResourceViewController extends BaseResourceTableController
+class ResourceViewController extends BaseResourceViewController
 {
-    protected Processor $processor;
-
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,

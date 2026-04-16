@@ -21,8 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseResourceViewController extends BaseResourceTableController
 {
-    protected object $processor;
-
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,

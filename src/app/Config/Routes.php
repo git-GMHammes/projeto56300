@@ -28,4 +28,9 @@ $routes->group('api/v1', function($routes) {
 	$routes->group('user-customer-view', function($routes) {
 		require __DIR__ . '/Routes/Api/v1/UserCustomer/EndPointView.php';
 	});
+
+	// Rotas para consulta através da vehicle_brand
+	$routes->group('vehicle-brand', function($routes) {
+		require __DIR__ . '/Routes/Api/v1/VehicleBrand/EndpointTable.php';
+	});
 });
