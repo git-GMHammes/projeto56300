@@ -1,0 +1,34 @@
+<?php
+// Rotas REST para manipulação da tabela vehicle_brand
+// {{www}}/index.php/api/v1/vehicle-brand/find
+$routes->post('find', 'Api\V1\VehicleBrand\ResourceTableController::find');
+// {{www}}/index.php/api/v1/vehicle-brand/get-grouped
+$routes->post('get-grouped', 'Api\V1\VehicleBrand\ResourceTableController::getGrouped');
+// {{www}}/index.php/api/v1/vehicle-brand/search
+$routes->get('search', 'Api\V1\VehicleBrand\ResourceTableController::search');
+// {{www}}/index.php/api/v1/vehicle-brand/get/{id}
+$routes->get('get/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::get/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/get-all
+$routes->get('get-all', 'Api\V1\VehicleBrand\ResourceTableController::getAll');
+// {{www}}/index.php/api/v1/vehicle-brand/get-no-pagination
+$routes->get('get-no-pagination', 'Api\V1\VehicleBrand\ResourceTableController::getNoPagination');
+// {{www}}/index.php/api/v1/vehicle-brand/get-deleted/{id}
+$routes->get('get-deleted/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/get-deleted-all
+$routes->get('get-deleted-all', 'Api\V1\VehicleBrand\ResourceTableController::getDeletedAll');
+// {{www}}/index.php/api/v1/vehicle-brand/get-with-deleted/{id}
+$routes->get('get-with-deleted/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::getWithDeleted/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/create
+$routes->post('create', 'Api\V1\VehicleBrand\ResourceTableController::create');
+// {{www}}/index.php/api/v1/vehicle-brand/update/{id}
+$routes->put('update/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::update/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/delete-soft/{id}
+$routes->delete('delete-soft/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::deleteSoft/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/delete-restore/{id}
+$routes->patch('delete-restore/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::deleteRestore/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/delete-hard/{id}
+$routes->delete('delete-hard/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::deleteHard/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/clear-deleted
+$routes->delete('clear-deleted', 'Api\V1\VehicleBrand\ResourceTableController::clearDeleted');
+// {{www}}/index.php/api/v1/vehicle-brand/clear-deleted/{id}
+$routes->delete('clear-deleted/(:num)', 'Api\V1\VehicleBrand\ResourceTableController::clearDeleted/$1');
