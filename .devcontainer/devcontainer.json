@@ -1,0 +1,25 @@
+{
+    "name": "PHP CodeIgniter 4 Dev Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "VARIANT": "8.3-apache"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client", // Inteligência de código PHP
+                "xdebug.php-debug",                   // Debugging
+                "mguenther.codeigniter-4-spark",      // Comandos do Spark
+                "devsense.phptools-vscode"            // Refatoração
+            ],
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php"
+            }
+        }
+    },
+    // Ajusta o DocumentRoot do Apache para a pasta public do CI4
+    "postCreateCommand": "sed -i 's|/var/www/html|/var/www/html/src/public|g' /etc/apache2/sites-available/000-default.conf && service apache2 restart && cd src && composer install",
+    "remoteUser": "vscode"
+}
