@@ -1,5 +1,5 @@
 {
-    "name": "PHP CodeIgniter 4 Dev Environment",
+    "name": "Habilidade — API Hub SaaS",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
