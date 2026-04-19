@@ -74,6 +74,28 @@ class SqlViewModel extends BaseViewModel
     }
 
     /**
+     * Busca um usuário ativo na view filtrando por um_user e ut_tenant_id.
+     *
+     * Garante que o usuário possui vínculo ativo com o tenant informado
+     * (ut_deleted_at IS NULL já está garantido pela própria view).
+     *
+     * @param  string $user     Valor do campo um_user
+     * @param  int    $tenantId ID do tenant (ut_tenant_id)
+     * @return array|null       Registro completo da view ou null se não encontrado
+     */
+    public function findByUserAndTenant(string $user, int $tenantId): ?array
+    {
+        $result = $this->db->table($this->table)
+            ->where('um_user', $user)
+            ->where('ut_tenant_id', $tenantId)
+            ->where('deleted_at IS NULL', null, false)
+            ->get()
+            ->getRowArray();
+
+        return $result ?: null;
+    }
+
+    /**
      * Busca um usuário ativo na view pelo campo uc_mail.
      *
      * @param  string $mail Valor do campo uc_mail

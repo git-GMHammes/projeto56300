@@ -16,8 +16,8 @@ import { RenavamField, RenavamFieldSchema } from '../renavam'
 // ─── Schema de campo texto ────────────────────────────────────────────────────
 
 export interface TextFieldSchema {
-  /** Discriminador — omitir ou definir como 'text' */
-  type?: 'text'
+  /** Discriminador — omitir ou definir como 'text' ou 'password' */
+  type?: 'text' | 'password'
 
   /** Largura da coluna Bootstrap (1-12). Ex: 4 → col-md-4 */
   col: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
@@ -356,7 +356,7 @@ function FormGrid({ schema }: FormGridProps) {
                   </label>
                 )}
                 <input
-                  type="text"
+                  type={_type ?? 'text'}
                   id={id}
                   className={`form-control${erro ? ' is-invalid' : ''}${className ? ` ${className}` : ''}`}
                   list={datalist ? datalistId : restInputProps.list}

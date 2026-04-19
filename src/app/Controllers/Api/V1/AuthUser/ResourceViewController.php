@@ -58,7 +58,8 @@ class ResourceViewController extends BaseResourceViewController
             // Delegar autenticação ao Service
             $result = $this->processor->authenticate(
                 (string) ($body['um_user'] ?? ''),
-                (string) ($body['um_password'] ?? '')
+                (string) ($body['um_password'] ?? ''),
+                (int) ($body['ut_tenant_id'] ?? 0)
             );
 
             return $this->respondSuccess($result, 'Autenticacao realizada com sucesso');

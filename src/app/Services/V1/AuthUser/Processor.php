@@ -37,25 +37,26 @@ class Processor extends BaseViewService
     // -------------------------------------------------------------------------
 
     /**
-     * Autentica o usuário pelo campo user e password.
+     * Autentica o usuário pelo campo user, password e tenant.
      *
      * Fluxo:
      *   1. Sanitizar entrada
-     *   2. Buscar usuário ativo pelo campo um_user na view
+     *   2. Buscar usuário ativo com vínculo ao tenant informado
      *   3. Verificar senha com password_verify
      *   4. Gerar token JWT com payload (sub, cpf, iat, exp)
      *   5. Retornar token e dados do usuário (sem senha)
      *
      * @param  string $user     Identificador do usuário (campo um_user)
      * @param  string $password Senha em texto plano para verificação
+     * @param  int    $tenantId ID do tenant (campo ut_tenant_id)
      * @return array            Dados de autenticação (token, token_type, expires_in, user)
      *
-     * @throws \InvalidArgumentException Se usuário não encontrado ou senha inválida
+     * @throws \InvalidArgumentException Se usuário não encontrado, sem vínculo ao tenant ou senha inválida
      */
-    public function authenticate(string $user, string $password): array
+    public function authenticate(string $user, string $password, int $tenantId): array
     {
         $user   = $this->sanitizeString($user);
-        $record = $this->viewModel->findByUser($user);
+        $record = $this->viewModel->findByUserAndTenant($user, $tenantId);
 
         if ($record === null || !password_verify($password, $record['um_password'])) {
             throw new \InvalidArgumentException('Credenciais inválidas');

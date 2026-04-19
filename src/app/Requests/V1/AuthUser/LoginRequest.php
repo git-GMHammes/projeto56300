@@ -18,8 +18,9 @@ class LoginRequest
     public function rules(): array
     {
         return [
-            'um_user'     => 'required|string|min_length[1]',
-            'um_password' => 'required|string|min_length[1]',
+            'um_user'      => 'required|string|min_length[1]',
+            'um_password'  => 'required|string|min_length[1]',
+            'ut_tenant_id' => 'required|integer|greater_than[0]',
         ];
     }
 
@@ -38,6 +39,11 @@ class LoginRequest
                 'required'   => 'O campo password é obrigatório',
                 'string'     => 'O campo password deve ser uma string',
                 'min_length' => 'O campo password não pode estar vazio',
+            ],
+            'ut_tenant_id' => [
+                'required'     => 'O campo tenant é obrigatório',
+                'integer'      => 'O campo tenant deve ser um número inteiro',
+                'greater_than' => 'O campo tenant deve ser maior que zero',
             ],
         ];
     }
