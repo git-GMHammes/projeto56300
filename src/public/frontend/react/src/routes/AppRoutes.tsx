@@ -1,10 +1,12 @@
 ﻿import { HashRouter, Routes, Route } from 'react-router-dom'
 import { moduloTestePublicRoutes } from './ModuloTeste'
+import { layoutTestPublicRoutes } from './LayoutTest'
 import Home from '../pages/Home'
 
 // Agrupa todas as rotas públicas de todos os módulos
 const publicRoutes = [
   ...moduloTestePublicRoutes,
+  ...layoutTestPublicRoutes,
 ]
 
 function AppRoutes() {

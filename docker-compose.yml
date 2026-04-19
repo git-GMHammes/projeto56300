@@ -63,6 +63,20 @@ services:
       mysql:
         condition: service_healthy
 
+  node:
+    image: node:20-alpine
+    container_name: codeigniter56300_node
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "56303:5173"
+    volumes:
+      - ./src/public/frontend/react:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - codeigniter56300_network
+
   nginx:
     image: nginx:alpine
     container_name: codeigniter56300_nginx
@@ -83,4 +97,6 @@ networks:
 
 volumes:
   mysql_data:
+    driver: local
+  node_modules:
     driver: local
