@@ -1,0 +1,190 @@
+src/
+├── app/                                  # Bootstrap/composição do app (web + native)
+│   ├── providers/                        # Providers globais (DI, Auth, Theme, Query, i18n, etc.)
+│   ├── composition/                      # Registro/composição: adapters + repositories + usecases (wiring)
+│   ├── navigation/                       # COMPOSIÇÃO (mínima) das rotas (agrega rotas descentralizadas)
+│   │   ├── RootNavigator.tsx             # Decide fluxo: Auth vs App
+│   │   ├── AppNavigator.tsx              # Navegação "logada" (tabs/stack) + features registradas
+│   │   ├── AuthNavigator.tsx             # Navegação de autenticação (registrada pela feature auth)
+│   │   ├── featureRoutes.ts              # Registro/lista de rotas/navigators exportados pelas features
+│   │   ├── linking.ts                    # Config de deep linking (agrega linking das features)
+│   │   └── types.ts                      # Tipos globais de navegação (RootParamList etc.)
+│   └── App.tsx
+│
+├── core/                                 # Plataforma/infra compartilhada (sem regra de negócio de feature)
+│   ├── config/                           # env, build vars, apiConfig
+│   ├── constants/                        # chaves globais (mínimo)
+│   ├── types/                            # tipos realmente globais
+│   ├── utils/                            # helpers genéricos
+│   ├── hooks/                            # hooks genéricos (não-domínio)
+│   ├── contracts/                        # contratos base (HttpClient, Storage, Logger, Analytics)
+│   ├── infra/                            # implementações de plataforma
+│   │   ├── http/                         # axios/fetch wrapper + interceptors
+│   │   ├── storage/                      # AsyncStorage/LocalStorage adapter
+│   │   ├── logging/                      # logger
+│   │   └── telemetry/                    # analytics/monitoring
+│   └── store/                            # estado global MÍNIMO (sessão/tema/flags)
+│
+├── shared/                               # Reuso agnóstico de domínio (design system e blocos genéricos)
+│   ├── ui/                               # design system: Button, Modal, Input, Typography
+│   ├── components/                       # genéricos: DataTable, FormBuilder, EmptyState
+│   ├── layouts/                          # Header, Sidebar, ScreenShell
+│   ├── assets/
+│   └── theme/                            # tokens, cores, espaçamentos, tipografia
+│
+├── features/                             # CORE da escalabilidade (vertical slice por domínio)
+│   ├── auth/
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   ├── value-objects/
+│   │   │   ├── services/                 # regras de domínio que não pertencem a 1 entidade
+│   │   │   ├── usecases/
+│   │   │   ├── repositories/             # interfaces (ports)
+│   │   │   └── errors/                   # erros de domínio (ex.: InvalidCredentials)
+│   │   ├── data/
+│   │   │   ├── datasources/              # chamadas HTTP/Storage específicas da feature
+│   │   │   ├── dto/                      # tipos exatamente como API/Storage retorna
+│   │   │   ├── mappers/                  # DTO <-> Domain
+│   │   │   └── repositories/             # implementações das interfaces do domain
+│   │   ├── presentation/                 # MVVM para React
+│   │   │   ├── routes/                   # rotas/navigator da feature (descentralizado)
+│   │   │   │   ├── AuthNavigator.tsx
+│   │   │   │   ├── paths.ts              # nomes/paths/route keys do módulo
+│   │   │   │   ├── linking.ts            # deep linking do módulo (opcional)
+│   │   │   │   ├── types.ts              # tipos do módulo (opcional)
+│   │   │   │   └── index.ts              # export público das rotas do módulo
+│   │   │   ├── ui/                       # VIEW (React)
+│   │   │   │   ├── screens/
+│   │   │   │   └── components/
+│   │   │   └── viewmodel/                # VIEWMODEL (estado + orquestração)
+│   │   │       ├── state/                # stores/slices/atoms (por feature)
+│   │   │       ├── hooks/                # hooks que expõem o "VM API" para a View
+│   │   │       ├── adapters/             # adaptação p/ UI (formatters, validators)
+│   │   │       └── types/                # tipos do ViewModel (UI state, form models)
+│   │   ├── index.ts                      # API pública da feature (exports controlados)
+│   │   └── __tests__/                    # testes da feature (unit/integration)
+│   │
+│   ├── estoque/
+│   │   ├── domain/                       # regra de negócio (PURO)
+│   │   │   ├── entities/
+│   │   │   │   └── Produto.ts
+│   │   │   ├── value-objects/            # ex.: Sku.ts, Money.ts (se aplicável)
+│   │   │   ├── services/                 # regras complexas (ex.: precificação, validações)
+│   │   │   ├── usecases/
+│   │   │   │   ├── getProdutos.ts
+│   │   │   │   ├── createProduto.ts
+│   │   │   │   └── updateProduto.ts
+│   │   │   ├── repositories/
+│   │   │   │   └── IProdutoRepository.ts
+│   │   │   └── errors/
+│   │   ├── data/                         # acesso a dados (HTTP/Cache/Storage)
+│   │   │   ├── datasources/
+│   │   │   │   └── produtoApi.ts
+│   │   │   ├── dto/
+│   │   │   ├── mappers/
+│   │   │   │   └── produtoMapper.ts
+│   │   │   └── repositories/
+│   │   │       └── ProdutoRepository.ts
+│   │   ├── presentation/                 # MVVM para React
+│   │   │   ├── routes/                   # rotas/navigator da feature (descentralizado)
+│   │   │   │   ├── EstoqueNavigator.tsx
+│   │   │   │   ├── paths.ts
+│   │   │   │   ├── linking.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── ui/
+│   │   │   │   ├── screens/
+│   │   │   │   │   ├── ProdutoList.tsx
+│   │   │   │   │   ├── ProdutoForm.tsx
+│   │   │   │   │   └── ProdutoDetail.tsx
+│   │   │   │   └── components/
+│   │   │   │       └── ProdutoCard.tsx
+│   │   │   └── viewmodel/
+│   │   │       ├── state/
+│   │   │       │   └── produtoStore.ts
+│   │   │       ├── hooks/
+│   │   │       │   ├── useProdutos.ts
+│   │   │       │   └── useProdutoForm.ts
+│   │   │       ├── adapters/
+│   │   │       └── types/
+│   │   ├── index.ts                      # exports controlados (routes, public hooks, etc.)
+│   │   └── __tests__/
+│   │
+│   ├── usuario/
+│   │   ├── domain/
+│   │   ├── data/
+│   │   ├── presentation/
+│   │   │   ├── routes/
+│   │   │   │   ├── UsuarioNavigator.tsx
+│   │   │   │   ├── paths.ts
+│   │   │   │   ├── linking.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── ui/
+│   │   │   └── viewmodel/
+│   │   ├── index.ts
+│   │   └── __tests__/
+│   │
+│   ├── gestaoDocumental/
+│   │   ├── domain/
+│   │   ├── data/
+│   │   ├── presentation/
+│   │   │   ├── routes/
+│   │   │   │   ├── GestaoDocumentalNavigator.tsx
+│   │   │   │   ├── paths.ts
+│   │   │   │   ├── linking.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── ui/
+│   │   │   └── viewmodel/
+│   │   ├── index.ts
+│   │   └── __tests__/
+│   │
+│   ├── mecanica/
+│   │   ├── domain/
+│   │   ├── data/
+│   │   ├── presentation/
+│   │   │   ├── routes/
+│   │   │   │   ├── MecanicaNavigator.tsx
+│   │   │   │   ├── paths.ts
+│   │   │   │   ├── linking.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── ui/
+│   │   │   └── viewmodel/
+│   │   ├── index.ts
+│   │   └── __tests__/
+│   │
+│   ├── tarefas/
+│   │   ├── domain/
+│   │   ├── data/
+│   │   ├── presentation/
+│   │   │   ├── routes/
+│   │   │   │   ├── TarefasNavigator.tsx
+│   │   │   │   ├── paths.ts
+│   │   │   │   ├── linking.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── ui/
+│   │   │   └── viewmodel/
+│   │   ├── index.ts
+│   │   └── __tests__/
+│   │
+│   └── veterinaria/
+│       ├── domain/
+│       ├── data/
+│       ├── presentation/
+│       │   ├── routes/
+│       │   │   ├── VeterinariaNavigator.tsx
+│       │   │   ├── paths.ts
+│       │   │   ├── linking.ts
+│       │   │   ├── types.ts
+│       │   │   └── index.ts
+│       │   ├── ui/
+│       │   └── viewmodel/
+│       ├── index.ts
+│       └── __tests__/
+│
+└── tests/                                # testes cross-feature (E2E/integração de alto nível)
+    ├── e2e/
+    └── integration/
