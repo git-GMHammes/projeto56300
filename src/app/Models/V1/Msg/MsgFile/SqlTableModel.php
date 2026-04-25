@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V1\Mec\Timeline;
+namespace App\Models\V1\Mec\MsgFile;
 
 use App\Models\V1\BaseTableModel;
 
