@@ -66,6 +66,10 @@ class Processor extends BaseTableService
             $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
         }
 
+        if (empty($data['uuid'])) {
+            $data['uuid'] = uuid();
+        }
+
         return $data;
     }
 }

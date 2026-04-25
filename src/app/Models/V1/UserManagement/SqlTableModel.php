@@ -10,7 +10,7 @@ use App\Models\V1\BaseTableModel;
  * Responsável por todas as operações CRUD diretas na tabela física.
  *
  * Tabela: user_management
- * DDL: id, user, password, last_login, created_at, updated_at, deleted_at
+ * DDL: id, uuid, user, password, last_login, created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
 {
@@ -33,6 +33,7 @@ class SqlTableModel extends BaseTableModel
      * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps).
      */
     protected $allowedFields = [
+        'uuid',
         'user',
         'password',
         'last_login',

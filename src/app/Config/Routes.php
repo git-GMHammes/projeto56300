@@ -33,4 +33,9 @@ $routes->group('api/v1', function($routes) {
 	$routes->group('vehicle-brand', function($routes) {
 		require __DIR__ . '/Routes/Api/v1/VehicleBrand/EndpointTable.php';
 	});
+
+	// Rotas para gerenciamento da tabela user_password_resets
+	$routes->group('user-password-resets', function($routes) {
+		require __DIR__ . '/Routes/Api/v1/UserPasswordResets/EndpointTable.php';
+	});
 });

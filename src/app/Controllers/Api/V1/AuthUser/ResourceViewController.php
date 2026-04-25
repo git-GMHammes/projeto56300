@@ -5,6 +5,7 @@ namespace App\Controllers\Api\V1\AuthUser;
 use App\Controllers\Api\V1\BaseResourceViewController;
 use App\Requests\V1\AuthUser\LoginRequest;
 use App\Requests\V1\AuthUser\RecoverPasswordRequest;
+use App\Requests\V1\AuthUser\ResetPasswordRequest;
 use App\Services\V1\AuthUser\Processor;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -13,8 +14,13 @@ use Psr\Log\LoggerInterface;
 /**
  * Controller de recurso para o módulo AuthUser.
  *
- * Expõe o endpoint de autenticação e as consultas somente leitura
+ * Expõe os endpoints de autenticação e as consultas somente leitura
  * da view view_auth_user.
+ *
+ * Fluxo de reset de senha:
+ *   POST /recover-password        → solicita reset, envia e-mail com token
+ *   GET  /reset-password/{token}  → valida o token (use antes de exibir o form)
+ *   POST /reset-password          → aplica a nova senha e invalida o token
  *
  * Nenhuma lógica de negócio aqui — apenas:
  *   1. Valida a requisição (Request)
@@ -39,12 +45,13 @@ class ResourceViewController extends BaseResourceViewController
     /**
      * POST {{www}}/index.php/api/v1/auth/login
      *
+     * Body: { "um_user": "...", "um_password": "...", "ut_tenant_id": 1 }
+     *
      * Autentica o usuário e retorna um token JWT.
      */
     public function login(): ResponseInterface
     {
         try {
-            // Validar entrada via LoginRequest
             $loginRequest = new LoginRequest();
             $validation   = \Config\Services::validation();
             $validation->setRules($loginRequest->rules(), $loginRequest->messages());
@@ -55,11 +62,10 @@ class ResourceViewController extends BaseResourceViewController
                 return $this->respondValidationError($validation->getErrors());
             }
 
-            // Delegar autenticação ao Service
             $result = $this->processor->authenticate(
                 (string) ($body['um_user'] ?? ''),
                 (string) ($body['um_password'] ?? ''),
-                (int) ($body['ut_tenant_id'] ?? 0)
+                (int)    ($body['ut_tenant_id'] ?? 0)
             );
 
             return $this->respondSuccess($result, 'Autenticacao realizada com sucesso');
@@ -73,7 +79,10 @@ class ResourceViewController extends BaseResourceViewController
     /**
      * POST {{www}}/index.php/api/v1/auth/recover-password
      *
-     * Verifica se o e-mail existe e envia o e-mail de recuperação de senha.
+     * Body: { "uc_mail": "usuario@email.com" }
+     *
+     * Verifica se o e-mail existe, gera token seguro, persiste em
+     * user_password_resets e envia o e-mail com o link de reset.
      */
     public function recoverPassword(): ResponseInterface
     {
@@ -95,6 +104,61 @@ class ResourceViewController extends BaseResourceViewController
             return $this->respondSuccess($result, 'E-mail de recuperação enviado com sucesso');
         } catch (\InvalidArgumentException $e) {
             return $this->respondError($e->getMessage(), 404);
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
+
+    /**
+     * GET {{www}}/index.php/api/v1/auth/reset-password/{token}
+     *
+     * Valida se o token de reset está ativo (não expirado, não utilizado).
+     * Use este endpoint antes de exibir o formulário de nova senha.
+     *
+     * Retorna: { id, user_id, expires_at }
+     */
+    public function validateResetToken(string $token): ResponseInterface
+    {
+        try {
+            $result = $this->processor->validateResetToken($token);
+
+            return $this->respondSuccess($result, 'Token válido');
+        } catch (\InvalidArgumentException $e) {
+            return $this->respondError($e->getMessage(), 422);
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
+
+    /**
+     * POST {{www}}/index.php/api/v1/auth/reset-password
+     *
+     * Body: { "token": "<64 hex chars>", "password": "...", "password_confirm": "..." }
+     *
+     * Valida o token, aplica a nova senha com bcrypt e marca o token como utilizado.
+     * O token é invalidado após o uso — não pode ser reutilizado.
+     */
+    public function resetPassword(): ResponseInterface
+    {
+        try {
+            $resetRequest = new ResetPasswordRequest();
+            $validation   = \Config\Services::validation();
+            $validation->setRules($resetRequest->rules(), $resetRequest->messages());
+
+            $body = $this->getJsonBody();
+
+            if (!$validation->run($body)) {
+                return $this->respondValidationError($validation->getErrors());
+            }
+
+            $result = $this->processor->applyPasswordReset(
+                (string) ($body['token'] ?? ''),
+                (string) ($body['password'] ?? '')
+            );
+
+            return $this->respondSuccess($result, 'Senha redefinida com sucesso');
+        } catch (\InvalidArgumentException $e) {
+            return $this->respondError($e->getMessage(), 422);
         } catch (\Throwable $e) {
             return $this->respondServerError($e);
         }

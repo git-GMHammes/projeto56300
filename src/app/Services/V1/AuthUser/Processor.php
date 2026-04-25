@@ -4,6 +4,8 @@ namespace App\Services\V1\AuthUser;
 
 use App\Libraries\JwtHelper;
 use App\Models\V1\AuthUser\SqlViewModel;
+use App\Models\V1\UserManagement\SqlTableModel as UserManagementModel;
+use App\Models\V1\UserPasswordResets\SqlTableModel as PasswordResetsModel;
 use App\Services\V1\BaseViewService;
 
 /**
@@ -13,7 +15,7 @@ use App\Services\V1\BaseViewService;
  *   - Consulta do usuário via Model
  *   - Verificação de senha com password_verify
  *   - Geração e revogação de token JWT
- *   - Envio de e-mail de recuperação de senha via view
+ *   - Fluxo completo de reset de senha (emissão, validação e aplicação)
  *
  * Nunca acessa Request nem Response diretamente.
  */
@@ -22,14 +24,21 @@ class Processor extends BaseViewService
     /** Tempo de vida do token JWT em segundos (10 horas). */
     private const JWT_TTL = 36000;
 
+    /** Tempo de vida do token de reset de senha em segundos (1 hora). */
+    private const RESET_TOKEN_TTL = 3600;
+
     /** View do template de e-mail de recuperação de senha. */
     private const EMAIL_VIEW_RECOVERY = 'emails/recovery_password';
 
-    protected SqlViewModel $viewModel;
+    protected SqlViewModel      $viewModel;
+    protected UserManagementModel $userModel;
+    protected PasswordResetsModel $resetModel;
 
     public function __construct()
     {
-        $this->viewModel = new SqlViewModel();
+        $this->viewModel  = new SqlViewModel();
+        $this->userModel  = new UserManagementModel();
+        $this->resetModel = new PasswordResetsModel();
     }
 
     // -------------------------------------------------------------------------
@@ -80,23 +89,25 @@ class Processor extends BaseViewService
     }
 
     // -------------------------------------------------------------------------
-    // Recuperação de senha
+    // Recuperação de senha — Passo 1: solicitar reset
     // -------------------------------------------------------------------------
 
     /**
-     * Verifica se o e-mail existe na view e envia o e-mail de recuperação.
+     * Verifica se o e-mail existe, gera token seguro, persiste e envia e-mail.
      *
      * Fluxo:
-     *   1. Sanitizar entrada
-     *   2. Buscar usuário ativo pelo campo uc_mail na view
-     *   3. Renderizar template HTML via view()
-     *   4. Enviar via SMTP usando o remetente de recuperação
+     *   1. Buscar usuário ativo pelo campo uc_mail na view
+     *   2. Invalidar tokens pendentes anteriores (evitar tokens órfãos)
+     *   3. Gerar token criptograficamente seguro (plain) + hash SHA-256
+     *   4. Persistir na tabela user_password_resets
+     *   5. Renderizar template HTML com o token plain no link
+     *   6. Enviar via SMTP
      *
      * @param  string $mail E-mail informado pelo usuário (campo uc_mail)
-     * @return array        Confirmação do envio com dados do destinatário
+     * @return array        Confirmação do envio com dados do destinatário e expiração
      *
      * @throws \InvalidArgumentException Se o e-mail não existir na base
-     * @throws \RuntimeException         Se o envio falhar
+     * @throws \RuntimeException         Se falhar ao persistir ou enviar
      */
     public function sendRecoveryEmail(string $mail): array
     {
@@ -107,18 +118,119 @@ class Processor extends BaseViewService
             throw new \InvalidArgumentException('E-mail não encontrado');
         }
 
-        $name = $record['uc_name'] ?? 'Usuário';
+        $userId = (int) ($record['uc_user_id'] ?? 0);
+        $name   = $record['uc_name'] ?? 'Usuário';
+
+        // Invalida tokens pendentes anteriores para este usuário
+        $this->resetModel->softDeleteActiveByUserId($userId);
+
+        // Gera token plain (64 hex chars) e armazena apenas o hash SHA-256
+        $token     = bin2hex(random_bytes(32));
+        $tokenHash = hash('sha256', $token);
+        $expiresAt = date('Y-m-d H:i:s', time() + self::RESET_TOKEN_TTL);
+
+        $resetId = $this->resetModel->insert([
+            'user_id'    => $userId,
+            'token_hash' => $tokenHash,
+            'expires_at' => $expiresAt,
+            'ip_address' => substr(service('request')->getIPAddress(), 0, 45),
+            'user_agent' => substr((string) service('request')->getUserAgent()->getAgentString(), 0, 255),
+        ]);
+
+        if (!$resetId) {
+            throw new \RuntimeException('Falha ao registrar a solicitação de recuperação de senha.');
+        }
 
         $body = view(self::EMAIL_VIEW_RECOVERY, [
-            'name' => $name,
-            'mail' => $mail,
+            'name'      => $name,
+            'mail'      => $mail,
+            'token'     => $token,
+            'expiresAt' => $expiresAt,
         ]);
 
         $this->dispatchEmail($mail, $name, 'Recuperação de Senha - Sistema Habilidade', $body);
 
         return [
-            'uc_mail' => $mail,
-            'uc_name' => $name,
+            'uc_mail'    => $mail,
+            'uc_name'    => $name,
+            'expires_at' => $expiresAt,
+        ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Recuperação de senha — Passo 2: validar token
+    // -------------------------------------------------------------------------
+
+    /**
+     * Valida se o token de reset é ativo: não utilizado, não expirado e não excluído.
+     *
+     * Usado pelo frontend para verificar o token antes de exibir o formulário de nova senha.
+     *
+     * @param  string $token Token plain de 64 chars recebido pelo usuário via link do e-mail
+     * @return array         Dados do registro de reset (id, user_id, expires_at)
+     *
+     * @throws \InvalidArgumentException Se o token for inválido, expirado ou já utilizado
+     */
+    public function validateResetToken(string $token): array
+    {
+        $token  = $this->sanitizeString($token);
+        $record = $this->resetModel->findActiveByTokenHash(hash('sha256', $token));
+
+        if ($record === null) {
+            throw new \InvalidArgumentException('Token inválido, expirado ou já utilizado');
+        }
+
+        return [
+            'id'         => (int) $record['id'],
+            'user_id'    => (int) $record['user_id'],
+            'expires_at' => $record['expires_at'],
+        ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Recuperação de senha — Passo 3: aplicar nova senha
+    // -------------------------------------------------------------------------
+
+    /**
+     * Valida o token, aplica o hash bcrypt na nova senha e marca o token como usado.
+     *
+     * Fluxo:
+     *   1. Hashear o token plain e buscar o registro ativo
+     *   2. Verificar se o usuário vinculado ainda existe
+     *   3. Atualizar a senha na tabela user_management (bcrypt)
+     *   4. Marcar o token como utilizado em user_password_resets
+     *
+     * @param  string $token    Token plain de 64 chars recebido no body da requisição
+     * @param  string $password Nova senha em texto plano
+     * @return array            ID do usuário que teve a senha redefinida
+     *
+     * @throws \InvalidArgumentException Se token inválido ou usuário não encontrado
+     * @throws \RuntimeException         Se a atualização falhar
+     */
+    public function applyPasswordReset(string $token, string $password): array
+    {
+        $token  = $this->sanitizeString($token);
+        $record = $this->resetModel->findActiveByTokenHash(hash('sha256', $token));
+
+        if ($record === null) {
+            throw new \InvalidArgumentException('Token inválido, expirado ou já utilizado');
+        }
+
+        $userId  = (int) $record['user_id'];
+        $resetId = (int) $record['id'];
+
+        if ($this->userModel->find($userId) === null) {
+            throw new \InvalidArgumentException('Usuário vinculado ao token não encontrado');
+        }
+
+        $this->userModel->update($userId, [
+            'password' => password_hash($password, PASSWORD_BCRYPT),
+        ]);
+
+        $this->resetModel->markAsUsed($resetId);
+
+        return [
+            'user_id' => $userId,
         ];
     }
 
