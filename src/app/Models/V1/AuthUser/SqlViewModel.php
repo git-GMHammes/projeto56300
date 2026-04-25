@@ -66,6 +66,7 @@ class SqlViewModel extends BaseViewModel
     {
         $result = $this->db->table($this->table)
             ->where('um_user', $user)
+            ->where('um_is_active', 1)
             ->where('deleted_at IS NULL', null, false)
             ->get()
             ->getRowArray();
@@ -88,6 +89,7 @@ class SqlViewModel extends BaseViewModel
         $result = $this->db->table($this->table)
             ->where('um_user', $user)
             ->where('ut_tenant_id', $tenantId)
+            ->where('um_is_active', 1)
             ->where('deleted_at IS NULL', null, false)
             ->get()
             ->getRowArray();

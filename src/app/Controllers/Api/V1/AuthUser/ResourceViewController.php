@@ -53,7 +53,7 @@ class ResourceViewController extends BaseResourceViewController
     {
         try {
             $loginRequest = new LoginRequest();
-            $validation   = \Config\Services::validation();
+            $validation = \Config\Services::validation();
             $validation->setRules($loginRequest->rules(), $loginRequest->messages());
 
             $body = $this->getJsonBody();
@@ -65,7 +65,7 @@ class ResourceViewController extends BaseResourceViewController
             $result = $this->processor->authenticate(
                 (string) ($body['um_user'] ?? ''),
                 (string) ($body['um_password'] ?? ''),
-                (int)    ($body['ut_tenant_id'] ?? 0)
+                (int) ($body['ut_tenant_id'] ?? 0)
             );
 
             return $this->respondSuccess($result, 'Autenticacao realizada com sucesso');
@@ -88,7 +88,7 @@ class ResourceViewController extends BaseResourceViewController
     {
         try {
             $recoverRequest = new RecoverPasswordRequest();
-            $validation     = \Config\Services::validation();
+            $validation = \Config\Services::validation();
             $validation->setRules($recoverRequest->rules(), $recoverRequest->messages());
 
             $body = $this->getJsonBody();
@@ -142,7 +142,7 @@ class ResourceViewController extends BaseResourceViewController
     {
         try {
             $resetRequest = new ResetPasswordRequest();
-            $validation   = \Config\Services::validation();
+            $validation = \Config\Services::validation();
             $validation->setRules($resetRequest->rules(), $resetRequest->messages());
 
             $body = $this->getJsonBody();
@@ -174,7 +174,7 @@ class ResourceViewController extends BaseResourceViewController
     {
         try {
             $authHeader = $this->request->getHeaderLine('Authorization');
-            $token      = substr($authHeader, 7); // Remove "Bearer "
+            $token = substr($authHeader, 7); // Remove "Bearer "
 
             $result = $this->processor->logout($token);
 
