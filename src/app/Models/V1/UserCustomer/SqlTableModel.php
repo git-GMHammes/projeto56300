@@ -29,6 +29,7 @@ class SqlTableModel extends BaseTableModel
      */
     protected $allowedFields = [
         'user_id',
+        'is_active',
         'name',
         'cpf',
         'whatsapp',
@@ -47,12 +48,22 @@ class SqlTableModel extends BaseTableModel
      * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
      */
     protected array $likeFields = [
-        'name', 'cpf', 'whatsapp', 'phone', 'mail', 'address', 'profile', 'zip_code', 'tenant_at',
+        'name',
+        'cpf',
+        'whatsapp',
+        'phone',
+        'mail',
+        'address',
+        'profile',
+        'zip_code',
+        'tenant_at',
+
     ];
 
     /** Campos válidos para ordenação */
     protected array $sortableFields = [
         'id',
+        'is_active',
         'user_id',
         'name',
         'cpf',

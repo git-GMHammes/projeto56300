@@ -25,16 +25,26 @@ use App\Models\V1\BaseViewModel;
  */
 class SqlViewModel extends BaseViewModel
 {
-    protected $DBGroup    = DB_GROUP_001;
-    protected $table      = 'view_customer';
+    protected $DBGroup = DB_GROUP_001;
+    protected $table = 'view_customer';
     protected $primaryKey = 'id';
 
     /**
      * Campos de texto que usam LIKE %valor% no findPaginatedView.
      */
     protected array $likeFields = [
-        'um_user', 'uc_name', 'uc_cpf', 'uc_whatsapp', 'uc_phone',
-        'uc_mail', 'uc_address', 'uc_profile', 'uc_zip_code', 'uc_tenant_at',
+        'um_user',
+        'uc_name',
+        'um_is_active',
+        'uc_cpf',
+        'uc_whatsapp',
+        'uc_phone',
+        'uc_mail',
+        'uc_address',
+        'uc_profile',
+        'uc_zip_code',
+        'uc_tenant_at',
+
     ];
 
     /** Campos válidos para ordenação */
@@ -43,6 +53,7 @@ class SqlViewModel extends BaseViewModel
         'uc_id',
         'um_user',
         'uc_name',
+        'um_is_active',
         'uc_cpf',
         'uc_mail',
         'uc_whatsapp',

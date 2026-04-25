@@ -30,11 +30,8 @@
   -moz-osx-font-smoothing: grayscale;
   min-height: 100svh;
 
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
   text-align: center;
-  border-inline: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

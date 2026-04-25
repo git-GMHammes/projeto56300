@@ -2,9 +2,13 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FormGrid, { FormGridSchema } from '../../../../../components/ui/FormGrid/Input'
 import notDefinedImg from '../../../../../assets/images/not_defined.png'
-import { palette1 as palette } from '../../../../../themes/login'
+import { getActiveTheme } from '../../../../../themes/global'
+import { ENVIRONMENT } from '../../../../../config/constants'
+import * as AuthService from '../../../../../services/modules/V1/authService'
+import { saveSession } from '../../../../../services/modules/V1/authService/session'
 
 // ─── Schema do formulário ─────────────────────────────────────────────────────
+
 const schema: FormGridSchema = {
     rows: [
         {
@@ -41,124 +45,235 @@ const schema: FormGridSchema = {
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
-function LoginModelo001() {
-    const [loading, setLoading] = useState(false)
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+function LoginModelo001() {
+    const { login: theme } = getActiveTheme()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [debugData, setDebugData] = useState<unknown>(null)
+
+    const isDev = ENVIRONMENT === 'development'
+
+    async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault()
         setLoading(true)
+        setError(null)
 
-        const data = new FormData(e.currentTarget)
-        const _payload = {
+        const form = e.currentTarget
+        const data = new FormData(form)
+
+        const payload: AuthService.LoginPayload = {
             um_user: data.get('um_user') as string,
             um_password: data.get('um_password') as string,
             ut_tenant_id: data.get('ut_tenant_id') as string,
         }
 
-        // TODO: integrar com o serviço de autenticação
-        setLoading(false)
+        try {
+            const response = await AuthService.login(payload)
+
+            if (isDev) setDebugData(response)
+
+            if (response.success && response.data) {
+                saveSession(
+                    response.data.token,
+                    response.data.token_type,
+                    response.data.expires_in,
+                    response.data.user,
+                )
+            } else {
+                setError(response.message ?? 'Erro ao realizar login')
+            }
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : 'Erro de conexão com o servidor'
+            setError(msg)
+            if (isDev) setDebugData({ error: msg })
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: `linear-gradient(135deg, ${palette.bgStart} 0%, ${palette.bgMid} 55%, ${palette.bgEnd} 100%)`,
-                padding: '1.5rem',
-            }}
-        >
+        <>
             <div
-                className="card shadow-lg border-0"
                 style={{
-                    width: '100%',
-                    maxWidth: 420,
-                    borderRadius: '1rem',
-                    backgroundColor: palette.cardBg,
-                    overflow: 'hidden',
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: `linear-gradient(135deg, ${theme.bgStart} 0%, ${theme.bgMid} 55%, ${theme.bgEnd} 100%)`,
+                    padding: '1.5rem',
                 }}
             >
-                {/* ── Cabeçalho colorido ── */}
                 <div
+                    className="card shadow-lg border-0"
                     style={{
-                        background: `linear-gradient(135deg, ${palette.headerStart} 0%, ${palette.headerEnd} 100%)`,
-                        padding: '2rem 2rem 1.5rem',
-                        textAlign: 'center',
+                        width: '100%',
+                        maxWidth: 420,
+                        borderRadius: '1rem',
+                        backgroundColor: theme.cardBg,
+                        overflow: 'hidden',
                     }}
                 >
-                    <img
-                        src={notDefinedImg}
-                        alt="Logo"
+                    {/* ── Cabeçalho colorido ── */}
+                    <div
                         style={{
-                            maxHeight: 72,
-                            maxWidth: '100%',
-                            objectFit: 'contain',
-                            marginBottom: '0.75rem',
+                            background: `linear-gradient(135deg, ${theme.headerStart} 0%, ${theme.headerEnd} 100%)`,
+                            padding: '2rem 2rem 1.5rem',
+                            textAlign: 'center',
                         }}
-                    />
-                    <h5
-                        className="mb-0 fw-semibold"
-                        style={{ color: palette.headerText, letterSpacing: '0.03em' }}
                     >
-                        Acesso ao Sistema
-                    </h5>
-                </div>
-
-                {/* ── Corpo do card ── */}
-                <div className="card-body px-4 pt-4 pb-3">
-                    <form onSubmit={handleSubmit} noValidate>
-                        <FormGrid schema={schema} />
-
-                        <button
-                            type="submit"
-                            className="btn w-100 mt-2 fw-semibold"
-                            disabled={loading}
+                        <img
+                            src={notDefinedImg}
+                            alt="Logo"
                             style={{
-                                backgroundColor: palette.btnBg,
-                                borderColor: palette.btnBg,
-                                color: palette.btnText,
-                                borderRadius: '0.5rem',
-                                padding: '0.6rem',
-                                transition: 'background-color 0.2s',
+                                maxHeight: 72,
+                                maxWidth: '100%',
+                                objectFit: 'contain',
+                                marginBottom: '0.75rem',
                             }}
-                            onMouseEnter={e =>
-                                ((e.currentTarget as HTMLButtonElement).style.backgroundColor = palette.btnBgHover)
-                            }
-                            onMouseLeave={e =>
-                                ((e.currentTarget as HTMLButtonElement).style.backgroundColor = palette.btnBg)
-                            }
+                        />
+                        <h5
+                            className="mb-0 fw-semibold"
+                            style={{ color: theme.headerText, letterSpacing: '0.03em' }}
                         >
-                            {loading ? 'Entrando…' : 'Entrar'}
-                        </button>
-                    </form>
-                </div>
+                            Acesso ao Sistema
+                        </h5>
+                    </div>
 
-                {/* ── Rodapé com links ── */}
-                <div
-                    className="d-flex justify-content-between px-4 pb-4 pt-1"
-                    style={{ fontSize: '0.85rem' }}
-                >
-                    <Link
-                        to="/v1/novo-registro"
-                        style={{ color: palette.link, textDecoration: 'none' }}
-                        onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = palette.linkHover)}
-                        onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = palette.link)}
+                    {/* ── Corpo do card ── */}
+                    <div className="card-body px-4 pt-4 pb-3">
+                        {error && (
+                            <div className="alert alert-danger py-2 mb-3" role="alert">
+                                {error}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} noValidate>
+                            <FormGrid schema={schema} />
+
+                            <button
+                                type="submit"
+                                className="btn w-100 mt-2 fw-semibold"
+                                disabled={loading}
+                                style={{
+                                    backgroundColor: theme.btnBg,
+                                    borderColor: theme.btnBg,
+                                    color: theme.btnText,
+                                    borderRadius: '0.5rem',
+                                    padding: '0.6rem',
+                                    transition: 'background-color 0.2s',
+                                }}
+                                onMouseEnter={e =>
+                                    ((e.currentTarget as HTMLButtonElement).style.backgroundColor = theme.btnBgHover)
+                                }
+                                onMouseLeave={e =>
+                                    ((e.currentTarget as HTMLButtonElement).style.backgroundColor = theme.btnBg)
+                                }
+                            >
+                                {loading ? (
+                                    <>
+                                        <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                            aria-hidden="true"
+                                        />
+                                        Entrando…
+                                    </>
+                                ) : (
+                                    'Entrar'
+                                )}
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* ── Rodapé com links ── */}
+                    <div
+                        className="d-flex justify-content-between px-4 pb-4 pt-1"
+                        style={{ fontSize: '0.85rem' }}
                     >
-                        Novo Registro
-                    </Link>
-                    <Link
-                        to="/v1/recuperar-senha"
-                        style={{ color: palette.link, textDecoration: 'none' }}
-                        onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = palette.linkHover)}
-                        onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = palette.link)}
-                    >
-                        Recuperação de Senha
-                    </Link>
+                        <Link
+                            to="/v1/novo-registro"
+                            style={{ color: theme.link, textDecoration: 'none' }}
+                            onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = theme.linkHover)}
+                            onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = theme.link)}
+                        >
+                            Novo Registro
+                        </Link>
+
+                        <Link
+                            to="/v1/recuperar-senha"
+                            style={{ color: theme.link, textDecoration: 'none' }}
+                            onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = theme.linkHover)}
+                            onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = theme.link)}
+                        >
+                            Recuperação de Senha
+                        </Link>
+                    </div>
+
+                    {/* ── Botão DEBUG (apenas development, após primeira tentativa) ── */}
+                    {isDev && debugData !== null && (
+                        <div className="px-4 pb-4 text-center">
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#loginDebugModal"
+                            >
+                                DEBUG
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
-        </div>
+
+            {/* ── Modal DEBUG Bootstrap (apenas development) ── */}
+            {isDev && (
+                <div
+                    className="modal fade"
+                    id="loginDebugModal"
+                    tabIndex={-1}
+                    aria-labelledby="loginDebugModalLabel"
+                    aria-hidden="true"
+                >
+                    <div className="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="loginDebugModalLabel">
+                                    DEBUG — Resposta da API
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Fechar"
+                                />
+                            </div>
+                            <div className="modal-body">
+                                <pre
+                                    className="mb-0"
+                                    style={{
+                                        fontSize: '0.8rem',
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-all',
+                                    }}
+                                >
+                                    {JSON.stringify(debugData, null, 2)}
+                                </pre>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-secondary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 
