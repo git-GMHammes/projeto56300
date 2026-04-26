@@ -1,50 +1,45 @@
 <?php
 
-namespace App\Models\V1\Mec\GroupMessage;
+namespace App\Models\V1\Msg\GroupMessage;
 
 use App\Models\V1\BaseTableModel;
 
 /**
- * Model de escrita para a tabela mec_01_vehicle_brand.
+ * Model de escrita para a tabela msg_006_group_message.
  *
- * Responsável por todas as operações CRUD diretas na tabela física.
- * Inclui verificações de unicidade para CPF, WhatsApp e e-mail,
- * respeitando os registros com soft delete.
+ * Mensagens de chat de grupo com suporte a reply (reply_to_id auto-referência).
+ * deleted_at preserva contexto de threads.
  *
- * Tabela: msg_001_timeline
+ * Tabela: msg_006_group_message
+ * DDL: id, group_id, user_id, reply_to_id, content,
+ *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
 {
-    protected $DBGroup = DB_GROUP_001;
-    protected $table = 'msg_001_timeline';
-    protected $primaryKey = 'id';
+    protected $DBGroup      = DB_GROUP_001;
+    protected $table        = 'msg_006_group_message';
+    protected $primaryKey   = 'id';
     protected $useSoftDeletes = true;
-    protected $useTimestamps = true;
+    protected $useTimestamps  = true;
 
-    /**
-     * Campos que podem ser inseridos/atualizados via Model.
-     * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
-     */
     protected $allowedFields = [
-        'name'
+        'group_id',
+        'user_id',
+        'reply_to_id',
+        'content',
     ];
 
-    /**
-     * Campos de texto que usam LIKE %valor% no find.
-     * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
-     */
     protected array $likeFields = [
-        'name'
+        'content',
     ];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
-        'name'
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
-        'name'
+        'content',
     ];
-
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controllers\Api\V1\UserCustomer;
+namespace App\Controllers\Api\V1\Mec\VehicleBrand;
 
 use App\Controllers\Api\V1\BaseResourceViewController;
-use App\Services\V1\UserCustomer\Processor;
+use App\Services\V1\Mec\VehicleBrand\Processor;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Controller de recurso para consultas na view v_user_customer.
+ * Controller de recurso para consultas na view do módulo VehicleBrand.
  *
  * Endpoints disponíveis (somente leitura):
  *   find, getGrouped, search, get, getAll, getNoPagination,

@@ -1,50 +1,49 @@
 <?php
 
-namespace App\Models\V1\Mec\Group;
+namespace App\Models\V1\Msg\Group;
 
 use App\Models\V1\BaseTableModel;
 
 /**
- * Model de escrita para a tabela mec_01_vehicle_brand.
+ * Model de escrita para a tabela msg_004_group.
  *
- * Responsável por todas as operações CRUD diretas na tabela física.
- * Inclui verificações de unicidade para CPF, WhatsApp e e-mail,
- * respeitando os registros com soft delete.
+ * Grupos de chat privado multi-usuário.
+ * O criador (created_by) assume role admin automaticamente via msg_005_group_member.
  *
- * Tabela: msg_001_timeline
+ * Tabela: msg_004_group
+ * DDL: id, tenant_id, name, description, avatar, created_by,
+ *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
 {
-    protected $DBGroup = DB_GROUP_001;
-    protected $table = 'msg_001_timeline';
-    protected $primaryKey = 'id';
+    protected $DBGroup      = DB_GROUP_001;
+    protected $table        = 'msg_004_group';
+    protected $primaryKey   = 'id';
     protected $useSoftDeletes = true;
-    protected $useTimestamps = true;
+    protected $useTimestamps  = true;
 
-    /**
-     * Campos que podem ser inseridos/atualizados via Model.
-     * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
-     */
     protected $allowedFields = [
-        // ...
+        'tenant_id',
+        'name',
+        'description',
+        'avatar',
+        'created_by',
     ];
 
-    /**
-     * Campos de texto que usam LIKE %valor% no find.
-     * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
-     */
     protected array $likeFields = [
-        // ...
+        'name',
+        'description',
     ];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
-        // ...
+        'id',
+        'name',
+        'created_at',
+        'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
-        'name'
+        'name',
+        'description',
     ];
-
 }

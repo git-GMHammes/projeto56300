@@ -1,50 +1,46 @@
 <?php
 
-namespace App\Models\V1\Mec\Private;
+namespace App\Models\V1\Msg\Private;
 
 use App\Models\V1\BaseTableModel;
 
 /**
- * Model de escrita para a tabela mec_01_vehicle_brand.
+ * Model de escrita para a tabela msg_003_private.
  *
- * Responsável por todas as operações CRUD diretas na tabela física.
- * Inclui verificações de unicidade para CPF, WhatsApp e e-mail,
- * respeitando os registros com soft delete.
+ * Mensagens diretas ponto a ponto, isoladas por tenant.
+ * read_at preenchido quando o destinatário lê (read receipt).
  *
- * Tabela: msg_001_timeline
+ * Tabela: msg_003_private
+ * DDL: id, tenant_id, sender_id, receiver_id, content, read_at,
+ *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
 {
-    protected $DBGroup = DB_GROUP_001;
-    protected $table = 'msg_001_timeline';
-    protected $primaryKey = 'id';
+    protected $DBGroup      = DB_GROUP_001;
+    protected $table        = 'msg_003_private';
+    protected $primaryKey   = 'id';
     protected $useSoftDeletes = true;
-    protected $useTimestamps = true;
+    protected $useTimestamps  = true;
 
-    /**
-     * Campos que podem ser inseridos/atualizados via Model.
-     * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
-     */
     protected $allowedFields = [
-        'name'
+        'tenant_id',
+        'sender_id',
+        'receiver_id',
+        'content',
+        'read_at',
     ];
 
-    /**
-     * Campos de texto que usam LIKE %valor% no find.
-     * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
-     */
     protected array $likeFields = [
-        'name'
+        'content',
     ];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
-        'name'
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
-        'name'
+        'content',
     ];
-
 }

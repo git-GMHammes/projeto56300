@@ -1,0 +1,34 @@
+<?php
+// Rotas REST para manipulação da tabela msg_003_private
+// {{www}}/index.php/api/v1/msg/private/find
+$routes->post('find', 'Api\V1\Msg\Private\ResourceTableController::find');
+// {{www}}/index.php/api/v1/msg/private/get-grouped
+$routes->post('get-grouped', 'Api\V1\Msg\Private\ResourceTableController::getGrouped');
+// {{www}}/index.php/api/v1/msg/private/search
+$routes->get('search', 'Api\V1\Msg\Private\ResourceTableController::search');
+// {{www}}/index.php/api/v1/msg/private/get/{id}
+$routes->get('get/(:num)', 'Api\V1\Msg\Private\ResourceTableController::get/$1');
+// {{www}}/index.php/api/v1/msg/private/get-all
+$routes->get('get-all', 'Api\V1\Msg\Private\ResourceTableController::getAll');
+// {{www}}/index.php/api/v1/msg/private/get-no-pagination
+$routes->get('get-no-pagination', 'Api\V1\Msg\Private\ResourceTableController::getNoPagination');
+// {{www}}/index.php/api/v1/msg/private/get-deleted/{id}
+$routes->get('get-deleted/(:num)', 'Api\V1\Msg\Private\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/msg/private/get-deleted-all
+$routes->get('get-deleted-all', 'Api\V1\Msg\Private\ResourceTableController::getDeletedAll');
+// {{www}}/index.php/api/v1/msg/private/get-with-deleted/{id}
+$routes->get('get-with-deleted/(:num)', 'Api\V1\Msg\Private\ResourceTableController::getWithDeleted/$1');
+// {{www}}/index.php/api/v1/msg/private/create
+$routes->post('create', 'Api\V1\Msg\Private\ResourceTableController::create');
+// {{www}}/index.php/api/v1/msg/private/update/{id}
+$routes->put('update/(:num)', 'Api\V1\Msg\Private\ResourceTableController::update/$1');
+// {{www}}/index.php/api/v1/msg/private/delete-soft/{id}
+$routes->delete('delete-soft/(:num)', 'Api\V1\Msg\Private\ResourceTableController::deleteSoft/$1');
+// {{www}}/index.php/api/v1/msg/private/delete-restore/{id}
+$routes->patch('delete-restore/(:num)', 'Api\V1\Msg\Private\ResourceTableController::deleteRestore/$1');
+// {{www}}/index.php/api/v1/msg/private/delete-hard/{id}
+$routes->delete('delete-hard/(:num)', 'Api\V1\Msg\Private\ResourceTableController::deleteHard/$1');
+// {{www}}/index.php/api/v1/msg/private/clear-deleted
+$routes->delete('clear-deleted', 'Api\V1\Msg\Private\ResourceTableController::clearDeleted');
+// {{www}}/index.php/api/v1/msg/private/clear-deleted/{id}
+$routes->delete('clear-deleted/(:num)', 'Api\V1\Msg\Private\ResourceTableController::clearDeleted/$1');

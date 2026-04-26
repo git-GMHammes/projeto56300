@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\V1\VehicleBrand;
+namespace App\Services\V1\Mec\VehicleBrand;
 
 use App\Models\V1\Mec\VehicleBrand\SqlTableModel;
 use App\Services\V1\BaseTableService;

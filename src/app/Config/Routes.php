@@ -7,35 +7,97 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-// Rotas agrupadas por versão e módulo (profissional, escalável)
-$routes->group('api/v1', function($routes) {
-	// Rotas de autenticação (login e consultas da view auth)
-	$routes->group('auth', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/AuthUser/EndPointView.php';
-	});
+$routes->group('api/v1', function ($routes) {
 
-	// Rotas para manipulação direta da tabela user_customer
-	$routes->group('user-management', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/UserManagement/EndpointTable.php';
-	});
+    // =========================================================================
+    // /User — Módulo de usuários e autenticação
+    // =========================================================================
 
-	// Rotas para manipulação direta da tabela user_customer
-	$routes->group('user-customer', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/UserCustomer/EndpointTable.php';
-	});
+    $routes->group('auth', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/AuthUser/EndPointView.php';
+    });
 
-	// Rotas para consulta através da View user_customer_view
-	$routes->group('user-customer-view', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/UserCustomer/EndPointView.php';
-	});
+    $routes->group('user-management', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserManagement/EndpointTable.php';
+    });
 
-	// Rotas para consulta através da vehicle_brand
-	$routes->group('vehicle-brand', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/VehicleBrand/EndpointTable.php';
-	});
+    $routes->group('user-customer', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserCustomer/EndpointTable.php';
+    });
 
-	// Rotas para gerenciamento da tabela user_password_resets
-	$routes->group('user-password-resets', function($routes) {
-		require __DIR__ . '/Routes/Api/v1/UserPasswordResets/EndpointTable.php';
-	});
+    $routes->group('user-customer-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserCustomer/EndPointView.php';
+    });
+
+    $routes->group('user-password-resets', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserPasswordResets/EndpointTable.php';
+    });
+
+    // =========================================================================
+    // /Mec — Módulo mecânico / veículos
+    // =========================================================================
+
+    $routes->group('vehicle-brand', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Mec/VehicleBrand/EndpointTable.php';
+    });
+
+    $routes->group('vehicle-brand-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Mec/VehicleBrand/EndPointView.php';
+    });
+
+    // =========================================================================
+    // /Msg — Módulo de mensagens
+    // =========================================================================
+
+    $routes->group('msg', function ($routes) {
+
+        // Timeline — mural de posts públicos
+        $routes->group('timeline', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Timeline/EndpointTable.php';
+        });
+        $routes->group('timeline-view', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Timeline/EndpointView.php';
+        });
+
+        // Timeline Reaction — reações aos posts
+        $routes->group('timeline-reaction', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/TimelineReaction/EndpointTable.php';
+        });
+
+        // Private — mensagens diretas
+        $routes->group('private', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Private/EndpointTable.php';
+        });
+        $routes->group('private-view', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Private/EndpointView.php';
+        });
+
+        // Group — grupos de chat
+        $routes->group('group', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Group/EndpointTable.php';
+        });
+        $routes->group('group-view', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/Group/EndpointView.php';
+        });
+
+        // Group Member — membros dos grupos
+        $routes->group('group-member', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/GroupMember/EndpointTable.php';
+        });
+
+        // Group Message — mensagens de grupo
+        $routes->group('group-message', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/GroupMessage/EndpointTable.php';
+        });
+
+        // Group Read — ponteiro de leitura
+        $routes->group('group-read', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/GroupRead/EndpointTable.php';
+        });
+
+        // Msg File — anexos multimídia
+        $routes->group('msg-file', function ($routes) {
+            require __DIR__ . '/Routes/Api/v1/Msg/MsgFile/EndpointTable.php';
+        });
+    });
 });

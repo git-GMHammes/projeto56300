@@ -1,0 +1,36 @@
+<?php
+// Rotas REST para manipulação da tabela msg_007_group_read
+// {{www}}/index.php/api/v1/msg/group-read/find
+$routes->post('find', 'Api\V1\Msg\GroupRead\ResourceTableController::find');
+// {{www}}/index.php/api/v1/msg/group-read/get-grouped
+$routes->post('get-grouped', 'Api\V1\Msg\GroupRead\ResourceTableController::getGrouped');
+// {{www}}/index.php/api/v1/msg/group-read/search
+$routes->get('search', 'Api\V1\Msg\GroupRead\ResourceTableController::search');
+// {{www}}/index.php/api/v1/msg/group-read/get/{id}
+$routes->get('get/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::get/$1');
+// {{www}}/index.php/api/v1/msg/group-read/get-all
+$routes->get('get-all', 'Api\V1\Msg\GroupRead\ResourceTableController::getAll');
+// {{www}}/index.php/api/v1/msg/group-read/get-no-pagination
+$routes->get('get-no-pagination', 'Api\V1\Msg\GroupRead\ResourceTableController::getNoPagination');
+// {{www}}/index.php/api/v1/msg/group-read/get-deleted/{id}
+$routes->get('get-deleted/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/msg/group-read/get-deleted-all
+$routes->get('get-deleted-all', 'Api\V1\Msg\GroupRead\ResourceTableController::getDeletedAll');
+// {{www}}/index.php/api/v1/msg/group-read/get-with-deleted/{id}
+$routes->get('get-with-deleted/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::getWithDeleted/$1');
+// {{www}}/index.php/api/v1/msg/group-read/create
+$routes->post('create', 'Api\V1\Msg\GroupRead\ResourceTableController::create');
+// {{www}}/index.php/api/v1/msg/group-read/update/{id}
+$routes->put('update/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::update/$1');
+// {{www}}/index.php/api/v1/msg/group-read/mark-read
+$routes->patch('mark-read', 'Api\V1\Msg\GroupRead\ResourceTableController::markRead');
+// {{www}}/index.php/api/v1/msg/group-read/delete-soft/{id}
+$routes->delete('delete-soft/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::deleteSoft/$1');
+// {{www}}/index.php/api/v1/msg/group-read/delete-restore/{id}
+$routes->patch('delete-restore/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::deleteRestore/$1');
+// {{www}}/index.php/api/v1/msg/group-read/delete-hard/{id}
+$routes->delete('delete-hard/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::deleteHard/$1');
+// {{www}}/index.php/api/v1/msg/group-read/clear-deleted
+$routes->delete('clear-deleted', 'Api\V1\Msg\GroupRead\ResourceTableController::clearDeleted');
+// {{www}}/index.php/api/v1/msg/group-read/clear-deleted/{id}
+$routes->delete('clear-deleted/(:num)', 'Api\V1\Msg\GroupRead\ResourceTableController::clearDeleted/$1');

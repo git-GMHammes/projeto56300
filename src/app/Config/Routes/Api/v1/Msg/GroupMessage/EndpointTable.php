@@ -1,0 +1,34 @@
+<?php
+// Rotas REST para manipulação da tabela msg_006_group_message
+// {{www}}/index.php/api/v1/msg/group-message/find
+$routes->post('find', 'Api\V1\Msg\GroupMessage\ResourceTableController::find');
+// {{www}}/index.php/api/v1/msg/group-message/get-grouped
+$routes->post('get-grouped', 'Api\V1\Msg\GroupMessage\ResourceTableController::getGrouped');
+// {{www}}/index.php/api/v1/msg/group-message/search
+$routes->get('search', 'Api\V1\Msg\GroupMessage\ResourceTableController::search');
+// {{www}}/index.php/api/v1/msg/group-message/get/{id}
+$routes->get('get/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::get/$1');
+// {{www}}/index.php/api/v1/msg/group-message/get-all
+$routes->get('get-all', 'Api\V1\Msg\GroupMessage\ResourceTableController::getAll');
+// {{www}}/index.php/api/v1/msg/group-message/get-no-pagination
+$routes->get('get-no-pagination', 'Api\V1\Msg\GroupMessage\ResourceTableController::getNoPagination');
+// {{www}}/index.php/api/v1/msg/group-message/get-deleted/{id}
+$routes->get('get-deleted/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/msg/group-message/get-deleted-all
+$routes->get('get-deleted-all', 'Api\V1\Msg\GroupMessage\ResourceTableController::getDeletedAll');
+// {{www}}/index.php/api/v1/msg/group-message/get-with-deleted/{id}
+$routes->get('get-with-deleted/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::getWithDeleted/$1');
+// {{www}}/index.php/api/v1/msg/group-message/create
+$routes->post('create', 'Api\V1\Msg\GroupMessage\ResourceTableController::create');
+// {{www}}/index.php/api/v1/msg/group-message/update/{id}
+$routes->put('update/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::update/$1');
+// {{www}}/index.php/api/v1/msg/group-message/delete-soft/{id}
+$routes->delete('delete-soft/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::deleteSoft/$1');
+// {{www}}/index.php/api/v1/msg/group-message/delete-restore/{id}
+$routes->patch('delete-restore/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::deleteRestore/$1');
+// {{www}}/index.php/api/v1/msg/group-message/delete-hard/{id}
+$routes->delete('delete-hard/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::deleteHard/$1');
+// {{www}}/index.php/api/v1/msg/group-message/clear-deleted
+$routes->delete('clear-deleted', 'Api\V1\Msg\GroupMessage\ResourceTableController::clearDeleted');
+// {{www}}/index.php/api/v1/msg/group-message/clear-deleted/{id}
+$routes->delete('clear-deleted/(:num)', 'Api\V1\Msg\GroupMessage\ResourceTableController::clearDeleted/$1');

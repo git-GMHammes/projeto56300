@@ -1,50 +1,42 @@
 <?php
 
-namespace App\Models\V1\Mec\GroupMember;
+namespace App\Models\V1\Msg\GroupMember;
 
 use App\Models\V1\BaseTableModel;
 
 /**
- * Model de escrita para a tabela mec_01_vehicle_brand.
+ * Model de escrita para a tabela msg_005_group_member.
  *
- * Responsável por todas as operações CRUD diretas na tabela física.
- * Inclui verificações de unicidade para CPF, WhatsApp e e-mail,
- * respeitando os registros com soft delete.
+ * Membros e roles de cada grupo.
+ * left_at NULL indica membresia ativa.
  *
- * Tabela: msg_001_timeline
+ * Tabela: msg_005_group_member
+ * DDL: id, group_id, user_id, role (enum: admin|member), joined_at, left_at,
+ *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
 {
-    protected $DBGroup = DB_GROUP_001;
-    protected $table = 'msg_001_timeline';
-    protected $primaryKey = 'id';
+    protected $DBGroup      = DB_GROUP_001;
+    protected $table        = 'msg_005_group_member';
+    protected $primaryKey   = 'id';
     protected $useSoftDeletes = true;
-    protected $useTimestamps = true;
+    protected $useTimestamps  = true;
 
-    /**
-     * Campos que podem ser inseridos/atualizados via Model.
-     * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
-     */
     protected $allowedFields = [
-        'name'
+        'group_id',
+        'user_id',
+        'role',
+        'joined_at',
+        'left_at',
     ];
 
-    /**
-     * Campos de texto que usam LIKE %valor% no find.
-     * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
-     */
-    protected array $likeFields = [
-        'name'
-    ];
+    protected array $likeFields = [];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
-        'name'
+        'id',
+        'joined_at',
+        'created_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
-    public array $searchFields = [
-        'name'
-    ];
-
+    public array $searchFields = [];
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\V1c\Mec\VehicleBrand;
+namespace App\Controllers\Api\V1\Mec\VehicleBrand;
 
 use App\Controllers\Api\V1\BaseResourceTableController;
 use App\Requests\V1\Mec\VehicleBrand\CreateRequest;
