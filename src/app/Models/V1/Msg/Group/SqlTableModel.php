@@ -26,7 +26,7 @@ class SqlTableModel extends BaseTableModel
      * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
      */
     protected $allowedFields = [
-        'name'
+        // ...
     ];
 
     /**
@@ -34,12 +34,12 @@ class SqlTableModel extends BaseTableModel
      * Campos relacionais/numéricos (id, user_id, datas) usam WHERE exato.
      */
     protected array $likeFields = [
-        'name'
+        // ...
     ];
 
     /** Campos válidos para ordenação */
     protected array $sortableFields = [
-        'name'
+        // ...
     ];
 
     /** Campos utilizados na busca textual (GET /search) */
