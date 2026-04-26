@@ -48,6 +48,7 @@ docker-compose up -d
 
 # Caso utilize Podman Compose
 podman-compose up -d
+```
 
 API REST multi-módulo construída em **CodeIgniter 4 / PHP 8.2**.
 
