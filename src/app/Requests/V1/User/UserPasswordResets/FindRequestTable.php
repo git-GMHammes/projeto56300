@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserPasswordResets;
 
 /**
- * Regras de validação para POST /find (tabela user_password_resets).
+ * Regras de validação para POST /find (tabela user_006_password_resets).
  *
  * Os parâmetros de paginação (page, limit, sort, order) vêm na query string
  * e são extraídos diretamente no controller — não pertencem a este Request.

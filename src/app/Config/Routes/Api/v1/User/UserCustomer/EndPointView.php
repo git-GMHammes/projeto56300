@@ -1,5 +1,5 @@
 <?php
-// Rotas REST para consulta da view user_customer_view
+// Rotas REST para consulta da view user_002_customer_view
 // {{www}}/index.php/api/v1/user-customer-view/find
 $routes->post('find', 'Api\V1\User\UserCustomer\ResourceViewController::find');
 // {{www}}/index.php/api/v1/user-customer-view/get-grouped

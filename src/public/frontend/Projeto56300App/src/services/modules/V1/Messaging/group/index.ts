@@ -33,7 +33,7 @@ export interface GroupMember {
   user_profile?: string | null
 }
 
-export interface GroupMessage {
+export interface MessageGroup {
   id: number
   group_id: number
   user_id: number
@@ -55,7 +55,7 @@ export interface CreateGroupPayload {
   member_ids?: number[]
 }
 
-export interface SendGroupMessagePayload {
+export interface SendMessageGroupPayload {
   content: string
   reply_to_id?: number
 }
@@ -68,7 +68,7 @@ export interface PaginationMeta {
 }
 
 export interface MessagesResponse {
-  data: GroupMessage[]
+  data: MessageGroup[]
   meta: PaginationMeta
 }
 
@@ -168,8 +168,8 @@ export async function getMessages(groupId: number, page = 1): Promise<MessagesRe
 
 export async function sendMessage(
   groupId: number,
-  payload: SendGroupMessagePayload,
-): Promise<ApiResponse<GroupMessage>> {
+  payload: SendMessageGroupPayload,
+): Promise<ApiResponse<MessageGroup>> {
   return http(`${BASE}/${groupId}/messages`, {
     method: 'POST',
     body: JSON.stringify(payload),

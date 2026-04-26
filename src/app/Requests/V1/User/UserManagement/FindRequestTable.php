@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserManagement;
 
 /**
- * Regras de validação para POST /find (tabela user_management).
+ * Regras de validação para POST /find (tabela user_001_management).
  *
  * Valida o corpo JSON da requisição de busca com filtros.
  * Os parâmetros de paginação (page, limit, sort, order) vêm na query string

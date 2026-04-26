@@ -25,12 +25,12 @@ function MessagingGroupDetail() {
 
   const [group, setGroup] = useState<GroupService.Group | null>(null)
   const [members, setMembers] = useState<GroupService.GroupMember[]>([])
-  const [messages, setMessages] = useState<GroupService.GroupMessage[]>([])
+  const [messages, setMessages] = useState<GroupService.MessageGroup[]>([])
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [content, setContent] = useState('')
-  const [replyTo, setReplyTo] = useState<GroupService.GroupMessage | null>(null)
+  const [replyTo, setReplyTo] = useState<GroupService.MessageGroup | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const currentUserId = getCurrentUserId()
 

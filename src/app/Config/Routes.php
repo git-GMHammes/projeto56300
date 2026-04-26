@@ -46,58 +46,55 @@ $routes->group('api/v1', function ($routes) {
     });
 
     // =========================================================================
-    // /Msg — Módulo de mensagens
+    // /Msg — Módulo de mensagens (prefixo plano msg-* no nível api/v1)
     // =========================================================================
 
-    $routes->group('msg', function ($routes) {
+    // Timeline — mural de posts públicos
+    $routes->group('msg-timeline', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageTimeline/EndpointTable.php';
+    });
+    $routes->group('msg-timeline-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageTimeline/EndpointView.php';
+    });
 
-        // Timeline — mural de posts públicos
-        $routes->group('timeline', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Timeline/EndpointTable.php';
-        });
-        $routes->group('timeline-view', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Timeline/EndpointView.php';
-        });
+    // Timeline Reaction — reações aos posts
+    $routes->group('msg-timeline-reaction', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageTimelineReaction/EndpointTable.php';
+    });
 
-        // Timeline Reaction — reações aos posts
-        $routes->group('timeline-reaction', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/TimelineReaction/EndpointTable.php';
-        });
+    // Private — mensagens diretas
+    $routes->group('msg-private', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessagePrivate/EndpointTable.php';
+    });
+    $routes->group('msg-private-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessagePrivate/EndpointView.php';
+    });
 
-        // Private — mensagens diretas
-        $routes->group('private', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Private/EndpointTable.php';
-        });
-        $routes->group('private-view', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Private/EndpointView.php';
-        });
+    // Group — grupos de chat
+    $routes->group('msg-group', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MsgGroup/EndpointTable.php';
+    });
+    $routes->group('msg-group-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MsgGroup/EndpointView.php';
+    });
 
-        // Group — grupos de chat
-        $routes->group('group', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Group/EndpointTable.php';
-        });
-        $routes->group('group-view', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/Group/EndpointView.php';
-        });
+    // Group Member — membros dos grupos
+    $routes->group('msg-group-member', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageGroupMember/EndpointTable.php';
+    });
 
-        // Group Member — membros dos grupos
-        $routes->group('group-member', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/GroupMember/EndpointTable.php';
-        });
+    // Group Message — mensagens de grupo
+    $routes->group('message-group', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageGroup/EndpointTable.php';
+    });
 
-        // Group Message — mensagens de grupo
-        $routes->group('group-message', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/GroupMessage/EndpointTable.php';
-        });
+    // Group Read — ponteiro de leitura
+    $routes->group('msg-group-read', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageGroupRead/EndpointTable.php';
+    });
 
-        // Group Read — ponteiro de leitura
-        $routes->group('group-read', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/GroupRead/EndpointTable.php';
-        });
-
-        // Msg File — anexos multimídia
-        $routes->group('msg-file', function ($routes) {
-            require __DIR__ . '/Routes/Api/v1/Msg/MsgFile/EndpointTable.php';
-        });
+    // Msg File — anexos multimídia
+    $routes->group('msg-file', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/Msg/MessageFile/EndpointTable.php';
     });
 });

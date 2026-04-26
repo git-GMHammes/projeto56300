@@ -6,7 +6,7 @@ use App\Controllers\Api\V1\BaseResourceViewController;
 use App\Requests\V1\User\AuthUser\LoginRequest;
 use App\Requests\V1\User\AuthUser\RecoverPasswordRequest;
 use App\Requests\V1\User\AuthUser\ResetPasswordRequest;
-use App\Services\V1\AuthUser\Processor;
+use App\Services\V1\User\AuthUser\Processor;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -82,7 +82,7 @@ class ResourceViewController extends BaseResourceViewController
      * Body: { "uc_mail": "usuario@email.com" }
      *
      * Verifica se o e-mail existe, gera token seguro, persiste em
-     * user_password_resets e envia o e-mail com o link de reset.
+     * user_006_password_resets e envia o e-mail com o link de reset.
      */
     public function recoverPassword(): ResponseInterface
     {

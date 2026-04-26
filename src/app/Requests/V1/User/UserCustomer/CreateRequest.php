@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserCustomer;
 
 /**
- * Regras de validação para POST /create (tabela user_customer).
+ * Regras de validação para POST /create (tabela user_002_customer).
  *
  * Valida o formato e os tipos dos campos conforme o DDL da tabela.
  * Validações de unicidade (CPF, WhatsApp, e-mail) são responsabilidade

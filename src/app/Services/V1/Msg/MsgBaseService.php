@@ -29,19 +29,19 @@ abstract class MsgBaseService extends BaseTableService
     // Verificações de existência — tabelas externas ao módulo
     // -------------------------------------------------------------------------
 
-    /** Tenant ativo em user_saas_tenants. */
+    /** Tenant ativo em user_004_saas_tenants. */
     protected function existsTenant(int $id): bool
     {
-        return $this->msgDb()->table('user_saas_tenants')
+        return $this->msgDb()->table('user_004_saas_tenants')
             ->where('id', $id)
             ->where('deleted_at IS NULL', null, false)
             ->countAllResults() > 0;
     }
 
-    /** Usuário ativo em user_management. */
+    /** Usuário ativo em user_001_management. */
     protected function existsUser(int $id): bool
     {
-        return $this->msgDb()->table('user_management')
+        return $this->msgDb()->table('user_001_management')
             ->where('id', $id)
             ->where('deleted_at IS NULL', null, false)
             ->countAllResults() > 0;
@@ -70,7 +70,7 @@ abstract class MsgBaseService extends BaseTableService
     }
 
     /** Mensagem de grupo ativa em msg_006_group_message. */
-    protected function existsGroupMessage(int $id): bool
+    protected function existsMessageGroup(int $id): bool
     {
         return $this->msgDb()->table('msg_006_group_message')
             ->where('id', $id)
@@ -84,7 +84,7 @@ abstract class MsgBaseService extends BaseTableService
 
     /**
      * Verifica se o usuário é membro ativo do grupo (left_at IS NULL).
-     * Usado por GroupMessage para garantir que só membros enviam mensagens.
+     * Usado por MessageGroup para garantir que só membros enviam mensagens.
      */
     protected function isActiveMember(int $groupId, int $userId): bool
     {

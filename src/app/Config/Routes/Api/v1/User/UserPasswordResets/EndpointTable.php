@@ -1,5 +1,5 @@
 <?php
-// Rotas REST para manipulação da tabela user_password_resets
+// Rotas REST para manipulação da tabela user_006_password_resets
 // {{www}}/index.php/api/v1/user-password-resets/find
 $routes->post('find', 'Api\V1\User\UserPasswordResets\ResourceTableController::find');
 // {{www}}/index.php/api/v1/user-password-resets/get-grouped

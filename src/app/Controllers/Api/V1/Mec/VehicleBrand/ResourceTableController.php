@@ -11,7 +11,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Controller de recurso para operações diretas na tabela user_customer.
+ * Controller de recurso para operações diretas na tabela user_002_customer.
  *
  * Todos os 14 endpoints REST estão implementados em BaseResourceTableController.
  * Este controller declara apenas o Processor e as regras de validação do módulo.

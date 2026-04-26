@@ -1,5 +1,5 @@
 <?php
-// Rotas REST para manipulação da tabela user_customer
+// Rotas REST para manipulação da tabela user_002_customer
 // {{www}}/index.php/api/v1/user-customer/find
 $routes->post('find', 'Api\V1\User\UserCustomer\ResourceTableController::find');
 // {{www}}/index.php/api/v1/user-customer/get-grouped

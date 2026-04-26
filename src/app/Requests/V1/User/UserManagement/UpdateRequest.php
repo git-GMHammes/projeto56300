@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserManagement;
 
 /**
- * Regras de validação para PUT /update/{id} (tabela user_management).
+ * Regras de validação para PUT /update/{id} (tabela user_001_management).
  *
  * Todos os campos são opcionais (permit_empty), pois o PUT parcial é aceito.
  * A validação de unicidade do campo user é responsabilidade

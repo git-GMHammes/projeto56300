@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserCustomer;
 
 /**
- * Regras de validação para POST /find (tabela user_customer).
+ * Regras de validação para POST /find (tabela user_002_customer).
  *
  * Valida o corpo JSON da requisição de busca com filtros.
  * Os parâmetros de paginação (page, limit, sort, order) vêm na query string

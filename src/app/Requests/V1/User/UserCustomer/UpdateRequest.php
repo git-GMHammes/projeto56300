@@ -3,13 +3,13 @@
 namespace App\Requests\V1\User\UserCustomer;
 
 /**
- * Regras de validação para PUT /update/{id} (tabela user_customer).
+ * Regras de validação para PUT /update/{id} (tabela user_002_customer).
  *
  * Todos os campos são opcionais (permit_empty), pois o PUT parcial é aceito.
  * Validações de unicidade (CPF, WhatsApp, e-mail) são responsabilidade
  * do Processor (Service), pois dependem do ID atual para exclusão correta.
  *
- * user_id não é permitido no update — o vínculo com user_management
+ * user_id não é permitido no update — o vínculo com user_001_management
  * não pode ser alterado após a criação.
  */
 class UpdateRequest

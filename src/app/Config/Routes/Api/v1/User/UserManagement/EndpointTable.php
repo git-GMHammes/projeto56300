@@ -1,5 +1,5 @@
 <?php
-// Rotas REST para manipulação da tabela user_management
+// Rotas REST para manipulação da tabela user_001_management
 // {{www}}/index.php/api/v1/user-management/find
 $routes->post('find', 'Api\V1\User\UserManagement\ResourceTableController::find');
 // {{www}}/index.php/api/v1/user-management/get-grouped

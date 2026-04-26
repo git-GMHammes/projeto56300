@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserPasswordResets;
 
 /**
- * Regras de validação para PUT /update/{id} (tabela user_password_resets).
+ * Regras de validação para PUT /update/{id} (tabela user_006_password_resets).
  *
  * Apenas campos mutáveis após a criação são permitidos.
  * user_id, token_hash e expires_at são imutáveis (auditoria).

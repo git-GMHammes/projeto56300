@@ -3,12 +3,12 @@
 namespace App\Requests\V1\User\UserPasswordResets;
 
 /**
- * Regras de validação para POST /create (tabela user_password_resets).
+ * Regras de validação para POST /create (tabela user_006_password_resets).
  *
  * Uso administrativo — o fluxo de reset padrão cria os registros via AuthUser/Processor.
  *
  * DDL de referência:
- *   user_id    BIGINT       NOT NULL  — FK user_management.id
+ *   user_id    BIGINT       NOT NULL  — FK user_001_management.id
  *   token_hash VARCHAR(64)  NOT NULL  — SHA-256 do token plain (nunca armazenar plain text)
  *   expires_at DATETIME     NOT NULL  — Expiração do token
  *   used_at    DATETIME     NULL      — Quando o token foi utilizado

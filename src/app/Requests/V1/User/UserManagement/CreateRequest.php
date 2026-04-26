@@ -3,7 +3,7 @@
 namespace App\Requests\V1\User\UserManagement;
 
 /**
- * Regras de validação para POST /create (tabela user_management).
+ * Regras de validação para POST /create (tabela user_001_management).
  *
  * Valida o formato e os tipos dos campos conforme o DDL da tabela.
  * A validação de unicidade do campo user é responsabilidade
