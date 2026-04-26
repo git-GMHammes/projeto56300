@@ -1,6 +1,6 @@
 # Habilidade — API Hub SaaS
 
-# Resumo Técnico do Projeto SaaS
+## Resumo Técnico do Projeto SaaS
 
 Este documento descreve as tecnologias utilizadas e a fundamentação do modelo SaaS (Software as a Service) aplicado ao desenvolvimento deste ecossistema.
 
