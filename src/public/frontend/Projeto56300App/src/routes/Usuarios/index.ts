@@ -1,1 +1,1 @@
-﻿// placeholder
+﻿export { default as usuariosPublicRoutes } from './PublicRoutes'

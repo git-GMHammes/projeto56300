@@ -1,0 +1,6 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "docker exec": true,
+        "56300_user": true
+    }
+}
