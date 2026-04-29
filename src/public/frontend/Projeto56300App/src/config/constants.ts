@@ -5,10 +5,10 @@ export const ENVIRONMENT = 'development'
 // export const ENVIRONMENT = 'production'
 // export const ENVIRONMENT = 'test'
 
-// Em produção: frontend e backend no mesmo host → window.location.origin
+// Em produção/test: backend em habilidade.com/projeto56300/src/public
 // Em development: backend em porta separada do Vite dev server
-export const APP_BASE_HOST = (ENVIRONMENT as string) === 'production'
-    ? window.location.origin
+export const APP_BASE_HOST = ((ENVIRONMENT as string) === 'production' || (ENVIRONMENT as string) === 'test')
+    ? 'https://habilidade.com/projeto56300/src/public'
     : 'http://localhost:56300'
 export const THEME = 'Purple'
 

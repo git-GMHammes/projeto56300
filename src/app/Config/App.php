@@ -202,10 +202,12 @@ class App extends BaseConfig
 
     public function __construct()
     {
-
         $request_scheme = isset($_SERVER['REQUEST_SCHEME']) ? ($_SERVER['REQUEST_SCHEME']) : 'http';
         $http_host = isset($_SERVER['HTTP_HOST']) ? ($_SERVER['HTTP_HOST']) : 'localhost:56300';
         $server_port = isset($_SERVER['SERVER_PORT']) ? ($_SERVER['SERVER_PORT']) : '80';
-        $this->baseURL = $request_scheme . '://' . $http_host . ($server_port != '80' ? ':' . $server_port : '') . '/';
+
+        $base_path = ($http_host === 'habilidade.com') ? '/projeto56300/src/public/' : '/';
+
+        $this->baseURL = $request_scheme . '://' . $http_host . ($server_port != '80' ? ':' . $server_port : '') . $base_path;
     }
 }
