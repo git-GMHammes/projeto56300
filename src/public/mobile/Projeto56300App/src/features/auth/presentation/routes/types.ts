@@ -1,4 +1,4 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
+import type { NativeStackScreenProps } from '../../../../core/navigation'
 import type { AUTH_PATHS } from './paths'
 
 export type AuthStackParamList = {

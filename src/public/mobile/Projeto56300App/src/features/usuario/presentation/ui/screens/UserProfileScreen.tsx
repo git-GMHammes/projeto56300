@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {
   View,
   Text,
@@ -7,36 +7,35 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from '../../../../../core/navigation'
 import type { UserProfileScreenProps } from '../../routes/types'
 import { USUARIO_PATHS } from '../../routes/paths'
 import { GetUserByIdUseCase } from '../../../domain/usecases/GetUserByIdUseCase'
 import { UserRepositoryImpl } from '../../../data/repositories/UserRepositoryImpl'
 import type { User } from '../../../domain/entities/User'
 import Bootstrap from '../../../../../shared/theme/bootstrap'
+import { useTheme } from '../../../../../app/providers/ThemeProvider'
+import type { AppColors } from '../../../../../shared/theme/global/types'
 
 const getUserByIdUseCase = new GetUserByIdUseCase(new UserRepositoryImpl())
 
-function InfoRow({ label, value }: { label: string; value?: string }) {
+function InfoRow({ label, value, colors }: { label: string; value?: string; colors: AppColors }) {
+  const styles = useMemo(() => makeRowStyles(colors), [colors])
   return (
-    <View style={row.container}>
-      <Text style={row.label}>{label}</Text>
-      <Text style={row.value}>{value ?? '—'}</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.value}>{value ?? '—'}</Text>
     </View>
   )
 }
-
-const row = StyleSheet.create({
-  container: { paddingVertical: Bootstrap.spacing.md, borderBottomWidth: 1, borderBottomColor: '#f1f3f5' },
-  label: { fontSize: Bootstrap.fontSize.sm, color: Bootstrap.colors.muted, marginBottom: 2 },
-  value: { fontSize: Bootstrap.fontSize.base, color: Bootstrap.colors.body, fontWeight: '500' },
-})
 
 export default function UserProfileScreen({ route, navigation }: UserProfileScreenProps) {
   const { userId } = route.params
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { theme } = useTheme()
+  const styles = useMemo(() => makeStyles(theme.colors), [theme])
 
   useEffect(() => {
     getUserByIdUseCase.execute(userId)
@@ -48,7 +47,7 @@ export default function UserProfileScreen({ route, navigation }: UserProfileScre
   if (loading) {
     return (
       <SafeAreaView style={styles.safe}>
-        <ActivityIndicator style={styles.loader} color={Bootstrap.colors.primary} size="large" />
+        <ActivityIndicator style={styles.loader} color={theme.colors.primary} size="large" />
       </SafeAreaView>
     )
   }
@@ -69,7 +68,6 @@ export default function UserProfileScreen({ route, navigation }: UserProfileScre
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Avatar */}
         <View style={styles.avatarSection}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{user.username[0].toUpperCase()}</Text>
@@ -80,17 +78,15 @@ export default function UserProfileScreen({ route, navigation }: UserProfileScre
           </View>
         </View>
 
-        {/* Dados */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Informações</Text>
-          <InfoRow label="ID" value={user.id} />
-          <InfoRow label="UUID" value={user.uuid} />
-          <InfoRow label="Usuário" value={user.username} />
-          <InfoRow label="Criado em" value={new Date(user.createdAt).toLocaleDateString('pt-BR')} />
-          <InfoRow label="Atualizado em" value={new Date(user.updatedAt).toLocaleDateString('pt-BR')} />
+          <InfoRow label="ID" value={user.id} colors={theme.colors} />
+          <InfoRow label="UUID" value={user.uuid} colors={theme.colors} />
+          <InfoRow label="Usuário" value={user.username} colors={theme.colors} />
+          <InfoRow label="Criado em" value={new Date(user.createdAt).toLocaleDateString('pt-BR')} colors={theme.colors} />
+          <InfoRow label="Atualizado em" value={new Date(user.updatedAt).toLocaleDateString('pt-BR')} colors={theme.colors} />
         </View>
 
-        {/* Ações */}
         <TouchableOpacity
           style={styles.editBtn}
           onPress={() => navigation.navigate(USUARIO_PATHS.FORM, { userId: user.id })}
@@ -102,23 +98,33 @@ export default function UserProfileScreen({ route, navigation }: UserProfileScre
   )
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f8f9fa' },
-  loader: { flex: 1 },
-  scroll: { flexGrow: 1, paddingHorizontal: Bootstrap.spacing.xl, paddingVertical: Bootstrap.spacing.xxl },
-  avatarSection: { alignItems: 'center', marginBottom: Bootstrap.spacing.xxl },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: Bootstrap.colors.primary, alignItems: 'center', justifyContent: 'center', marginBottom: Bootstrap.spacing.md },
-  avatarText: { color: '#fff', fontSize: 36, fontWeight: '700' },
-  username: { fontSize: 20, fontWeight: '700', color: Bootstrap.colors.body, marginBottom: Bootstrap.spacing.sm },
-  badge: { borderRadius: Bootstrap.borderRadius.pill, paddingHorizontal: Bootstrap.spacing.md, paddingVertical: 4 },
-  badgeActive: { backgroundColor: '#d1e7dd' },
-  badgeInactive: { backgroundColor: '#f8d7da' },
-  badgeText: { fontSize: Bootstrap.fontSize.sm, fontWeight: '600' },
-  card: { backgroundColor: '#fff', borderRadius: Bootstrap.borderRadius.lg, padding: Bootstrap.spacing.xl, elevation: 2, shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6, shadowOffset: { width: 0, height: 1 }, marginBottom: Bootstrap.spacing.lg },
-  sectionTitle: { fontSize: Bootstrap.fontSize.sm, fontWeight: '700', color: Bootstrap.colors.muted, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: Bootstrap.spacing.sm },
-  editBtn: { height: Bootstrap.inputHeight + 6, borderRadius: Bootstrap.borderRadius.sm, borderWidth: 2, borderColor: Bootstrap.colors.primary, alignItems: 'center', justifyContent: 'center' },
-  editBtnText: { color: Bootstrap.colors.primary, fontSize: Bootstrap.fontSize.md, fontWeight: '600' },
-  errorBox: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: Bootstrap.spacing.xl },
-  errorText: { color: '#842029', fontSize: Bootstrap.fontSize.base, textAlign: 'center', marginBottom: Bootstrap.spacing.lg },
-  backLink: { color: Bootstrap.colors.primary, fontSize: Bootstrap.fontSize.sm },
-})
+function makeRowStyles(c: AppColors) {
+  return StyleSheet.create({
+    container: { paddingVertical: Bootstrap.spacing.md, borderBottomWidth: 1, borderBottomColor: c.divider },
+    label: { fontSize: Bootstrap.fontSize.sm, color: c.textMuted, marginBottom: 2 },
+    value: { fontSize: Bootstrap.fontSize.base, color: c.text, fontWeight: '500' },
+  })
+}
+
+function makeStyles(c: AppColors) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: c.bg },
+    loader: { flex: 1 },
+    scroll: { flexGrow: 1, paddingHorizontal: Bootstrap.spacing.xl, paddingVertical: Bootstrap.spacing.xxl },
+    avatarSection: { alignItems: 'center', marginBottom: Bootstrap.spacing.xxl },
+    avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: c.primary, alignItems: 'center', justifyContent: 'center', marginBottom: Bootstrap.spacing.md },
+    avatarText: { color: c.primaryText, fontSize: 36, fontWeight: '700' },
+    username: { fontSize: 20, fontWeight: '700', color: c.text, marginBottom: Bootstrap.spacing.sm },
+    badge: { borderRadius: Bootstrap.borderRadius.pill, paddingHorizontal: Bootstrap.spacing.md, paddingVertical: 4 },
+    badgeActive: { backgroundColor: c.successBg },
+    badgeInactive: { backgroundColor: c.dangerBg },
+    badgeText: { fontSize: Bootstrap.fontSize.sm, fontWeight: '600' },
+    card: { backgroundColor: c.surface, borderRadius: Bootstrap.borderRadius.lg, padding: Bootstrap.spacing.xl, elevation: 2, shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6, shadowOffset: { width: 0, height: 1 }, marginBottom: Bootstrap.spacing.lg },
+    sectionTitle: { fontSize: Bootstrap.fontSize.sm, fontWeight: '700', color: c.textMuted, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: Bootstrap.spacing.sm },
+    editBtn: { height: Bootstrap.inputHeight + 6, borderRadius: Bootstrap.borderRadius.sm, borderWidth: 2, borderColor: c.primary, alignItems: 'center', justifyContent: 'center' },
+    editBtnText: { color: c.primary, fontSize: Bootstrap.fontSize.md, fontWeight: '600' },
+    errorBox: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: Bootstrap.spacing.xl },
+    errorText: { color: c.dangerText, fontSize: Bootstrap.fontSize.base, textAlign: 'center', marginBottom: Bootstrap.spacing.lg },
+    backLink: { color: c.primary, fontSize: Bootstrap.fontSize.sm },
+  })
+}

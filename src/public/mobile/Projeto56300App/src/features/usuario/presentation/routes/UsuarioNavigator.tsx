@@ -1,5 +1,5 @@
 import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createNativeStackNavigator } from '../../../../core/navigation'
 import type { UsuarioStackParamList } from './types'
 import { USUARIO_PATHS } from './paths'
 import UserListScreen from '../ui/screens/UserListScreen'

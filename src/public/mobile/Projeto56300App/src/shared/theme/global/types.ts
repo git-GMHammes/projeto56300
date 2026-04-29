@@ -15,7 +15,34 @@ export interface LoginTheme {
   linkHover: string
 }
 
+export interface AppColors {
+  bg: string
+  surface: string
+  primary: string
+  primaryText: string
+  text: string
+  textMuted: string
+  border: string
+  divider: string
+  inputBg: string
+  inputBorder: string
+  inputText: string
+  placeholder: string
+  success: string
+  successBg: string
+  successBorder: string
+  successText: string
+  danger: string
+  dangerBg: string
+  dangerBorder: string
+  dangerText: string
+  warningBg: string
+  warningBorder: string
+  warningText: string
+}
+
 export interface GlobalTheme {
   name: ThemeName
   login: LoginTheme
+  colors: AppColors
 }

@@ -50,6 +50,10 @@ export function useRegisterViewModel() {
     setState(prev => ({ ...prev, profile: { ...prev.profile, [name]: value }, error: null }))
   }, [])
 
+  const goBackToAccess = useCallback(() => {
+    setState(prev => ({ ...prev, step: 'access', error: null }))
+  }, [])
+
   const goToProfile = useCallback(() => {
     const { username, password, confirmPassword } = state.access
     if (username.trim().length < 3) {
@@ -101,5 +105,5 @@ export function useRegisterViewModel() {
     state.profile.cpf.replace(/\D/g, '').length === 11 &&
     state.profile.whatsapp.replace(/\D/g, '').length >= 10
 
-  return { ...state, setAccessField, setProfileField, goToProfile, submit, isAccessValid, isProfileValid }
+  return { ...state, setAccessField, setProfileField, goBackToAccess, goToProfile, submit, isAccessValid, isProfileValid }
 }

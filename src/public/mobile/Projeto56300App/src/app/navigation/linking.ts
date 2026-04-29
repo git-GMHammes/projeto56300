@@ -1,9 +1,7 @@
-import type { LinkingOptions } from '@react-navigation/native'
-import type { RootStackParamList } from './types'
 import { authLinking } from '../../features/auth/presentation/routes/linking'
 import { usuarioLinking } from '../../features/usuario/presentation/routes'
 
-export const linking: LinkingOptions<RootStackParamList> = {
+export const linking = {
   prefixes: ['habilidade://', 'https://habilidade.app'],
   config: {
     screens: {

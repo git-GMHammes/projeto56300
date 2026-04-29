@@ -1,8 +1,6 @@
-import type { PathConfig } from '@react-navigation/native'
-import type { AuthStackParamList } from './types'
 import { AUTH_PATHS } from './paths'
 
-export const authLinking: PathConfig<AuthStackParamList> = {
+export const authLinking = {
   screens: {
     [AUTH_PATHS.LOGIN]: 'login',
     [AUTH_PATHS.REGISTER]: 'registrar',

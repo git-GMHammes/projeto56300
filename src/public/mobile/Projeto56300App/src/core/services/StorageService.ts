@@ -1,11 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// In-memory storage — no native dependency.
+// Token is lost on app restart (user must log in again).
+// Replace with a persisted solution once the build environment
+// supports native C++ compilation (adequate RAM/page file).
 
-const KEYS = {
-  TOKEN: 'auth_token',
-  TOKEN_TYPE: 'auth_token_type',
-  EXPIRES_AT: 'auth_expires_at',
-  USER: 'auth_user',
-} as const
+type Session = {
+  token: string
+  tokenType: string
+  expiresAt: number
+  user: unknown
+}
+
+let _session: Session | null = null
 
 export async function saveSession(
   token: string,
@@ -13,38 +18,34 @@ export async function saveSession(
   expiresIn: number,
   user: unknown,
 ): Promise<void> {
-  const expiresAt = Date.now() + expiresIn * 1000
-  await AsyncStorage.multiSet([
-    [KEYS.TOKEN, token],
-    [KEYS.TOKEN_TYPE, tokenType],
-    [KEYS.EXPIRES_AT, String(expiresAt)],
-    [KEYS.USER, JSON.stringify(user)],
-  ])
+  _session = {
+    token,
+    tokenType,
+    expiresAt: Date.now() + expiresIn * 1000,
+    user,
+  }
 }
 
 export async function getToken(): Promise<string | null> {
-  return AsyncStorage.getItem(KEYS.TOKEN)
+  return _session?.token ?? null
 }
 
 export async function getTokenType(): Promise<string> {
-  return (await AsyncStorage.getItem(KEYS.TOKEN_TYPE)) ?? 'Bearer'
+  return _session?.tokenType ?? 'Bearer'
 }
 
 export async function getUser<T>(): Promise<T | null> {
-  const raw = await AsyncStorage.getItem(KEYS.USER)
-  if (!raw) return null
-  try { return JSON.parse(raw) as T } catch { return null }
+  return (_session?.user as T) ?? null
 }
 
 export async function isAuthenticated(): Promise<boolean> {
-  const [token, expiresAt] = await Promise.all([
-    AsyncStorage.getItem(KEYS.TOKEN),
-    AsyncStorage.getItem(KEYS.EXPIRES_AT),
-  ])
-  if (!token || !expiresAt) return false
-  return Date.now() < Number(expiresAt)
+  if (!_session) return false
+  return Date.now() < _session.expiresAt
 }
 
 export async function clearSession(): Promise<void> {
-  await AsyncStorage.multiRemove(Object.values(KEYS))
+  _session = null
 }
+
+// Kept for API compatibility — no-op since there's nothing to read back.
+export function setTokenReader(_reader: () => Promise<string | null>): void {}
