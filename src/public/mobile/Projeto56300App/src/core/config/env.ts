@@ -14,6 +14,9 @@ export type AppEnv = 'development' | 'staging' | 'production';
 /** Ambiente atual da build */
 export const APP_ENV: AppEnv = 'development';
 
+/** Versão da API consumida pelo app */
+export const APP_VERSION = 'V1';
+
 /** URL base de todas as chamadas HTTP do sistema */
 export const API_BASE_URL: string = 'http://localhost:56300/';
 
