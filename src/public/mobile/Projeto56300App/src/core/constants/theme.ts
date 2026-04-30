@@ -10,10 +10,10 @@
 
 import type { ThemeName } from '../../shared/theme/global/types'
 
-// export const THEME: ThemeName = 'Purple'
+export const THEME: ThemeName = 'Purple'
 
 // export const THEME: ThemeName = 'Dark'
 // export const THEME: ThemeName = 'Light'
 // export const THEME: ThemeName = 'Green'
 // export const THEME: ThemeName = 'Blue'
-export const THEME: ThemeName = 'Red'
+// export const THEME: ThemeName = 'Red'
