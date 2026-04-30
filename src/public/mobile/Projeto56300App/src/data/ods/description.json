@@ -1,0 +1,110 @@
+[
+    {
+        "key": "pods001",
+        "title": "Objetivo 1 - Erradicação da Pobreza",
+        "description": "Acabar com a pobreza em todas as suas formas, em todos os lugares. Inclui metas como erradicar a pobreza extrema para todas as pessoas, reduzir à metade a proporção de pessoas em situação de pobreza monetária e não monetária, implementar sistemas de proteção social para pobres e vulneráveis, garantir acesso a serviços básicos, direitos a recursos econômicos e novas tecnologias, e construir resiliência das populações em situação de vulnerabilidade frente a riscos climáticos e desastres naturais. As metas complementares enfocam a alocação de recursos para programas de redução da pobreza e o fortalecimento de marcos políticos e institucionais para garantir efetividade e sustentabilidade das ações.",
+        "image": "q01.png"
+    },
+    {
+        "key": "pods002",
+        "title": "Objetivo 2 - Fome Zero e Agricultura Sustentável",
+        "description": "Acabar com a fome, alcançar a segurança alimentar e melhoria da nutrição, e promover a agricultura sustentável. Inclui metas como acabar com a fome e garantir acesso de todos a alimentos seguros, culturalmente adequados e nutritivos, eliminar todas as formas de má-nutrição incluindo desnutrição e sobrepeso com foco em crianças e grupos prioritários, dobrar a produtividade agrícola e a renda dos pequenos produtores por meio de acesso equitativo à terra, crédito e mercados, garantir sistemas sustentáveis de produção de alimentos, conservar a diversidade genética de sementes, plantas e animais, aumentar o investimento em infraestrutura rural e pesquisa agrícola, corrigir restrições ao comércio e distorções nos mercados agrícolas, e adotar medidas para garantir a estabilidade dos preços dos alimentos.",
+        "image": "q02.png"
+    },
+    {
+        "key": "pods003",
+        "title": "Objetivo 3 - Saúde e Bem-Estar",
+        "description": "Assegurar uma vida saudável e promover o bem-estar para todos, em todas as idades. Inclui metas como reduzir a mortalidade materna e infantil, acabar com epidemias de AIDS, tuberculose, malária e doenças tropicais negligenciadas, reduzir em um terço a mortalidade prematura por doenças não transmissíveis, fortalecer a prevenção e o tratamento do abuso de substâncias, reduzir mortes e lesões por acidentes de trânsito, garantir o acesso universal a serviços de saúde sexual e reprodutiva, atingir a cobertura universal de saúde via SUS, reduzir mortes causadas por poluição, combater o tabagismo, e ampliar o acesso a medicamentos e vacinas essenciais para toda a população.",
+        "image": "q03.png"
+    },
+    {
+        "key": "pods004",
+        "title": "Objetivo 4 - Educação de Qualidade",
+        "description": "Assegurar a educação inclusiva e equitativa e de qualidade, e promover oportunidades de aprendizagem ao longo da vida para todos. Inclui metas como garantir que todas as crianças e jovens concluam o ensino fundamental e médio de qualidade na idade adequada, assegurar o desenvolvimento integral e o acesso à educação infantil de qualidade, garantir igualdade de acesso à educação técnica e superior de forma gratuita ou a preços acessíveis, aumentar o número de jovens e adultos com competências técnicas e profissionais para emprego e empreendedorismo, eliminar desigualdades de gênero e raça em todos os níveis de ensino, garantir a alfabetização plena de jovens e adultos, e promover educação para o desenvolvimento sustentável, direitos humanos e cidadania global.",
+        "image": "q04.png"
+    },
+    {
+        "key": "pods005",
+        "title": "Objetivo 5 - Igualdade de Gênero",
+        "description": "Alcançar a igualdade de gênero e empoderar todas as mulheres e meninas. Inclui metas como eliminar todas as formas de discriminação e violência contra mulheres e meninas, acabar com casamentos precoces e práticas nocivas como a mutilação genital feminina, reconhecer e valorizar o trabalho doméstico não remunerado, garantir a participação plena e igualitária das mulheres em cargos de liderança política e econômica, assegurar acesso universal à saúde sexual e reprodutiva, garantir direitos econômicos e acesso igualitário a recursos produtivos e tecnologias, e promover igualdade no acesso ao conhecimento científico e à produção de informação, com atenção especial às interseccionalidades de raça, etnia, orientação sexual e identidade de gênero.",
+        "image": "q05.png"
+    },
+    {
+        "key": "pods006",
+        "title": "Objetivo 6 - Água Potável e Saneamento",
+        "description": "Garantir a disponibilidade e o manejo sustentável da água e do saneamento para todas as pessoas. Inclui metas como assegurar acesso universal e equitativo à água potável segura e a preços acessíveis, garantir saneamento e higiene adequados para todos com atenção especial a mulheres, meninas e pessoas em situação de vulnerabilidade, melhorar a qualidade da água reduzindo poluição e aumentando a reciclagem e o reuso seguro, aumentar a eficiência do uso da água em todos os setores, implementar a gestão integrada dos recursos hídricos em todos os níveis inclusive com cooperação transfronteiriça, proteger e restaurar ecossistemas aquáticos, e ampliar a cooperação internacional para capacitação em atividades de água e saneamento com participação das comunidades locais.",
+        "image": "q06.png"
+    },
+    {
+        "key": "pods007",
+        "title": "Objetivo 7 - Energia Acessível e Limpa",
+        "description": "Garantir acesso à energia barata, confiável, sustentável e renovável para todos. Inclui metas como assegurar acesso universal a serviços energéticos modernos com preços acessíveis priorizando populações de baixa renda e áreas remotas, manter elevada a participação de energias renováveis na matriz energética nacional, aumentar a taxa de melhoria da eficiência energética considerando a estrutura produtiva do país, apoiar o desenvolvimento de tecnologias de energia limpa e renovável por meio da cooperação internacional, e expandir a infraestrutura para serviços de energia modernos e sustentáveis para toda a população, reconhecendo o potencial já consolidado da matriz renovável brasileira.",
+        "image": "q07.png"
+    },
+    {
+        "key": "pods008",
+        "title": "Objetivo 8 - Trabalho Decente e Crescimento Econômico",
+        "description": "Promover o crescimento econômico sustentado, inclusivo e sustentável, o emprego pleno e produtivo e o trabalho digno para todos. Inclui metas como alcançar crescimento econômico per capita sustentado, aumentar a produtividade por meio de diversificação, inovação e qualificação tecnológica, promover políticas que estimulem o trabalho decente, a formalização e o empreendedorismo, ampliar a eficiência dos recursos e dissociar o crescimento da degradação ambiental, reduzir o desemprego e o desemprego juvenil, erradicar o trabalho escravo e o trabalho infantil até 2025, reduzir o descumprimento da legislação trabalhista, implementar políticas de turismo sustentável, e expandir o acesso a serviços bancários e financeiros para todos.",
+        "image": "q08.png"
+    },
+    {
+        "key": "pods009",
+        "title": "Objetivo 9 - Indústria, Inovação e Infraestrutura",
+        "description": "Construir infraestrutura resiliente, promover a industrialização inclusiva e sustentável e fomentar a inovação. Inclui metas como aprimorar sistemas de transporte com foco em sustentabilidade, segurança e equidade regional, promover industrialização inclusiva e atividades econômicas de alta complexidade tecnológica, expandir o acesso de micro e pequenas empresas a serviços financeiros e integração em cadeias de valor, modernizar a infraestrutura para adoção de tecnologias limpas e processos industriais mais sustentáveis, fortalecer a pesquisa científica e as capacidades tecnológicas nacionais aumentando investimentos em P&D, e ampliar o acesso universal a tecnologias de informação e comunicação com qualidade e segurança.",
+        "image": "q09.png"
+    },
+    {
+        "key": "pods010",
+        "title": "Objetivo 10 - Redução das Desigualdades",
+        "description": "Reduzir a desigualdade dentro dos países e entre eles. Inclui metas como garantir que a renda dos 40% mais pobres cresça a uma taxa superior à média nacional, promover o empoderamento e a inclusão social, econômica e política de todos independentemente de raça, gênero, deficiência ou idade, eliminar práticas discriminatórias por meio de legislação adequada, adotar políticas fiscais e de proteção social que promovam a igualdade, regular os mercados financeiros globais para reduzir desigualdades, garantir melhor representação de países em desenvolvimento em instituições econômicas internacionais, facilitar a migração e mobilidade de pessoas de forma segura e responsável, e reduzir os custos de remessas enviadas por migrantes.",
+        "image": "q10.png"
+    },
+    {
+        "key": "pods011",
+        "title": "Objetivo 11 - Cidades e Comunidades Sustentáveis",
+        "description": "Tornar as cidades e os assentamentos humanos inclusivos, seguros, resilientes e sustentáveis. Inclui metas como garantir acesso a moradia digna e adequada e urbanizar assentamentos precários até 2030, melhorar a mobilidade urbana com sistemas de transporte sustentáveis priorizando o transporte público coletivo, aumentar a urbanização inclusiva e aprimorar o planejamento e a gestão participativa das cidades, proteger o patrimônio natural e cultural material e imaterial, reduzir mortes e perdas econômicas causadas por desastres naturais com foco em populações vulneráveis, reduzir o impacto ambiental das cidades, garantir o acesso universal a espaços públicos verdes e seguros, e fortalecer a integração entre áreas urbanas e rurais e as políticas climáticas locais.",
+        "image": "q11.png"
+    },
+    {
+        "key": "pods012",
+        "title": "Objetivo 12 - Consumo e Produção Responsáveis",
+        "description": "Assegurar padrões de produção e de consumo sustentáveis. Inclui metas como implementar o Plano de Ação para Produção e Consumo Sustentáveis em articulação com entes federados, alcançar a gestão sustentável e o uso eficiente dos recursos naturais, reduzir o desperdício de alimentos e estabelecer marco regulatório para isso, alcançar o manejo ambientalmente adequado de produtos químicos e resíduos, reduzir substancialmente a geração de resíduos por meio da prevenção, reciclagem e reuso, incentivar empresas a adotar práticas de responsabilidade socioambiental, promover contratações e gestão públicas com critérios de sustentabilidade, garantir informação e conscientização sobre desenvolvimento sustentável, e racionalizar subsídios a combustíveis fósseis.",
+        "image": "q12.png"
+    },
+    {
+        "key": "pods013",
+        "title": "Objetivo 13 - Ação Contra a Mudança Global do Clima",
+        "description": "Tomar medidas urgentes para combater a mudança do clima e seus impactos. Inclui metas como ampliar a resiliência e a capacidade adaptativa frente aos riscos climáticos e desastres naturais, integrar as políticas sobre mudança climática nas estratégias e planejamentos nacionais, melhorar a educação e a conscientização sobre mudança climática nos currículos de ensino, promover mecanismos de financiamento climático para países em desenvolvimento, e estimular a cooperação internacional tecnológica e educacional para fortalecer capacidades de mitigação e adaptação nos países menos desenvolvidos, com foco especial nos grupos mais vulneráveis aos impactos climáticos.",
+        "image": "q13.png"
+    },
+    {
+        "key": "pods014",
+        "title": "Objetivo 14 - Vida na Água",
+        "description": "Conservação e uso sustentável dos oceanos, dos mares e dos recursos marinhos para o desenvolvimento sustentável. Inclui metas como reduzir a poluição marinha e os detritos plásticos nas águas costeiras, gerir de forma sustentável os ecossistemas marinhos e costeiros, minimizar os impactos da acidificação dos oceanos, acabar com a sobrepesca e as práticas pesqueiras predatórias e destrutivas, conservar pelo menos 25% das zonas costeiras e marinhas nacionais, eliminar os subsídios à pesca que contribuem para a sobrepesca, ampliar os benefícios econômicos do uso sustentável dos recursos marinhos, garantir o acesso de pescadores artesanais aos recursos, e expandar o conhecimento científico sobre os oceanos.",
+        "image": "q14.png"
+    },
+    {
+        "key": "pods015",
+        "title": "Objetivo 15 - Vida Terrestre",
+        "description": "Proteger, recuperar e promover o uso sustentável dos ecossistemas terrestres, gerir de forma sustentável as florestas, combater a desertificação, deter e reverter a degradação da terra e deter a perda de biodiversidade. Inclui metas como assegurar a conservação de ecossistemas terrestres e aquáticos continentais protegendo 30% da Amazônia e 17% dos demais biomas, zerar o desmatamento ilegal e recuperar milhões de hectares de florestas degradadas, combater a desertificação e restaurar solos e terras degradadas, conservar espécies ameaçadas de extinção e seus habitats, garantir a repartição equitativa dos benefícios do uso de recursos genéticos, combater o tráfico e a exploração ilegal de espécies da flora e fauna silvestres, e integrar os valores dos ecossistemas ao planejamento e desenvolvimento nacional.",
+        "image": "q15.png"
+    },
+    {
+        "key": "pods016",
+        "title": "Objetivo 16 - Paz, Justiça e Instituições Eficazes",
+        "description": "Promover sociedades pacíficas e inclusivas para o desenvolvimento sustentável, proporcionar o acesso à justiça para todos e construir instituições eficazes, responsáveis e inclusivas em todos os níveis. Inclui metas como reduzir todas as formas de violência e as taxas de mortalidade, acabar com o abuso e a exploração de crianças, promover o Estado de Direito e garantir acesso igualitário à justiça, reduzir fluxos financeiros e de armas ilegais, combater a corrupção e o suborno, desenvolver instituições transparentes e responsáveis, garantir tomada de decisão inclusiva e participativa, fortalecer a participação de países em desenvolvimento na governança global, assegurar identidade jurídica para todos, e proteger as liberdades fundamentais e o acesso público à informação, com atenção especial a povos indígenas, comunidades quilombolas e população LGBT.",
+        "image": "q16.png"
+    },
+    {
+        "key": "pods017",
+        "title": "Objetivo 17 - Parcerias e Meios de Implementação",
+        "description": "Fortalecer os meios de implementação e revitalizar a parceria global para o desenvolvimento sustentável. Inclui metas como mobilizar recursos financeiros domésticos e internacionais para países em desenvolvimento, promover a cooperação internacional Norte-Sul, Sul-Sul e triangular para ciência, tecnologia e inovação, facilitar a transferência de tecnologia para países em desenvolvimento em termos favoráveis, promover um sistema de comércio multilateral universal não discriminatório e equitativo, aumentar a estabilidade macroeconômica e a coerência de políticas para o desenvolvimento sustentável, fortalecer os sistemas de produção e compartilhamento de dados estatísticos para monitoramento dos ODS, e estimular parcerias multissetoriais entre governos, setor privado e sociedade civil.",
+        "image": "q17.png"
+    },
+    {
+        "key": "pods018",
+        "title": "Objetivo 18 - Eliminar o racismo e a discriminação étnico-racial contra povos indígenas e afrodescendentes",
+        "description": "Eliminar o racismo e a discriminação étnico-racial contra povos indígenas e afrodescendentes, especialmente grupos populacionais afetados por múltiplas formas de discriminação. Inclui metas como eliminar o racismo nos ambientes de trabalho, eliminar todas as formas de violência contra povos indígenas e afrodescendentes incluindo homicídio de juventudes, feminicídio, homofobia e transfobia, garantir tratamento digno perante o sistema de justiça e segurança pública, assegurar representatividade equitativa em órgãos de Estado e empresas, promover reparação integral de violações socioeconômicas e culturais, assegurar moradias adequadas e sustentáveis, garantir acesso à saúde de qualidade não discriminatória, assegurar educação de qualidade com respeito às culturas e histórias desses povos, reconhecer saberes tradicionais com participação em decisões sobre grandes obras e empreendimentos, e eliminar a xenofobia contra imigrantes indígenas e afrodescendentes.",
+        "image": "q18.png"
+    }
+]

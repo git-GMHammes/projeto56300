@@ -4,6 +4,7 @@ import { layoutTestPublicRoutes } from './LayoutTest'
 import { authPublicRoutes } from './Auth'
 import { messagingPublicRoutes } from './Messaging'
 import { usuariosPublicRoutes } from './Usuarios'
+import { odsPublicRoutes } from './Ods'
 import Home from '../pages/Home'
 
 // Agrupa todas as rotas públicas de todos os módulos
@@ -13,6 +14,7 @@ const publicRoutes = [
   ...moduloTestePublicRoutes,
   ...layoutTestPublicRoutes,
   ...messagingPublicRoutes,
+  ...odsPublicRoutes,
 ]
 
 function AppRoutes() {

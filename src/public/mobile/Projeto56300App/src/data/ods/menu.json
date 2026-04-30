@@ -1,0 +1,97 @@
+[
+  {
+    "ods": "Home",
+    "description": "Página pública inicial",
+    "link": "Home"
+  },
+  {
+    "ods": "ODS 1",
+    "description": "Erradicar a pobreza",
+    "link": "OdsP01"
+  },
+  {
+    "ods": "ODS 2",
+    "description": "Acabar com fome",
+    "link": "OdsP02"
+  },
+  {
+    "ods": "ODS 3",
+    "description": "Saúde e bem-estar",
+    "link": "OdsP03"
+  },
+  {
+    "ods": "ODS 4",
+    "description": "Educação de qualidade",
+    "link": "OdsP04"
+  },
+  {
+    "ods": "ODS 5",
+    "description": "Igualdade de gênero",
+    "link": "OdsP05"
+  },
+  {
+    "ods": "ODS 6",
+    "description": "Água e saneamento",
+    "link": "OdsP06"
+  },
+  {
+    "ods": "ODS 7",
+    "description": "Energia limpa",
+    "link": "OdsP07"
+  },
+  {
+    "ods": "ODS 8",
+    "description": "Trabalho decente",
+    "link": "OdsP08"
+  },
+  {
+    "ods": "ODS 9",
+    "description": "Indústria e inovação",
+    "link": "OdsP09"
+  },
+  {
+    "ods": "ODS 10",
+    "description": "Reduzir desigualdades",
+    "link": "OdsP10"
+  },
+  {
+    "ods": "ODS 11",
+    "description": "Cidades sustentáveis",
+    "link": "OdsP11"
+  },
+  {
+    "ods": "ODS 12",
+    "description": "Consumo responsável",
+    "link": "OdsP12"
+  },
+  {
+    "ods": "ODS 13",
+    "description": "Ação climática",
+    "link": "OdsP13"
+  },
+  {
+    "ods": "ODS 14",
+    "description": "Vida na água",
+    "link": "OdsP14"
+  },
+  {
+    "ods": "ODS 15",
+    "description": "Vida terrestre",
+    "link": "OdsP15"
+  },
+  {
+    "ods": "ODS 16",
+    "description": "Paz e justiça",
+    "link": "OdsP16"
+  },
+  {
+    "ods": "ODS 17",
+    "description": "Parcerias globais",
+    "link": "OdsP17"
+  },
+  {
+    "ods": "Login",
+    "description": "Login",
+    "link": "Acesso ao Sistema"
+  }
+]

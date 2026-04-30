@@ -18,8 +18,10 @@ import PasswordField from '../../../../../shared/ui/forms/fields/PasswordField'
 import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { AppColors } from '../../../../../shared/theme/global/types'
-import { API_BASE_URL, APP_ENV } from '../../../../../core/config/env'
+import { API_BASE_URL, APP_ENV, APP_CONTRACT_CODE } from '../../../../../core/config/env'
 import { APP_SYSTEM_ID, SYSTEM_LABELS, SystemId } from '../../../../../core/constants/systems'
+import OdsMenuDrawer from '../../../../ods/presentation/ui/components/OdsMenuDrawer'
+import type { AuthStackParamList } from '../../routes/types'
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const vm = useLoginViewModel()
@@ -35,6 +37,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   return (
     <SafeAreaView style={styles.safe}>
+      {APP_CONTRACT_CODE === 'cont0001' && (
+        <View style={styles.menuBar}>
+          <OdsMenuDrawer
+            onNavigate={(name) => navigation.navigate(name as keyof AuthStackParamList)}
+          />
+        </View>
+      )}
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -122,6 +131,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 ['API_BASE_URL', API_BASE_URL],
                 ['APP_SYSTEM_ID', `${APP_SYSTEM_ID} — ${SYSTEM_LABELS[APP_SYSTEM_ID as SystemId]}`],
                 ['APP_ENV', APP_ENV],
+                ['APP_CONTRACT_CODE', APP_CONTRACT_CODE],
               ].map(([k, v]) => (
                 <View key={k} style={styles.debugRow}>
                   <Text style={styles.debugKey}>{k}</Text>
@@ -140,6 +150,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 function makeStyles(c: AppColors) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: c.bg },
+    menuBar: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      paddingHorizontal: Bootstrap.spacing.xl,
+      minHeight: 48,
+    },
     flex: { flex: 1 },
     scroll: {
       flexGrow: 1,
