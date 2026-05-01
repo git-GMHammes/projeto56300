@@ -19,6 +19,7 @@ export type OdsStackParamList = {
   OdsP16: undefined
   OdsP17: undefined
   OdsP18: undefined
+  Messaging: undefined
 }
 
 export type OdsPageScreenProps = {

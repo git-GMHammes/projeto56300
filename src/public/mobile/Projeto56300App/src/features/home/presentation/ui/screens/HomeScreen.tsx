@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from '../../../../../core/navigation'
 import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
+import TopBar from '../../../../../shared/ui/components/TopBar'
+import HamburgerMenuButton from '../../../../../shared/ui/components/HamburgerMenuButton'
 import OdsMenuDrawer from '../../../../ods/presentation/ui/components/OdsMenuDrawer'
 
 interface Props {
@@ -11,13 +13,20 @@ interface Props {
 
 export default function HomeScreen({ navigate }: Props) {
   const { theme } = useTheme()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.bg }]}>
-      <View style={[styles.topBar, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border }]}>
-        <View style={styles.spacer} />
-        <OdsMenuDrawer onNavigate={navigate} />
-      </View>
+      <TopBar
+        rightContent={
+          <HamburgerMenuButton onPress={() => setMenuOpen(true)} />
+        }
+      />
+      <OdsMenuDrawer
+        visible={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onNavigate={navigate}
+      />
       <View style={styles.center}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
           HOME / Pública
@@ -29,17 +38,6 @@ export default function HomeScreen({ navigate }: Props) {
 
 const styles = StyleSheet.create({
   safe: {
-    flex: 1,
-  },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Bootstrap.spacing.xl,
-    paddingVertical: Bootstrap.spacing.md,
-    minHeight: 48,
-    borderBottomWidth: 1,
-  },
-  spacer: {
     flex: 1,
   },
   center: {

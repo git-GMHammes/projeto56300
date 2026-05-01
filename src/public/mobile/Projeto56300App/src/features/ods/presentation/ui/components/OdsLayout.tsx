@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { ReactNode } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { SafeAreaView } from '../../../../../core/navigation'
 import type { NavigationProp } from '../../../../../core/navigation'
 import type { OdsStackParamList } from '../../routes/types'
-import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../../../../shared/theme/global'
+import TopBar from '../../../../../shared/ui/components/TopBar'
+import HamburgerMenuButton from '../../../../../shared/ui/components/HamburgerMenuButton'
 import OdsMenuDrawer from './OdsMenuDrawer'
 
 interface Props {
@@ -16,16 +17,21 @@ interface Props {
 
 export default function OdsLayout({ navigation, children }: Props) {
   const { theme } = useTheme()
+  const [menuOpen, setMenuOpen] = useState(false)
   const styles = makeStyles(theme)
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.topBar}>
-        <View style={styles.spacer} />
-        <OdsMenuDrawer
-          onNavigate={(name) => navigation.navigate(name as keyof OdsStackParamList)}
-        />
-      </View>
+      <TopBar
+        rightContent={
+          <HamburgerMenuButton onPress={() => setMenuOpen(true)} />
+        }
+      />
+      <OdsMenuDrawer
+        visible={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onNavigate={(name) => navigation.navigate(name as keyof OdsStackParamList)}
+      />
       <View style={styles.content}>{children}</View>
     </SafeAreaView>
   )
@@ -36,19 +42,6 @@ function makeStyles(t: GlobalTheme) {
     safe: {
       flex: 1,
       backgroundColor: t.colors.bg,
-    },
-    topBar: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: Bootstrap.spacing.xl,
-      paddingVertical: Bootstrap.spacing.md,
-      minHeight: 48,
-      borderBottomWidth: 1,
-      borderBottomColor: t.colors.border,
-      backgroundColor: t.colors.surface,
-    },
-    spacer: {
-      flex: 1,
     },
     content: {
       flex: 1,

@@ -7,9 +7,11 @@ import RegisterScreen from '../ui/screens/RegisterScreen'
 import ForgotPasswordScreen from '../ui/screens/ForgotPasswordScreen'
 import { ODS_SCREENS_MAP } from '../../../ods/presentation/ui/screens/odsScreensMap'
 import HomeScreen from '../../../home/presentation/ui/screens/HomeScreen'
+import MessagingNavigator from '../../../messaging/V1/MessagingNavigator'
 
 const PUBLIC_HOME = 'Home'
-type AuthScreen = keyof AuthStackParamList | typeof PUBLIC_HOME
+const PUBLIC_MESSAGING = 'Messaging'
+type AuthScreen = keyof AuthStackParamList | typeof PUBLIC_HOME | typeof PUBLIC_MESSAGING
 
 function makeNav(
   setCurrent: (s: AuthScreen) => void,
@@ -29,6 +31,9 @@ export function AuthNavigator() {
 
   if (current === PUBLIC_HOME)
     return <HomeScreen navigate={(name) => setCurrent(name as AuthScreen)} />
+
+  if (current === PUBLIC_MESSAGING)
+    return <MessagingNavigator goBack={() => setCurrent(PUBLIC_HOME)} />
 
   // Páginas ODS públicas
   const OdsPage = (ODS_SCREENS_MAP as Record<string, React.ComponentType<any>>)[current]

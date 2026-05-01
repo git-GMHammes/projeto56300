@@ -90,6 +90,16 @@
     "link": "OdsP17"
   },
   {
+    "ods": "ODS 18",
+    "description": "Eliminar o racismo e a discriminação",
+    "link": "OdsP18"
+  },
+  {
+    "ods": "Mensagens",
+    "description": "Mural, DM e Grupos",
+    "link": "Messaging"
+  },
+  {
     "ods": "Login",
     "description": "Login",
     "link": "Acesso ao Sistema"
