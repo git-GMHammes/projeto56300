@@ -1,0 +1,83 @@
+{
+    "plano": {
+        "id": "plan_2026_05_01_003",
+        "titulo": "Corrigir Gradle Daemon OOM — gradle.properties",
+        "descricao": "Limitar heap do JVM do Gradle para evitar que o daemon seja morto pelo Windows por falta de RAM.",
+        "criado_em": "2026-05-01T18:23:00-03:00",
+        "projeto": "projeto56300",
+        "diretorio_base": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+        "contexto": "O daemon do Gradle está sendo morto pelo SO com o erro 'disappeared unexpectedly'. O arquivo gradle.properties usa -Xmx512m alocando até 494.9 MiB. Reduzir o heap e desativar o daemon em background resolve o problema em máquinas com RAM limitada.",
+        "criterios_de_sucesso": [
+            "gradle.properties atualizado com -Xmx384m",
+            "gradle.properties contém org.gradle.daemon=false",
+            "Próximo build não apresenta 'daemon disappeared unexpectedly'"
+        ],
+        "rollback": {
+            "estrategia": "str_replace_manual",
+            "instrucoes": "Reverter -Xmx384m para -Xmx512m e remover a linha org.gradle.daemon=false no arquivo android/gradle.properties"
+        }
+    },
+    "passos": [
+        {
+            "passo": 1,
+            "tipo": "leitura_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\public\\mobile\\Projeto56300App\\android\\gradle.properties",
+            "intervalo_linhas": null,
+            "motivo": "Confirmar o valor atual de org.gradle.jvmargs antes de editar.",
+            "saida_esperada": "conteudo_arquivo",
+            "depende_de": []
+        },
+        {
+            "passo": 2,
+            "tipo": "editar_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\public\\mobile\\Projeto56300App\\android\\gradle.properties",
+            "operacao": "str_replace",
+            "alteracoes": [
+                {
+                    "buscar": "org.gradle.jvmargs=-Xmx512m -XX:MaxMetaspaceSize=256m -Dfile.encoding=UTF-8 -XX:+UseSerialGC",
+                    "substituir_por": "org.gradle.jvmargs=-Xmx384m -XX:MaxMetaspaceSize=256m -Dfile.encoding=UTF-8 -XX:+UseSerialGC"
+                }
+            ],
+            "motivo": "Reduzir heap máximo de 512m para 384m, liberando ~128m de RAM para evitar que o OS mate o processo.",
+            "depende_de": [1]
+        },
+        {
+            "passo": 3,
+            "tipo": "editar_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\public\\mobile\\Projeto56300App\\android\\gradle.properties",
+            "operacao": "str_replace",
+            "alteracoes": [
+                {
+                    "buscar": "org.gradle.workers.max=1",
+                    "substituir_por": "org.gradle.workers.max=1\norg.gradle.daemon=false"
+                }
+            ],
+            "motivo": "Desativar daemon em background. O Gradle passa a rodar e terminar em vez de ficar residente na memória, eliminando o erro 'disappeared unexpectedly'.",
+            "depende_de": [2]
+        },
+        {
+            "passo": 4,
+            "tipo": "validacao",
+            "regra": "conteudo_contem",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\public\\mobile\\Projeto56300App\\android\\gradle.properties",
+            "esperado": "org.gradle.daemon=false",
+            "motivo": "Confirmar que as alterações foram aplicadas corretamente.",
+            "depende_de": [3]
+        }
+    ],
+    "tipos_suportados": [
+        "leitura_pasta",
+        "leitura_arquivo",
+        "criar_arquivo",
+        "editar_arquivo",
+        "excluir_arquivo",
+        "copiar_arquivo",
+        "mover_arquivo",
+        "renomear_arquivo",
+        "buscar_texto",
+        "executar_bash",
+        "requisicao_http",
+        "validacao",
+        "registrar_log"
+    ]
+}

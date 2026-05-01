@@ -1,0 +1,223 @@
+{
+    "plano": {
+        "id": "plan_2026_05_01_001",
+        "titulo": "Refatoração do módulo X do projeto56300",
+        "descricao": "Localiza, analisa e refatora componentes do módulo X, criando backup e validando build ao final.",
+        "criado_em": "2026-05-01T10:00:00-03:00",
+        "projeto": "projeto56300",
+        "diretorio_base": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+        "contexto": "O componente atual está acoplado demais e precisa ser dividido em camadas (Clean Architecture). Antes de qualquer edição, fazer backup e mapear dependências.",
+        "criterios_de_sucesso": [
+            "Build do Vite passa sem erros",
+            "Testes unitários do módulo X passam",
+            "Nenhum import quebrado nos componentes que dependiam do antigo arquivo"
+        ],
+        "rollback": {
+            "estrategia": "restaurar_do_backup",
+            "caminho_backup": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\backup\\2026_05_01"
+        }
+    },
+    "passos": [
+        {
+            "passo": 1,
+            "tipo": "leitura_pasta",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude",
+            "recursivo": true,
+            "filtros": {
+                "extensoes": [
+                    ".ts",
+                    ".tsx",
+                    ".json"
+                ],
+                "ignorar": [
+                    "node_modules",
+                    "dist",
+                    ".git"
+                ]
+            },
+            "motivo": "Localizar os arquivos: planning.json, dependencies.json e o componente principal do módulo X.",
+            "saida_esperada": "lista_arquivos",
+            "depende_de": []
+        },
+        {
+            "passo": 2,
+            "tipo": "leitura_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\planning.json",
+            "intervalo_linhas": null,
+            "motivo": "Ler o que a função processarFluxo() faz para entender o comportamento atual antes de refatorar.",
+            "saida_esperada": "conteudo_arquivo",
+            "depende_de": [
+                1
+            ]
+        },
+        {
+            "passo": 3,
+            "tipo": "buscar_texto",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src",
+            "padrao": "import .* from ['\"].*ModuloX['\"]",
+            "regex": true,
+            "motivo": "Verificar onde o ModuloX é importado para mapear impacto da refatoração.",
+            "saida_esperada": "lista_ocorrencias",
+            "depende_de": [
+                1
+            ]
+        },
+        {
+            "passo": 4,
+            "tipo": "copiar_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\planning.json",
+            "destino": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\backup\\2026_05_01\\planning.json",
+            "sobrescrever": false,
+            "motivo": "Criar backup antes de qualquer modificação destrutiva.",
+            "depende_de": [
+                2
+            ]
+        },
+        {
+            "passo": 5,
+            "tipo": "criar_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\modules\\moduloX\\useCases\\processarFluxo.ts",
+            "conteudo": "// código da nova função extraída para a camada de useCase",
+            "motivo": "Separar a lógica de processarFluxo() em um UseCase dedicado seguindo Clean Architecture.",
+            "depende_de": [
+                2,
+                3,
+                4
+            ]
+        },
+        {
+            "passo": 6,
+            "tipo": "editar_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\planning.json",
+            "operacao": "str_replace",
+            "alteracoes": [
+                {
+                    "buscar": "function processarFluxo(...) { ... }",
+                    "substituir_por": "import { processarFluxo } from '../modules/moduloX/useCases/processarFluxo';"
+                }
+            ],
+            "motivo": "Substituir a implementação inline pela importação do novo UseCase.",
+            "depende_de": [
+                5
+            ]
+        },
+        {
+            "passo": 7,
+            "tipo": "renomear_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\helper.old.ts",
+            "novo_nome": "helper.legacy.ts",
+            "motivo": "Padronizar nomenclatura de arquivos legados com o sufixo .legacy.",
+            "depende_de": [
+                1
+            ]
+        },
+        {
+            "passo": 8,
+            "tipo": "mover_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\helper.legacy.ts",
+            "destino": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\legacy\\helper.legacy.ts",
+            "motivo": "Mover arquivos legados para uma pasta dedicada.",
+            "depende_de": [
+                7
+            ]
+        },
+        {
+            "passo": 9,
+            "tipo": "excluir_arquivo",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\src\\writable\\claude\\temp_debug.json",
+            "confirmar": true,
+            "motivo": "Remover arquivo temporário de debug que não é mais necessário.",
+            "depende_de": [
+                6
+            ]
+        },
+        {
+            "passo": 10,
+            "tipo": "executar_bash",
+            "comando": "npm run lint -- --fix",
+            "diretorio_de_trabalho": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+            "timeout_segundos": 120,
+            "motivo": "Aplicar auto-fix do ESLint nos arquivos modificados.",
+            "saida_esperada": "stdout_stderr_codigo_saida",
+            "falhar_em_erro": false,
+            "depende_de": [
+                6,
+                8,
+                9
+            ]
+        },
+        {
+            "passo": 11,
+            "tipo": "executar_bash",
+            "comando": "npm run build",
+            "diretorio_de_trabalho": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+            "timeout_segundos": 300,
+            "motivo": "Validar que o build do Vite passa após a refatoração.",
+            "falhar_em_erro": true,
+            "depende_de": [
+                10
+            ]
+        },
+        {
+            "passo": 12,
+            "tipo": "executar_bash",
+            "comando": "npm test -- --run moduloX",
+            "diretorio_de_trabalho": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+            "motivo": "Rodar a suíte de testes do módulo refatorado.",
+            "falhar_em_erro": true,
+            "depende_de": [
+                11
+            ]
+        },
+        {
+            "passo": 13,
+            "tipo": "requisicao_http",
+            "metodo": "GET",
+            "url": "http://localhost:7777/api/health",
+            "headers": {
+                "Accept": "application/json"
+            },
+            "motivo": "Confirmar que o backend continua respondendo após o deploy local.",
+            "depende_de": [
+                11
+            ]
+        },
+        {
+            "passo": 14,
+            "tipo": "validacao",
+            "regra": "arquivo_existe",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\dist\\index.html",
+            "motivo": "Garantir que o artefato de build foi gerado.",
+            "depende_de": [
+                11
+            ]
+        },
+        {
+            "passo": 15,
+            "tipo": "registrar_log",
+            "alvo": "C:\\laragon\\www\\php\\habilidade\\projeto56300\\backup\\2026_05_01\\plan_execution.log",
+            "conteudo": "Plano plan_2026_05_01_001 executado com sucesso.",
+            "motivo": "Registrar conclusão do plano para auditoria.",
+            "depende_de": [
+                12,
+                13,
+                14
+            ]
+        }
+    ],
+    "tipos_suportados": [
+        "leitura_pasta",
+        "leitura_arquivo",
+        "criar_arquivo",
+        "editar_arquivo",
+        "excluir_arquivo",
+        "copiar_arquivo",
+        "mover_arquivo",
+        "renomear_arquivo",
+        "buscar_texto",
+        "executar_bash",
+        "requisicao_http",
+        "validacao",
+        "registrar_log"
+    ]
+}
