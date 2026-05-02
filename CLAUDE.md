@@ -127,20 +127,45 @@ src/writable/claude/{titulo}_{codigo}_planejamento.json
 - `{titulo}` = slug do prompt (lowercase, espaços → `_`, sem caracteres especiais). Ex: `criar_modulo_estoque`
 - `{codigo}` = sequencial de 3 dígitos (`001`, `002`, ...) — verificar arquivos existentes na pasta para determinar o próximo número
 
-Estrutura do JSON de planejamento:
+> **⚠️ MODELO OBRIGATÓRIO:** A estrutura do JSON deve seguir **exatamente** o arquivo modelo:
+> `src/writable/claude/nome_modelo_001_planejamento.json`
+>
+> Leia o modelo antes de criar qualquer planejamento. Não invente campos nem simplifique a estrutura.
+
+Estrutura obrigatória do JSON de planejamento (conforme modelo):
 ```json
 {
-  "titulo": "Título legível da tarefa",
-  "codigo": "001",
-  "prompt_resumo": "Resumo do que foi solicitado",
-  "data": "YYYY-MM-DD",
-  "acoes_planejadas": [
-    {
-      "ordem": 1,
-      "tipo": "create | edit | delete | read | bash | query",
-      "acao": "Descrição da ação",
-      "arquivo": "caminho/do/arquivo (se aplicável)"
+  "plano": {
+    "id": "plan_YYYY_MM_DD_NNN",
+    "titulo": "Título legível da tarefa",
+    "descricao": "Descrição detalhada do que será feito e por quê.",
+    "criado_em": "YYYY-MM-DDTHH:MM:SS-03:00",
+    "projeto": "projeto56300",
+    "diretorio_base": "C:\\laragon\\www\\php\\habilidade\\projeto56300",
+    "contexto": "Contexto relevante: o que motivou a tarefa, o que foi observado, restrições.",
+    "criterios_de_sucesso": [
+      "Critério objetivo 1",
+      "Critério objetivo 2"
+    ],
+    "rollback": {
+      "estrategia": "restaurar_do_backup | reverter_via_git | nao_aplicavel",
+      "comando": "git checkout HEAD -- caminho/do/arquivo"
     }
+  },
+  "passos": [
+    {
+      "passo": 1,
+      "tipo": "leitura_arquivo | leitura_pasta | criar_arquivo | editar_arquivo | excluir_arquivo | copiar_arquivo | mover_arquivo | renomear_arquivo | buscar_texto | executar_bash | requisicao_http | validacao | registrar_log",
+      "alvo": "C:\\caminho\\absoluto\\do\\arquivo_ou_pasta",
+      "motivo": "Por que este passo é necessário.",
+      "saida_esperada": "conteudo_arquivo | lista_arquivos | lista_ocorrencias | stdout_stderr_codigo_saida",
+      "depende_de": []
+    }
+  ],
+  "tipos_suportados": [
+    "leitura_pasta", "leitura_arquivo", "criar_arquivo", "editar_arquivo",
+    "excluir_arquivo", "copiar_arquivo", "mover_arquivo", "renomear_arquivo",
+    "buscar_texto", "executar_bash", "requisicao_http", "validacao", "registrar_log"
   ]
 }
 ```
