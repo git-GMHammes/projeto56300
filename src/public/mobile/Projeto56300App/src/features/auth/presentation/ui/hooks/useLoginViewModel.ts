@@ -20,7 +20,7 @@ interface LoginState {
 
 export function useLoginViewModel() {
   const [state, setState] = useState<LoginState>({
-    form: { username: '', password: '', tenantId: '1' },
+    form: { username: '', password: '', tenantId: '2' },
     loading: false,
     error: null,
     session: null,

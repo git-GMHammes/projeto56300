@@ -4,16 +4,6 @@
     "description": "Página pública inicial",
     "link": "Home"
   },
-    {
-    "ods": "Mensagens",
-    "description": "Mural, DM e Grupos",
-    "link": "Messaging"
-  },
-  {
-    "ods": "Login",
-    "description": "Login",
-    "link": "Acesso ao Sistema"
-  },
   {
     "ods": "ODS 1",
     "description": "Erradicar a pobreza",
@@ -103,5 +93,15 @@
     "ods": "ODS 18",
     "description": "Eliminar o racismo e a discriminação",
     "link": "OdsP18"
+  },
+  {
+    "ods": "Login",
+    "description": "Login",
+    "link": "Acesso ao Sistema"
+  },
+  {
+    "ods": "Mensagens",
+    "description": "Mural, DM e Grupos",
+    "link": "Messaging"
   }
 ]

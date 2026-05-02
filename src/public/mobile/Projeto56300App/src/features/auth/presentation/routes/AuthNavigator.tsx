@@ -26,7 +26,11 @@ function makeNav(
   }
 }
 
-export function AuthNavigator() {
+interface AuthNavigatorProps {
+  onAuthenticated?: () => void
+}
+
+export function AuthNavigator({ onAuthenticated }: AuthNavigatorProps) {
   const [current, setCurrent] = useState<AuthScreen>(PUBLIC_HOME)
 
   if (current === PUBLIC_HOME)
@@ -45,5 +49,5 @@ export function AuthNavigator() {
   if (current === AUTH_PATHS.FORGOT_PASSWORD)
     return <ForgotPasswordScreen {...makeNav(setCurrent, AUTH_PATHS.FORGOT_PASSWORD)} />
 
-  return <LoginScreen {...makeNav(setCurrent, AUTH_PATHS.LOGIN)} />
+  return <LoginScreen {...makeNav(setCurrent, AUTH_PATHS.LOGIN)} onAuthenticated={onAuthenticated} />
 }
