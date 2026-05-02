@@ -1,0 +1,20 @@
+[
+    {
+        "ods": "Perfil",
+        "icon":"",
+        "description": "Editar perfil, configurações e preferências",
+        "link": "/..."
+    },
+    {
+        "ods": "Home",
+        "icon":"",
+        "description": "Página inicial",
+        "link": "/..."
+    },
+    {
+        "ods": "Logout",
+        "icon":"",
+        "description": "Sair do sistema",
+        "link": "/..."
+    }
+]

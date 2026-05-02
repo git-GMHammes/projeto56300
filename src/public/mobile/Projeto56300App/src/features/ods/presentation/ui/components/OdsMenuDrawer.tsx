@@ -11,7 +11,7 @@ import {
 import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../../../../shared/theme/global'
-import menuData from '../../../../../data/ods/menu.json'
+import menuData from '../../../../../data/ods/menu_ods.json'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)

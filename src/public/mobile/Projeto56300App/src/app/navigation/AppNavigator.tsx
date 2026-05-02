@@ -1,6 +1,6 @@
 import React from 'react'
-import { OdsNavigator } from '../../features/ods/presentation/routes'
+import { HomeNavigator } from '../../features/home/presentation/routes'
 
 export function AppNavigator() {
-  return <OdsNavigator />
+  return <HomeNavigator />
 }
