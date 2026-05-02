@@ -18,7 +18,8 @@
             outline: none;
         }
         html, body {
-            color: rgba(33, 37, 41, 1);
+            background-color: #000;
+            color: #fff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             font-size: 16px;
             margin: 0;
