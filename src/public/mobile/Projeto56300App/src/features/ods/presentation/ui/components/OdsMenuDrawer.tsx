@@ -13,7 +13,7 @@ import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../../../../shared/theme/global'
 import menuData from '../../../../../data/ods/menu.json'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
+const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)
 
 interface Props {
@@ -106,18 +106,28 @@ export default function OdsMenuDrawer({ visible, onClose, onNavigate }: Props) {
 function makeStyles(t: GlobalTheme) {
   return StyleSheet.create({
     overlay: {
-      ...StyleSheet.absoluteFillObject,
-      flexDirection: 'row',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.45)',
       zIndex: 999,
       elevation: 20,
     },
     backdrop: {
-      flex: 1,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
     },
     panel: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
       width: PANEL_WIDTH,
-      height: SCREEN_HEIGHT,
       backgroundColor: t.colors.surface,
       shadowColor: '#000',
       shadowOffset: { width: -2, height: 0 },

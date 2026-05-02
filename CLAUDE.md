@@ -117,6 +117,8 @@ Aplicar em toda tarefa que envolva criação, edição ou exclusão de arquivos,
 
 ### Passo 1 — Criar JSON de planejamento e aguardar permissão
 
+**Regra crítica:** ao identificar que a solução envolve criação, edição ou exclusão de arquivos, criar o JSON imediatamente — sem perguntar ao usuário antes, sem propor a ação verbalmente. O JSON é a proposta.
+
 Antes de executar qualquer ação, criar o arquivo:
 ```
 src/writable/claude/{titulo}_{codigo}_planejamento.json
@@ -149,16 +151,16 @@ Após criar o arquivo, **apresentar o plano ao usuário e aguardar aprovação a
 
 Executar somente as ações aprovadas no planejamento.
 
-### Passo 3 — Criar JSON de ações não planejadas
+### Passo 3 — Registrar ações não planejadas (somente se necessário)
 
-Ao final da tarefa, criar o arquivo:
+Se todas as ações foram exatamente as planejadas, **a tarefa está concluída — não criar nenhum arquivo adicional**.
+
+Se durante a execução for necessária alguma ação que não constava no planejamento original, criar o arquivo:
 ```
-src/writable/claude/{titulo}_{codigo}_nao_planejado.json
+src/writable/claude/{titulo}_{codigo}_apos_planejamento.json
 ```
 
-Registrar toda ação que foi necessária mas não constava no planejamento original. Se nenhuma ação adicional foi necessária, criar o arquivo com `"acoes_nao_planejadas": []`.
-
-Estrutura do JSON de não planejadas:
+Estrutura do JSON de ações pós-planejamento:
 ```json
 {
   "titulo": "Título legível da tarefa",

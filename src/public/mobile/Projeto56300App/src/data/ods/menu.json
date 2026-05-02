@@ -1,8 +1,18 @@
 [
   {
-    "ods": "Home",
+    "ods": "Home 001",
     "description": "Página pública inicial",
     "link": "Home"
+  },
+    {
+    "ods": "Mensagens",
+    "description": "Mural, DM e Grupos",
+    "link": "Messaging"
+  },
+  {
+    "ods": "Login",
+    "description": "Login",
+    "link": "Acesso ao Sistema"
   },
   {
     "ods": "ODS 1",
@@ -93,15 +103,5 @@
     "ods": "ODS 18",
     "description": "Eliminar o racismo e a discriminação",
     "link": "OdsP18"
-  },
-  {
-    "ods": "Mensagens",
-    "description": "Mural, DM e Grupos",
-    "link": "Messaging"
-  },
-  {
-    "ods": "Login",
-    "description": "Login",
-    "link": "Acesso ao Sistema"
   }
 ]

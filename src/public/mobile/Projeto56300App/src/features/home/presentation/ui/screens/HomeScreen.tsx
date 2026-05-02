@@ -31,6 +31,9 @@ export default function HomeScreen({ navigate }: Props) {
         <Text style={[styles.label, { color: theme.colors.text }]}>
           HOME / Pública
         </Text>
+        <Text style={[styles.subtitle, { color: theme.colors.text }]}>
+          Olá mundo
+        </Text>
       </View>
     </SafeAreaView>
   )
@@ -48,5 +51,9 @@ const styles = StyleSheet.create({
   label: {
     fontSize: Bootstrap.fontSize.xl,
     fontWeight: Bootstrap.fontWeight.bold,
+  },
+  subtitle: {
+    fontSize: Bootstrap.fontSize.base,
+    marginTop: 8,
   },
 })
