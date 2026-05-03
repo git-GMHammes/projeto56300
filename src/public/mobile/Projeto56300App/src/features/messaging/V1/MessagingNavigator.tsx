@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { MESSAGING_PATHS } from './paths'
 import type { MessagingStackParamList } from './types'
-import BottomTabBar from '../../../shared/ui/components/BottomTabBar'
-import type { TabItem } from '../../../shared/ui/components/BottomTabBar'
 import TimelineScreen from './messageTimeline/presentation/ui/screens/TimelineScreen'
 import TimelineReactionScreen from './messageTimelineReaction/presentation/ui/screens/TimelineReactionScreen'
 import PrivateScreen from './messagePrivate/presentation/ui/screens/PrivateScreen'
@@ -11,12 +9,6 @@ import GroupScreen from './msgGroup/presentation/ui/screens/GroupScreen'
 import GroupMemberScreen from './messageGroupMember/presentation/ui/screens/GroupMemberScreen'
 import GroupMessageScreen from './messageGroup/presentation/ui/screens/GroupMessageScreen'
 import MessageFileScreen from './messageFile/presentation/ui/screens/MessageFileScreen'
-
-const TABS: TabItem[] = [
-  { key: MESSAGING_PATHS.TIMELINE, label: 'Mural' },
-  { key: MESSAGING_PATHS.PRIVATE, label: 'DM' },
-  { key: MESSAGING_PATHS.GROUP, label: 'Grupos' },
-]
 
 const MAIN_TAB_KEYS = new Set<string>([
   MESSAGING_PATHS.TIMELINE,
@@ -53,7 +45,6 @@ export default function MessagingNavigator({ initialScreen = MESSAGING_PATHS.TIM
   }
 
   const { screen, params } = nav
-  const showTabs = MAIN_TAB_KEYS.has(screen)
 
   function renderScreen() {
     switch (screen) {
@@ -91,13 +82,6 @@ export default function MessagingNavigator({ initialScreen = MESSAGING_PATHS.TIM
   return (
     <View style={styles.container}>
       <View style={styles.content}>{renderScreen()}</View>
-      {showTabs && (
-        <BottomTabBar
-          tabs={TABS}
-          activeTab={screen}
-          onTabPress={(key) => navigate(key as MessagingScreen)}
-        />
-      )}
     </View>
   )
 }

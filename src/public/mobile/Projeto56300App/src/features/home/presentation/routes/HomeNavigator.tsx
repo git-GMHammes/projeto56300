@@ -7,11 +7,24 @@ import HomeScreen from '../ui/screens/HomeScreen'
 
 const Stack = createNativeStackNavigator<HomeStackParamList>()
 
-function HomeScreenWrapper({ navigation }: NativeStackScreenProps<HomeStackParamList>) {
-  return <HomeScreen navigate={navigation.navigate as (screenName: string) => void} />
+interface HomeNavigatorProps {
+  onLogout: () => void
 }
 
-export function HomeNavigator() {
+function makeHomeScreenWrapper(onLogout: () => void) {
+  return function HomeScreenWrapper({ navigation }: NativeStackScreenProps<HomeStackParamList>) {
+    return (
+      <HomeScreen
+        navigate={navigation.navigate as (screenName: string) => void}
+        onLogout={onLogout}
+      />
+    )
+  }
+}
+
+export function HomeNavigator({ onLogout }: HomeNavigatorProps) {
+  const HomeScreenWrapper = React.useMemo(() => makeHomeScreenWrapper(onLogout), [onLogout])
+
   return (
     <Stack.Navigator initialRouteName={HOME_PATHS.HOME}>
       <Stack.Screen name={HOME_PATHS.HOME} component={HomeScreenWrapper} />

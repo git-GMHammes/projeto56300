@@ -15,6 +15,9 @@ export function RootNavigator() {
   if (authenticated === null) return null
 
   const handleAuthenticated = () => setAuthenticated(true)
+  const handleLogout = () => setAuthenticated(false)
 
-  return authenticated ? <AppNavigator /> : <AuthNavigator onAuthenticated={handleAuthenticated} />
+  return authenticated
+    ? <AppNavigator onLogout={handleLogout} />
+    : <AuthNavigator onAuthenticated={handleAuthenticated} />
 }

@@ -1,20 +1,30 @@
 [
     {
+        "ods": "Login",
+        "icon": "🔑",
+        "description": "Entrar no sistema",
+        "link": "Login",
+        "showWhen": "guest"
+    },
+    {
         "ods": "Perfil",
-        "icon":"",
+        "icon": "👤",
         "description": "Editar perfil, configurações e preferências",
-        "link": "/..."
+        "link": "Profile",
+        "showWhen": "auth"
     },
     {
         "ods": "Home",
-        "icon":"",
+        "icon": "🏠",
         "description": "Página inicial",
-        "link": "/..."
+        "link": "Home",
+        "showWhen": "always"
     },
     {
         "ods": "Logout",
-        "icon":"",
+        "icon": "🚪",
         "description": "Sair do sistema",
-        "link": "/..."
+        "link": "__logout__",
+        "showWhen": "auth"
     }
 ]
