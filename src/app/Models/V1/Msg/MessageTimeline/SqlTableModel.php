@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V1\Msg\Timeline;
+namespace App\Models\V1\Msg\MessageTimeline;
 
 use App\Models\V1\BaseTableModel;
 
@@ -10,7 +10,7 @@ use App\Models\V1\BaseTableModel;
  * Posts públicos do mural da empresa, isolados por tenant.
  *
  * Tabela: msg_001_timeline
- * DDL: id, tenant_id, user_id, content, is_pinned,
+ * DDL: id, tenant_id, user_management_id, content, is_pinned,
  *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
@@ -23,7 +23,7 @@ class SqlTableModel extends BaseTableModel
 
     protected $allowedFields = [
         'tenant_id',
-        'user_id',
+        'user_management_id',
         'content',
         'is_pinned',
     ];

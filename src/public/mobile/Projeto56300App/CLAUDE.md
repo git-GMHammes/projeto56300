@@ -136,3 +136,86 @@ de interceptação, independente da densidade de tela ou versão do Android.
   </KeyboardAvoidingView>
 </SafeAreaView>
 ```
+
+---
+
+## 8. Dados Estáticos — Isolamento Obrigatório em JSON
+
+**Regra absoluta:** nenhum dado estático deve ser declarado dentro de um componente, tela ou hook.
+Arrays fixos, listas de opções, labels de menu, textos descritivos, configurações de UI — tudo vai em arquivo `.json` separado.
+
+---
+
+### Dois níveis de JSONs
+
+| Nível | Localização | Quando usar |
+|---|---|---|
+| **Global** | `src/data/{dominio}/arquivo.json` | Dados compartilhados entre duas ou mais features |
+| **Por feature** | `src/features/{modulo}/data/arquivo.json` | Dados exclusivos de um único módulo |
+
+---
+
+### Estrutura de diretórios
+
+```
+src/
+├── data/                          ← JSONs globais
+│   ├── ods/
+│   │   ├── menu_ods.json          ← menu de navegação ODS
+│   │   ├── menu_user.json         ← menu contextual do usuário
+│   │   └── description.json       ← descrições longas dos ODS
+│   └── message/
+│       └── footer_message.json    ← abas da tela de mensagens
+│
+└── features/
+    └── {modulo}/
+        └── data/                  ← JSONs exclusivos do módulo
+            └── form_fields.json   ← campos de formulário, opções de select, etc.
+```
+
+---
+
+### Padrão errado vs. correto
+
+**ERRADO — dado embutido no componente:**
+```typescript
+// src/features/estoque/presentation/screens/ProdutoForm.tsx
+const categorias = [
+  { label: 'Eletrônicos', value: 'eletronicos' },
+  { label: 'Alimentos', value: 'alimentos' },
+  { label: 'Vestuário', value: 'vestuario' },
+]
+```
+
+**CORRETO — dado isolado em JSON e importado:**
+```typescript
+// src/features/estoque/data/categorias.json
+[
+  { "label": "Eletrônicos", "value": "eletronicos" },
+  { "label": "Alimentos", "value": "alimentos" },
+  { "label": "Vestuário", "value": "vestuario" }
+]
+
+// src/features/estoque/presentation/screens/ProdutoForm.tsx
+import categorias from '../../data/categorias.json'
+```
+
+---
+
+### Inventário dos JSONs existentes
+
+| Arquivo | Nível | Conteúdo |
+|---|---|---|
+| `src/data/ods/menu_ods.json` | Global | 20 itens de navegação ODS (Home, ODS 1–18, Login, Messaging) |
+| `src/data/ods/menu_user.json` | Global | Menu contextual: Login, Perfil, Home, Logout com `showWhen` |
+| `src/data/ods/description.json` | Global | 18 ODS com `key`, `title`, `description` e `image` |
+| `src/data/message/footer_message.json` | Global | 3 abas de mensagens: Mural, Mensagens Diretas, Grupos |
+
+---
+
+### Regra de normalização
+
+Ao trabalhar em qualquer arquivo que contenha dados estáticos embutidos:
+1. Extrair os dados para o JSON correspondente (global ou por feature) **antes** de qualquer nova implementação
+2. Substituir a declaração inline pelo import do JSON
+3. Nunca criar novas telas, formulários ou componentes com dados estáticos inline
