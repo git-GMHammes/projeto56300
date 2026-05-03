@@ -8,9 +8,9 @@ use App\Models\V1\BaseTableModel;
  * Model de escrita para a tabela user_005_tenants.
  *
  * Tabela: user_005_tenants
- * DDL: id, user_id (FK→user_001_management), tenant_id (FK→user_004_saas_tenants),
+ * DDL: id, user_management_id (FK→user_001_management), saas_tenants_id (FK→user_004_saas_tenants),
  *      role, created_at, updated_at, deleted_at
- * Unique: (user_id, tenant_id)
+ * Unique: (user_management_id, saas_tenants_id)
  */
 class SqlTableModel extends BaseTableModel
 {
@@ -21,20 +21,20 @@ class SqlTableModel extends BaseTableModel
     protected $useTimestamps = true;
 
     protected $allowedFields = [
-        'user_id',
-        'tenant_id',
+        'user_management_id',
+        'saas_tenants_id',
         'role',
     ];
 
-    /** user_id e tenant_id são FKs inteiras — busca exata; apenas role usa LIKE */
+    /** user_management_id e saas_tenants_id são FKs inteiras — busca exata; apenas role usa LIKE */
     protected array $likeFields = [
         'role',
     ];
 
     protected array $sortableFields = [
         'id',
-        'user_id',
-        'tenant_id',
+        'user_management_id',
+        'saas_tenants_id',
         'role',
         'created_at',
         'updated_at',
@@ -51,8 +51,8 @@ class SqlTableModel extends BaseTableModel
     public function existsByUserAndTenant(int $userId, int $tenantId, ?int $excludeId = null): bool
     {
         $builder = $this->db->table($this->table)
-            ->where('user_id', $userId)
-            ->where('tenant_id', $tenantId)
+            ->where('user_management_id', $userId)
+            ->where('saas_tenants_id', $tenantId)
             ->where('deleted_at IS NULL', null, false);
 
         if ($excludeId !== null) {

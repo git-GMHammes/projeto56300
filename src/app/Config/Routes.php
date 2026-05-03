@@ -33,6 +33,10 @@ $routes->group('api/v1', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserPasswordResets/EndpointTable.php';
     });
 
+    $routes->group('user-saas-tenants', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserSaasTenants/EndpointTable.php';
+    });
+
     $routes->group('user-tenants', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserTenants/EndpointTable.php';
     });

@@ -121,11 +121,12 @@ Aplicar em toda tarefa que envolva criação, edição ou exclusão de arquivos,
 
 Antes de executar qualquer ação, criar o arquivo:
 ```
-src/writable/claude/{titulo}_{codigo}_planejamento.json
+src/writable/claude/{AAAAMMDDHHMMSS}_{titulo}_plano.json
 ```
 
+- `{AAAAMMDDHHMMSS}` = timestamp exato da criação (Ano+Mês+Dia+Hora+Minuto+Segundo). Ex: `20260503143022`
+- O `_` (underscore) separa o timestamp do título
 - `{titulo}` = slug do prompt (lowercase, espaços → `_`, sem caracteres especiais). Ex: `criar_modulo_estoque`
-- `{codigo}` = sequencial de 3 dígitos (`001`, `002`, ...) — verificar arquivos existentes na pasta para determinar o próximo número
 
 > **⚠️ MODELO OBRIGATÓRIO:** A estrutura do JSON deve seguir **exatamente** o arquivo modelo:
 > `src/writable/claude/nome_modelo_001_planejamento.json`
@@ -182,15 +183,14 @@ Se todas as ações foram exatamente as planejadas, **a tarefa está concluída 
 
 Se durante a execução for necessária alguma ação que não constava no planejamento original, criar o arquivo:
 ```
-src/writable/claude/{titulo}_{codigo}_apos_planejamento.json
+src/writable/claude/{AAAAMMDDHHMMSS}_{titulo}_pos_plano.json
 ```
 
 Estrutura do JSON de ações pós-planejamento:
 ```json
 {
   "titulo": "Título legível da tarefa",
-  "codigo": "001",
-  "data": "YYYY-MM-DD",
+  "timestamp": "AAAAMMDDHHMMSS",
   "acoes_nao_planejadas": [
     {
       "ordem": 1,
