@@ -33,6 +33,14 @@ $routes->group('api/v1', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserPasswordResets/EndpointTable.php';
     });
 
+    $routes->group('user-tenants', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserTenants/EndpointTable.php';
+    });
+
+    $routes->group('user-tenants-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserTenants/EndPointView.php';
+    });
+
     // =========================================================================
     // /Mec — Módulo mecânico / veículos
     // =========================================================================

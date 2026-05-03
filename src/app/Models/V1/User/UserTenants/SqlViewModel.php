@@ -5,61 +5,47 @@ namespace App\Models\V1\User\UserTenants;
 use App\Models\V1\BaseViewModel;
 
 /**
- * Model de leitura para a view view_customer.
+ * Model de leitura para a view view_user_tenants.
  *
- * Responsável exclusivamente por consultas (read-only).
- * A view une user_002_customer (uc) com user_001_management (um),
- * expondo os dados com prefixo uc_ para campos do cliente
- * e usando os timestamps de user_001_management.
+ * A view une user_005_tenants (ut) com user_004_saas_tenants (ust),
+ * expondo campos com prefixo ut_ (tenant do usuário) e ust_ (dados do SaaS tenant).
  *
  * Campos disponíveis na view:
- *   id, uc_id, um_user, uc_user_id, uc_name, uc_cpf, uc_whatsapp,
- *   uc_profile, uc_mail, uc_phone, uc_date_birth, uc_zip_code,
- *   uc_address, uc_tenant_at, uc_validity, created_at, updated_at, deleted_at
- *
- * O campo deleted_at reflete user_001_management.deleted_at.
- *
- * Todos os métodos de leitura (findPaginatedView, findById, findDeletedById,
- * findDeletedPaginatedView, searchByTermView, findGroupedView, findAllView)
- * estão disponíveis via BaseViewModel.
+ *   id, ut_user_id, ut_tenant_id, ut_role,
+ *   created_at, updated_at, deleted_at,
+ *   ust_id, ust_name, ust_slug, ust_plan, ust_active,
+ *   ust_created_at, ust_updated_at, ust_deleted_at
  */
 class SqlViewModel extends BaseViewModel
 {
     protected $DBGroup    = DB_GROUP_001;
-    protected $table      = 'view_customer';
+    protected $table      = 'view_user_tenants';
     protected $primaryKey = 'id';
 
-    /**
-     * Campos de texto que usam LIKE %valor% no findPaginatedView.
-     */
     protected array $likeFields = [
-        'um_user', 'uc_name', 'uc_cpf', 'uc_whatsapp', 'uc_phone',
-        'uc_mail', 'uc_address', 'uc_profile', 'uc_zip_code', 'uc_tenant_at',
+        'ut_role',
+        'ust_name',
+        'ust_slug',
+        'ust_plan',
     ];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
         'id',
-        'uc_id',
-        'um_user',
-        'uc_name',
-        'uc_cpf',
-        'uc_mail',
-        'uc_whatsapp',
-        'uc_validity',
+        'ut_user_id',
+        'ut_tenant_id',
+        'ut_role',
+        'ust_name',
+        'ust_slug',
+        'ust_plan',
+        'ust_active',
         'created_at',
         'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
-        'um_user',
-        'uc_name',
-        'uc_cpf',
-        'uc_mail',
-        'uc_whatsapp',
-        'uc_phone',
-        'uc_address',
-        'uc_tenant_at',
+        'ut_role',
+        'ust_name',
+        'ust_slug',
+        'ust_plan',
     ];
 }
