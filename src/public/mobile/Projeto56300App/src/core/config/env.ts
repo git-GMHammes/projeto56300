@@ -19,7 +19,7 @@ export const APP_VERSION = 'V1';
 export const API_BASE_URL: string =
     (APP_ENV as string) === 'production' || (APP_ENV as string) === 'staging'
         ? 'https://habilidade.com/projeto56300/src/public'
-        : 'http://localhost:56300';
+        : 'http://10.0.2.2:56300';
 
 /** Timeout padrão (ms) para requisições HTTP */
 export const API_TIMEOUT_MS = 10_000;

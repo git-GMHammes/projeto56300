@@ -1,0 +1,20 @@
+[
+    {
+        "key": "timeline",
+        "label": "Mural",
+        "icon": "📋",
+        "description": "Linha do tempo — postagens públicas do sistema"
+    },
+    {
+        "key": "dm",
+        "label": "Mensagens",
+        "icon": "💬",
+        "description": "Mensagens diretas entre usuários"
+    },
+    {
+        "key": "groups",
+        "label": "Grupos",
+        "icon": "👥",
+        "description": "Conversas em grupo com múltiplos participantes"
+    }
+]

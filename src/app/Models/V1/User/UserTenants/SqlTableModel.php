@@ -7,10 +7,10 @@ use App\Models\V1\BaseTableModel;
 /**
  * Model de escrita para a tabela user_005_tenants.
  *
- * Responsável por todas as operações CRUD diretas na tabela física.
- *
  * Tabela: user_005_tenants
- * DDL: id, user_id, tenant_id, role, created_at, updated_at, deleted_at
+ * DDL: id, user_management_id (FK→user_001_management), user_saas_tenants_id (FK→user_004_saas_tenants),
+ *      role, created_at, updated_at, deleted_at
+ * Unique: (user_management_id, user_saas_tenants_id)
  */
 class SqlTableModel extends BaseTableModel
 {
@@ -20,36 +20,45 @@ class SqlTableModel extends BaseTableModel
     protected $useSoftDeletes = true;
     protected $useTimestamps = true;
 
-    /**
-     * Campos que podem ser inseridos/atualizados via Model.
-     * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps).
-     */
     protected $allowedFields = [
-        'user_id',
-        'tenant_id',
+        'user_management_id',
+        'user_saas_tenants_id',
         'role',
     ];
 
-    /**
-     * Campos de texto que usam LIKE %valor% no find.
-     * Exclui: user_id, tenant_id (FKs inteiros — busca exata com WHERE).
-     */
+    /** user_management_id e user_saas_tenants_id são FKs inteiras — busca exata; apenas role usa LIKE */
     protected array $likeFields = [
         'role',
     ];
 
-    /** Campos válidos para ordenação */
     protected array $sortableFields = [
         'id',
-        'user_id',
-        'tenant_id',
+        'user_management_id',
+        'user_saas_tenants_id',
         'role',
         'created_at',
         'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
         'role',
     ];
+
+    /**
+     * Verifica se já existe vínculo ativo entre o usuário e o tenant informados.
+     * Usado pelo Processor para validar a restrição de unicidade composta.
+     */
+    public function existsByUserAndTenant(int $userId, int $tenantId, ?int $excludeId = null): bool
+    {
+        $builder = $this->db->table($this->table)
+            ->where('user_management_id', $userId)
+            ->where('user_saas_tenants_id', $tenantId)
+            ->where('deleted_at IS NULL', null, false);
+
+        if ($excludeId !== null) {
+            $builder->where('id !=', $excludeId);
+        }
+
+        return $builder->countAllResults() > 0;
+    }
 }

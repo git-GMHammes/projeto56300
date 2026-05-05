@@ -18,7 +18,8 @@
             outline: none;
         }
         html, body {
-            color: rgba(33, 37, 41, 1);
+            background-color: #000;
+            color: #fff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             font-size: 16px;
             margin: 0;
@@ -28,14 +29,14 @@
             text-rendering: optimizeLegibility;
         }
         header {
-            background-color: rgba(247, 248, 249, 1);
+            background-color: #000;
             padding: .4rem 0 0;
         }
         .menu {
             padding: .4rem 2rem;
         }
         header ul {
-            border-bottom: 1px solid rgba(242, 242, 242, 1);
+            border-bottom: 1px solid #333;
             list-style-type: none;
             margin: 0;
             overflow: hidden;
@@ -47,7 +48,7 @@
         }
         header li a {
             border-radius: 5px;
-            color: rgba(0, 0, 0, .5);
+            color: #fff;
             display: block;
             height: 44px;
             text-decoration: none;
@@ -122,8 +123,8 @@
             padding-top: 1.5rem;
         }
         section pre {
-            background-color: rgba(247, 248, 249, 1);
-            border: 1px solid rgba(242, 242, 242, 1);
+            background-color: #111;
+            border: 1px solid #333;
             display: block;
             font-size: .9rem;
             margin: 2rem 0;
@@ -143,29 +144,29 @@
             width: 25px;
         }
         .further {
-            background-color: rgba(247, 248, 249, 1);
-            border-bottom: 1px solid rgba(242, 242, 242, 1);
-            border-top: 1px solid rgba(242, 242, 242, 1);
+            background-color: #000;
+            border-bottom: 1px solid #333;
+            border-top: 1px solid #333;
         }
         .further h2:first-of-type {
             padding-top: 0;
         }
         .svg-stroke {
             fill: none;
-            stroke: #000;
+            stroke: #fff;
             stroke-width: 32px;
         }
         footer {
-            background-color: rgba(221, 72, 20, .8);
+            background-color: #000;
             text-align: center;
         }
         footer .environment {
-            color: rgba(255, 255, 255, 1);
+            color: #fff;
             padding: 2rem 1.75rem;
         }
         footer .copyrights {
-            background-color: rgba(62, 62, 62, 1);
-            color: rgba(200, 200, 200, 1);
+            background-color: #000;
+            color: #fff;
             padding: .25rem 1.75rem;
         }
         @media (max-width: 629px) {
@@ -176,8 +177,8 @@
                 padding: 0 1rem;
             }
             header .menu-item {
-                background-color: rgba(244, 245, 246, 1);
-                border-top: 1px solid rgba(242, 242, 242, 1);
+                background-color: #000;
+                border-top: 1px solid #333;
                 margin: 0 15px;
                 width: calc(100% - 30px);
             }

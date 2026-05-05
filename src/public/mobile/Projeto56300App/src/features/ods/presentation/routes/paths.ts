@@ -17,6 +17,7 @@ export const ODS_PATHS = {
   P16: 'OdsP16',
   P17: 'OdsP17',
   P18: 'OdsP18',
+  MESSAGING: 'Messaging',
 } as const
 
 export type OdsPathKey = keyof typeof ODS_PATHS

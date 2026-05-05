@@ -20,6 +20,7 @@ src/writable/debugbar/*
 src/writable/logs/*
 src/writable/session/*
 src/writable/uploads/*
+src/writable/claude/*
 
 # Manter os diretórios no repositório via .gitkeep
 !src/writable/cache/.gitkeep

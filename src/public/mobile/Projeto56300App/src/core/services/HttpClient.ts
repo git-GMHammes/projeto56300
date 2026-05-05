@@ -17,6 +17,7 @@ export interface ApiEnvelope<T = unknown> {
   message: string
   success: boolean
   data?: T
+  errors?: Record<string, string>
 }
 
 export class HttpError extends Error {

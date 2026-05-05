@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   View,
   Text,
@@ -23,15 +23,16 @@ import { APP_SYSTEM_ID, SYSTEM_LABELS, SystemId } from '../../../../../core/cons
 import OdsMenuDrawer from '../../../../ods/presentation/ui/components/OdsMenuDrawer'
 import type { AuthStackParamList } from '../../routes/types'
 
-export default function LoginScreen({ navigation }: LoginScreenProps) {
+export default function LoginScreen({ navigation, onAuthenticated }: LoginScreenProps & { onAuthenticated?: () => void }) {
   const vm = useLoginViewModel()
   const { theme } = useTheme()
   const styles = useMemo(() => makeStyles(theme.colors), [theme])
+  const [menuVisible, setMenuVisible] = useState(false)
 
   const handleLogin = async () => {
     const session = await vm.submit()
     if (session) {
-      // RootNavigator ouvirá o estado de autenticação e fará o redirect
+      onAuthenticated?.()
     }
   }
 
@@ -39,9 +40,12 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     <SafeAreaView style={styles.safe}>
       {APP_CONTRACT_CODE === 'cont0001' && (
         <View style={styles.menuBar}>
-          <OdsMenuDrawer
-            onNavigate={(name) => navigation.navigate(name as keyof AuthStackParamList)}
-          />
+          <TouchableOpacity
+            onPress={() => setMenuVisible(true)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={styles.menuIcon}>☰</Text>
+          </TouchableOpacity>
         </View>
       )}
       <KeyboardAvoidingView
@@ -143,6 +147,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
         </ScrollView>
       </KeyboardAvoidingView>
+      {APP_CONTRACT_CODE === 'cont0001' && (
+        <OdsMenuDrawer
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          onNavigate={(name) => navigation.navigate(name as keyof AuthStackParamList)}
+        />
+      )}
     </SafeAreaView>
   )
 }
@@ -242,5 +253,6 @@ function makeStyles(c: AppColors) {
     },
     debugKey: { fontSize: Bootstrap.fontSize.sm, fontWeight: '600', color: c.primary, minWidth: 120 },
     debugVal: { fontSize: Bootstrap.fontSize.sm, color: c.text, flex: 1 },
+    menuIcon: { fontSize: 24, color: c.text },
   })
 }

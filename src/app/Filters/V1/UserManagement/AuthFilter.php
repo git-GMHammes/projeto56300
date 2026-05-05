@@ -35,6 +35,8 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        log_message('debug', '[AuthFilter] called. URI=' . service('uri')->getPath() . ' | REQUEST_URI=' . ($_SERVER['REQUEST_URI'] ?? 'n/a'));
+
         $authHeader = $request->getHeaderLine('Authorization');
 
         // Verificar presença do header Authorization com Bearer

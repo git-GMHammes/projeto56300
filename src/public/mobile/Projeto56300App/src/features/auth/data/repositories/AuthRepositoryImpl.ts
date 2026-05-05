@@ -3,7 +3,6 @@ import type { AuthSession } from '../../domain/entities/AuthSession'
 import type { AuthUser, AuthUserGroup } from '../../domain/entities/AuthUser'
 import { AuthRemoteDataSource } from '../datasources/AuthRemoteDataSource'
 import { AuthMapper } from '../mappers/AuthMapper'
-import { InvalidCredentialsError } from '../../domain/errors/AuthErrors'
 
 export class AuthRepositoryImpl implements IAuthRepository {
   private readonly ds = new AuthRemoteDataSource()
@@ -16,7 +15,11 @@ export class AuthRepositoryImpl implements IAuthRepository {
     })
 
     if (!envelope.success || !envelope.data) {
-      throw new InvalidCredentialsError()
+      if (envelope.errors) {
+        const firstError = Object.values(envelope.errors)[0]
+        throw new Error(firstError ?? envelope.message)
+      }
+      throw new Error(envelope.message ?? 'Credenciais inválidas')
     }
 
     return AuthMapper.toSession(envelope.data)

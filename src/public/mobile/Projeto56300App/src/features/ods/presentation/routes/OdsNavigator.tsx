@@ -20,6 +20,7 @@ import POds015 from '../ui/screens/pods015'
 import POds016 from '../ui/screens/pods016'
 import POds017 from '../ui/screens/pods017'
 import POds018 from '../ui/screens/pods018'
+import MessagingScreen from '../../../messaging/V1/presentation/MessagingScreen'
 
 const Stack = createNativeStackNavigator<OdsStackParamList>()
 
@@ -44,6 +45,7 @@ export function OdsNavigator() {
       <Stack.Screen name={ODS_PATHS.P16} component={POds016} />
       <Stack.Screen name={ODS_PATHS.P17} component={POds017} />
       <Stack.Screen name={ODS_PATHS.P18} component={POds018} />
+      <Stack.Screen name={ODS_PATHS.MESSAGING} component={MessagingScreen} />
     </Stack.Navigator>
   )
 }
