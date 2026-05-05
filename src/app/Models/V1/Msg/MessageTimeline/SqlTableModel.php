@@ -10,7 +10,7 @@ use App\Models\V1\BaseTableModel;
  * Posts públicos do mural da empresa, isolados por tenant.
  *
  * Tabela: msg_001_timeline
- * DDL: id, tenant_id, user_management_id, content, is_pinned,
+ * DDL: id, user_saas_tenants_id, user_management_id, content, is_pinned,
  *      created_at, updated_at, deleted_at
  */
 class SqlTableModel extends BaseTableModel
@@ -22,7 +22,7 @@ class SqlTableModel extends BaseTableModel
     protected $useTimestamps  = true;
 
     protected $allowedFields = [
-        'tenant_id',
+        'user_saas_tenants_id',
         'user_management_id',
         'content',
         'is_pinned',

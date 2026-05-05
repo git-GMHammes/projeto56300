@@ -6,7 +6,7 @@ use App\Libraries\Msg\ContentFilter;
 
 /**
  * Validação para PUT /update/{id} (msg_001_timeline).
- * tenant_id e user_management_id são imutáveis — apenas content e is_pinned aceitam update.
+ * user_saas_tenants_id e user_management_id são imutáveis — apenas content e is_pinned aceitam update.
  *
  * Campos sanitizados pelo ContentFilter: content
  */

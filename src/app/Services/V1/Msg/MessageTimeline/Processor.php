@@ -10,7 +10,7 @@ use App\Services\V1\Msg\MsgBaseService;
 /**
  * Service de negócio para posts públicos do mural (msg_001_timeline).
  *
- * Tabela : msg_001_timeline  — tenant_id, user_id, content, is_pinned
+ * Tabela : msg_001_timeline  — user_saas_tenants_id, user_id, content, is_pinned
  * View   : view_msg_timeline_feed — feed completo com autor e reações
  *
  * Métodos de tabela: find, getGrouped, search, get, getAll, getNoPagination,
@@ -40,7 +40,7 @@ class Processor extends MsgBaseService
      */
     protected function validateOnCreate(array $data): ?array
     {
-        if (!empty($data['tenant_id']) && !$this->existsTenant((int) $data['tenant_id'])) {
+        if (!empty($data['user_saas_tenants_id']) && !$this->existsTenant((int) $data['user_saas_tenants_id'])) {
             return ['success' => false, 'message' => 'Tenant não encontrado', 'code' => 422];
         }
 
@@ -64,12 +64,12 @@ class Processor extends MsgBaseService
     }
 
     /**
-     * tenant_id e user_id são imutáveis após a criação do post.
+     * user_saas_tenants_id e user_id são imutáveis após a criação do post.
      * Sanitiza content antes do update.
      */
     protected function prepareUpdateData(int $id, array $data): array
     {
-        unset($data['tenant_id'], $data['user_id']);
+        unset($data['user_saas_tenants_id'], $data['user_id']);
 
         return ContentFilter::sanitizeFields($data, ['content']);
     }

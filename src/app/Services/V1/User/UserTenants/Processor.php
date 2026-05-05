@@ -10,8 +10,8 @@ use App\Services\V1\BaseTableService;
  * Service de negócio para o módulo UserTenants.
  *
  * Regras do módulo:
- *   - A combinação (user_management_id + saas_tenants_id) deve ser única entre registros ativos.
- *   - Após a criação, user_management_id e saas_tenants_id são imutáveis — apenas role pode ser atualizado.
+ *   - A combinação (user_management_id + user_saas_tenants_id) deve ser única entre registros ativos.
+ *   - Após a criação, user_management_id e user_saas_tenants_id são imutáveis — apenas role pode ser atualizado.
  */
 class Processor extends BaseTableService
 {
@@ -27,7 +27,7 @@ class Processor extends BaseTableService
     protected function validateOnCreate(array $data): ?array
     {
         $userId   = isset($data['user_management_id']) ? (int) $data['user_management_id'] : 0;
-        $tenantId = isset($data['saas_tenants_id'])    ? (int) $data['saas_tenants_id']    : 0;
+        $tenantId = isset($data['user_saas_tenants_id']) ? (int) $data['user_saas_tenants_id'] : 0;
 
         if ($userId > 0 && $tenantId > 0 && $this->tableModel->existsByUserAndTenant($userId, $tenantId)) {
             return ['success' => false, 'message' => 'Este usuário já está vinculado a este tenant', 'code' => 409];
@@ -38,7 +38,7 @@ class Processor extends BaseTableService
 
     protected function prepareUpdateData(int $id, array $data): array
     {
-        unset($data['user_management_id'], $data['saas_tenants_id']);
+        unset($data['user_management_id'], $data['user_saas_tenants_id']);
 
         return $data;
     }
