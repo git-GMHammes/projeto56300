@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIE – Associação da Imprensa Estrangeira no Brasil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #2c5282;
+            --accent-gold: #c9a227;
+            --accent-green: #4a7c59;
+            --text-dark: #1a202c;
+            --text-gray: #4a5568;
+            --text-light: #718096;
+            --bg-light: #f7fafc;
+            --bg-white: #ffffff;
+            --border-light: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--bg-white);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text span:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span:last-child {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            position: relative;
+            height: 90vh;
+            min-height: 600px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f2744 100%);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            background-image: url('https://kimi-web-img.moonshot.cn/img/aie.org.br/ac7b3b5c5dc1ec507a39f52dce799a32cbfa1b52.jpeg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(30%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(201, 162, 39, 0.2);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            color: white;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+        }
+
+        .btn-primary:hover {
+            background: #b8941f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(201, 162, 39, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary-blue);
+            border-color: white;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 3vw, 3rem);
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-gray);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gold-line {
+            width: 60px;
+            height: 3px;
+            background: var(--accent-gold);
+            margin: 1.5rem auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            padding: 2.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gold);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        /* About Section */
+        .about-section {
+            background: var(--bg-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--accent-gold);
+            border-radius: 8px;
+            z-index: -1;
+        }
+
+        .about-content h2 {
+            font-size: clamp(2rem, 3vw, 3rem);
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .contact-item i {
+            color: var(--accent-gold);
+            font-size: 1.25rem;
+            width: 24px;
+        }
+
+        /* Services List */
+        .services-section {
+            background: var(--bg-white);
+        }
+
+        .services-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s;
+        }
+
+        .service-item:hover {
+            background: var(--bg-light);
+            padding-left: 2.5rem;
+        }
+
+        .service-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            line-height: 1;
+            min-width: 50px;
+        }
+
+        .service-content h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .service-content p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
+            background: var(--bg-light);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            group: gallery;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(30, 58, 95, 0.95), transparent);
+            padding: 2rem 1.5rem 1.5rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Agenda Section */
+        .agenda-highlight {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 25px 50px -12px rgba(30, 58, 95, 0.3);
+        }
+
+        .agenda-image {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .agenda-image img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .agenda-content {
+            padding: 4rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .agenda-label {
+            display: inline-block;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .agenda-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .agenda-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .agenda-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .agenda-meta-item i {
+            color: var(--accent-gold);
+            width: 20px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--border-light);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            width: 50%;
+            padding: 0 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-gold);
+            border: 4px solid white;
+            border-radius: 50%;
+            top: 0;
+            box-shadow: 0 0 0 4px var(--border-light);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        .timeline-content h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* News/Clipping */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .news-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .news-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-light);
+        }
+
+        .news-source {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-header h4 {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .news-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .news-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .news-link:hover {
+            color: var(--accent-gold);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f2744 100%);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.05;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 3vw, 3rem);
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand img {
+            height: 60px;
+            margin-bottom: 1.5rem;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--primary-blue);
+        }
+
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                gap: 1.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image::after {
+                display: none;
+            }
+
+            .agenda-highlight {
+                grid-template-columns: 1fr;
+            }
+
+            .agenda-image {
+                min-height: 250px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 3rem;
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: 10px !important;
+                right: auto !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .about-container {
+                padding: 4rem 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="logo">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/d388ebc41b3898b6e86262fd742db581e567accd.png"
+                    alt="AIE Logo">
+                <div class="logo-text">
+                    <span>AIE</span>
+                    <span>Associação da Imprensa Estrangeira</span>
+                </div>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#quem-somos">Quem Somos</a></li>
+                <li><a href="#o-que-fazemos">O que Fazemos</a></li>
+                <li><a href="#encontros">Encontros</a></li>
+                <li><a href="#agenda">Agenda</a></li>
+                <li><a href="#historia">História</a></li>
+                <li><a href="#clipping">Some News</a></li>
+                <li><a href="#contato" class="btn btn-primary"
+                        style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Contato</a></li>
+            </ul>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-badge">Conectando o Brasil ao Mundo</span>
+            <h1>Aproximando quem é notícia de quem a escreve</h1>
+            <p>A AIE organiza encontros exclusivos com autoridades, empresários e executivos para a imprensa
+                internacional há mais de uma década.</p>
+            <div class="hero-buttons">
+                <a href="#agenda" class="btn btn-primary">
+                    <i class="fas fa-calendar-alt"></i> Próximo Encontro
+                </a>
+                <a href="#o-que-fazemos" class="btn btn-outline">
+                    <i class="fas fa-play-circle"></i> Conheça Nosso Trabalho
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section>
+        <div class="section-header">
+            <h2>Nossos Pilares</h2>
+            <div class="gold-line"></div>
+            <p>Atuamos para fortalecer a comunicação entre o Brasil e os principais veículos de imprensa do mundo</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Encontros Exclusivos</h3>
+                <p>Coletivas e entrevistas com autoridades governamentais, empresários e líderes empresariais para a
+                    imprensa estrangeira.</p>
+            </div>
+
+            <div class="feature-card animate-on-scroll delay-1">
+                <div class="feature-icon">
+                    <i class="fas fa-plane-departure"></i>
+                </div>
+                <h3>Press Trips</h3>
+                <p>Organizamos viagens de imprensa para correspondentes internacionais conhecerem de perto projetos e
+                    regiões estratégicas do Brasil.</p>
+            </div>
+
+            <div class="feature-card animate-on-scroll delay-2">
+                <div class="feature-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h3>Cobertura Global</h3>
+                <p>Conexão direta com os principais veículos de comunicação internacional, ampliando a visibilidade do
+                    Brasil no exterior.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quem Somos -->
+    <section class="about-section" id="quem-somos">
+        <div class="about-container">
+            <div class="about-image animate-on-scroll">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/ac7b3b5c5dc1ec507a39f52dce799a32cbfa1b52.jpeg"
+                    alt="Encontro AIE com Ministro Paulo Guedes">
+            </div>
+
+            <div class="about-content animate-on-scroll delay-1">
+                <h2>AIE – Associação da Imprensa Estrangeira</h2>
+                <div class="gold-line" style="margin-left: 0;"></div>
+                <p>
+                    A AIE – Associação da Imprensa Estrangeira no Brasil é uma organização dedicada a aproximar
+                    <strong>quem é notícia de quem a escreve</strong> para os mercados globais.
+                </p>
+                <p>
+                    Organizamos encontros exclusivos com autoridades, empresários, executivos e representantes
+                    do governo, proporcionando acesso direto e conteúdo de qualidade para correspondentes
+                    internacionais sediados no Brasil.
+                </p>
+                <p>
+                    Nossa missão é facilitar o fluxo de informações estratégicas entre o Brasil e a imprensa
+                    mundial, promovendo uma cobertura jornalística mais profunda e contextualizada.
+                </p>
+
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>imprensa.estrangeira@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>aie.org.br@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- O que Fazemos -->
+    <section class="services-section" id="o-que-fazemos">
+        <div class="section-header">
+            <h2>O que Fazemos</h2>
+            <div class="gold-line"></div>
+            <p>Soluções completas para comunicação internacional e relacionamento com a imprensa estrangeira</p>
+        </div>
+
+        <div class="services-list">
+            <div class="service-item animate-on-scroll">
+                <div class="service-number">01</div>
+                <div class="service-content">
+                    <h3>Encontros com a Imprensa Internacional</h3>
+                    <p>Organização de eventos exclusivos que reúnem correspondentes estrangeiros com autoridades e
+                        líderes empresariais brasileiros.</p>
+                </div>
+            </div>
+
+            <div class="service-item animate-on-scroll delay-1">
+                <div class="service-number">02</div>
+                <div class="service-content">
+                    <h3>Coletivas com Empresários, Autoridades e Executivos</h3>
+                    <p>Mediação de entrevistas coletivas e individuais com os principais protagonistas da política e
+                        economia brasileira.</p>
+                </div>
+            </div>
+
+            <div class="service-item animate-on-scroll delay-2">
+                <div class="service-number">03</div>
+                <div class="service-content">
+                    <h3>Press Trips</h3>
+                    <p>Coordenação de viagens de imprensa para correspondentes internacionais visitarem obras,
+                        indústrias e regiões de interesse estratégico.</p>
+                </div>
+            </div>
+
+            <div class="service-item animate-on-scroll">
+                <div class="service-number">04</div>
+                <div class="service-content">
+                    <h3>Publicações e Edição para Imprensa Internacional</h3>
+                    <p>Produção de conteúdo jornalístico e editorial direcionado aos veículos de comunicação do
+                        exterior.</p>
+                </div>
+            </div>
+
+            <div class="service-item animate-on-scroll delay-1">
+                <div class="service-number">05</div>
+                <div class="service-content">
+                    <h3>Eventos com Imprensa Internacional</h3>
+                    <p>Realização de conferências, seminários e encontros temáticos sobre assuntos de relevância global.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="mailto:imprensa.estrangeira@gmail.com" class="btn btn-primary"
+                style="font-size: 1.1rem; padding: 1.2rem 3rem;">
+                <i class="fas fa-paper-plane"></i> Entre em Contato e Participe
+            </a>
+            <div style="margin-top: 1.5rem; color: var(--text-gray);">
+                <p><i class="fas fa-envelope" style="color: var(--accent-gold); margin-right: 0.5rem;"></i>
+                    imprensa.estrangeira@gmail.com</p>
+                <p><i class="fas fa-envelope" style="color: var(--accent-gold); margin-right: 0.5rem;"></i>
+                    aie.org.br@gmail.com</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Encontros / Galeria -->
+    <section class="gallery-section" id="encontros">
+        <div class="section-header">
+            <h2>Encontros Realizados</h2>
+            <div class="gold-line"></div>
+            <p>Registros dos principais eventos e coletivas organizados pela AIE</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item animate-on-scroll">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/ac7b3b5c5dc1ec507a39f52dce799a32cbfa1b52.jpeg"
+                    alt="Encontro com Paulo Guedes">
+                <div class="gallery-overlay">
+                    <h4>Entrevista com Ministro da Economia</h4>
+                    <p>Março 2021 | Brasília - DF</p>
+                </div>
+            </div>
+
+            <div class="gallery-item animate-on-scroll delay-1">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/02e9efc60d4f2e2fc3428f46b8f3fa55a4140094.png"
+                    alt="Terras Raras">
+                <div class="gallery-overlay">
+                    <h4>Minerais Críticos e Terras Raras</h4>
+                    <p>Abril 2026 | Transmissão ao Vivo</p>
+                </div>
+            </div>
+
+            <div class="gallery-item animate-on-scroll delay-2">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/28e00f6115ca6fb3864d8e5d6332e9a5606cada0.png"
+                    alt="Ministro de Portos">
+                <div class="gallery-overlay">
+                    <h4>Ministro de Portos e Aeroportos</h4>
+                    <p>2024 | Encontro Virtual</p>
+                </div>
+            </div>
+
+            <div class="gallery-item animate-on-scroll">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/92a00729989686dffa877d1ad4e8a4bd40d7f269.png"
+                    alt="Jean-Pierre Bou">
+                <div class="gallery-overlay">
+                    <h4>Jean-Pierre Bou - Mercosul</h4>
+                    <p>2025 | Coletiva Internacional</p>
+                </div>
+            </div>
+
+            <div class="gallery-item animate-on-scroll delay-1">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/4ab3ab586978d9a3dd84eb4bf6474c54c4db0383.png"
+                    alt="Roberto Perosa">
+                <div class="gallery-overlay">
+                    <h4>Roberto Perosa - Agricultura</h4>
+                    <p>2023 | Relações Internacionais</p>
+                </div>
+            </div>
+
+            <div class="gallery-item animate-on-scroll delay-2">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/51850687fe5d3653a9e2184cf193c4a805235341.jpg"
+                    alt="Press Trip">
+                <div class="gallery-overlay">
+                    <h4>Press Trip Imprensa Internacional</h4>
+                    <p>2023 | Rio de Janeiro</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda -->
+    <section id="agenda">
+        <div class="section-header">
+            <h2>Agenda</h2>
+            <div class="gold-line"></div>
+            <p>Fique por dentro do próximo Encontro com a Imprensa Internacional</p>
+        </div>
+
+        <div class="agenda-highlight animate-on-scroll">
+            <div class="agenda-image">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/02e9efc60d4f2e2fc3428f46b8f3fa55a4140094.png"
+                    alt="Próximo Evento - Terras Raras">
+            </div>
+            <div class="agenda-content">
+                <span class="agenda-label">Próximo Evento</span>
+                <h3>Minerais Críticos e Terras Raras</h3>
+                <p style="margin-bottom: 2rem; opacity: 0.9; line-height: 1.7;">
+                    O Brasil desponta como ator estratégico na geopolítica dos minerais críticos.
+                    Debatemos as oportunidades e desafios deste setor com especialistas e autoridades.
+                </p>
+                <div class="agenda-meta">
+                    <div class="agenda-meta-item">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>14 de Abril de 2026</span>
+                    </div>
+                    <div class="agenda-meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>10h às 12h</span>
+                    </div>
+                    <div class="agenda-meta-item">
+                        <i class="fas fa-video"></i>
+                        <span>Transmissão ao Vivo pelo YouTube</span>
+                    </div>
+                    <div class="agenda-meta-item">
+                        <i class="fas fa-users"></i>
+                        <span>Participantes: Uallace Moreira Lima, Mauro Souza, José Roberto Tadini, Marco Aurélio
+                            Kuhner, Júlio Nery, Ricardo Lessa, Sergio Cortingi</span>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-primary" style="width: fit-content;">
+                    <i class="fas fa-external-link-alt"></i> Acessar Transmissão
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- História -->
+    <section class="about-section" id="historia">
+        <div class="section-header" style="padding-bottom: 2rem;">
+            <h2>Nossa História</h2>
+            <div class="gold-line"></div>
+            <p>A trajetória da imprensa estrangeira e da AIE no Brasil</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item animate-on-scroll">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Origens da Imprensa Estrangeira</h4>
+                    <p>A correspondência internacional no Brasil remonta ao século XIX, quando jornalistas europeus e
+                        norte-americanos começaram a cobrir os acontecimentos do Império e da República
+                        recém-proclamada.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item animate-on-scroll delay-1">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Crescimento do Correspondente</h4>
+                    <p>Durante o século XX, o Brasil se consolidou como destino estratégico para grandes veículos
+                        internacionais, especialmente em períodos de transformação política e econômica.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item animate-on-scroll delay-2">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Fundação da AIE</h4>
+                    <p>A AIE foi criada para organizar e facilitar o trabalho da imprensa estrangeira, criando uma ponte
+                        institucional entre correspondentes e fontes de interesse público e privado.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item animate-on-scroll">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Expansão das Atividades</h4>
+                    <p>Ampliação dos encontros temáticos, press trips e parcerias institucionais, consolidando a AIE
+                        como referência no relacionamento entre o Brasil e a mídia internacional.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item animate-on-scroll delay-1">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Atualidade</h4>
+                    <p>Hoje, a AIE continua promovendo encontros de alto nível sobre temas estratégicos como economia,
+                        infraestrutura, mineração e política externa, conectando o Brasil ao mundo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Some News / Clipping -->
+    <section id="clipping">
+        <div class="section-header">
+            <h2>Some News</h2>
+            <div class="gold-line"></div>
+            <p>Matérias publicadas com base nos encontros realizados pela AIE</p>
+        </div>
+
+        <div class="news-grid">
+            <article class="news-card animate-on-scroll">
+                <div class="news-header">
+                    <span class="news-source">Agência Brasil</span>
+                    <h4>Brazil opens BRICS meeting with call to end wars and global tensions</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Cobertura do encontro de chanceleres do BRICS com destaque para a posição brasileira em defesa
+                        da paz.
+                    </p>
+                    <a href="https://agenciabrasil.ebc.com.br/en/internacional/noticia/2025-04/brazil-opens-brics-summit-call-end-wars-global-tensions"
+                        target="_blank" class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="news-card animate-on-scroll delay-1">
+                <div class="news-header">
+                    <span class="news-source">EFE</span>
+                    <h4>Brazil and US launch an alliance against transnational crime</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Reportagem sobre a parceria entre Brasil e Estados Unidos no combate ao crime organizado
+                        transnacional.
+                    </p>
+                    <a href="https://efe.com/english/latest-news/2026-04-10/brazil-and-us-launch-an-alliance-against-transnational-crime/"
+                        target="_blank" class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="news-card animate-on-scroll delay-2">
+                <div class="news-header">
+                    <span class="news-source">ANBA</span>
+                    <h4>Brazilian FM sees new phase in ties with Gulf</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Análise da nova fase nas relações diplomáticas entre Brasil e países do Golfo Pérsico.
+                    </p>
+                    <a href="https://anba.com.br/en/brazilian-fm-sees-new-phase-in-ties-with-gulf/" target="_blank"
+                        class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="news-card animate-on-scroll">
+                <div class="news-header">
+                    <span class="news-source">Revista Fórum</span>
+                    <h4>GPM transcorre sob os olhos da imprensa internacional</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Cobertura do Global Progressive Mobilisation com foco na participação da imprensa estrangeira.
+                    </p>
+                    <a href="https://revistaforum.com.br/global/evento-gpm-imprensa-internacional-discursos-esquerda/"
+                        target="_blank" class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="news-card animate-on-scroll delay-1">
+                <div class="news-header">
+                    <span class="news-source">Global Times</span>
+                    <h4>China, Brazil sign cooperation documents to expand partnership</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Documentos de cooperação assinados entre China e Brasil para expandir parceria estratégica.
+                    </p>
+                    <a href="https://www.globaltimes.cn/page/202507/1337774.shtml" target="_blank" class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="news-card animate-on-scroll delay-2">
+                <div class="news-header">
+                    <span class="news-source">InfoBRICS</span>
+                    <h4>BRICS Sign Joint Declaration on Artificial Intelligence</h4>
+                </div>
+                <div class="news-body">
+                    <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                        Declaração conjunta dos países do BRICS sobre cooperação em inteligência artificial.
+                    </p>
+                    <a href="https://infobrics.org/en/post/47839" target="_blank" class="news-link">
+                        Ler matéria completa <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contato">
+        <div class="cta-content">
+            <h2>Faça Parte da Nossa Rede</h2>
+            <p>Entre em contato para participar dos próximos encontros, coletivas de imprensa ou press trips organizados
+                pela AIE.</p>
+            <div class="cta-buttons">
+                <a href="mailto:imprensa.estrangeira@gmail.com" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> imprensa.estrangeira@gmail.com
+                </a>
+                <a href="mailto:aie.org.br@gmail.com" class="btn btn-outline">
+                    <i class="fas fa-envelope"></i> aie.org.br@gmail.com
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="https://kimi-web-img.moonshot.cn/img/aie.org.br/d388ebc41b3898b6e86262fd742db581e567accd.png"
+                    alt="AIE Logo">
+                <p>A AIE – Associação da Imprensa Estrangeira no Brasil conecta o Brasil aos principais veículos de
+                    comunicação do mundo através de encontros exclusivos e conteúdo de qualidade.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#quem-somos">Quem Somos</a></li>
+                    <li><a href="#o-que-fazemos">O que Fazemos</a></li>
+                    <li><a href="#encontros">Encontros</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Informações</h4>
+                <ul>
+                    <li><a href="#agenda">Agenda</a></li>
+                    <li><a href="#historia">História</a></li>
+                    <li><a href="#clipping">Some News</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="mailto:imprensa.estrangeira@gmail.com">imprensa.estrangeira@gmail.com</a></li>
+                    <li><a href="mailto:aie.org.br@gmail.com">aie.org.br@gmail.com</a></li>
+                    <li><a href="https://aie.org.br" target="_blank">aie.org.br</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p> AIE – Associação da Imprensa Estrangeira no Brasil. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
