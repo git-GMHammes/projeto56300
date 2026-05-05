@@ -1,7 +1,7 @@
 export interface LoginRequestDto {
   um_user: string
   um_password: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
 }
 
 export interface SessionUserDto {
@@ -25,7 +25,7 @@ export interface SessionUserDto {
   uc_zip_code: string
   uc_address: string
   ut_id: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
   ut_role: string
   ut_deleted_at: string | null
 }

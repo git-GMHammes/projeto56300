@@ -34,8 +34,8 @@ const schema: FormGridSchema = {
                 },
                 {
                     col: 12,
-                    id: 'ut_tenant_id',
-                    name: 'ut_tenant_id',
+                    id: 'ut_user_saas_tenants_id',
+                    name: 'ut_user_saas_tenants_id',
                     defaultValue: '1',
                     hidden: true,
                 },
@@ -65,7 +65,7 @@ function LoginModelo001() {
         const payload: AuthService.LoginPayload = {
             um_user: data.get('um_user') as string,
             um_password: data.get('um_password') as string,
-            ut_tenant_id: data.get('ut_tenant_id') as string,
+            ut_user_saas_tenants_id: data.get('ut_user_saas_tenants_id') as string,
         }
 
         try {

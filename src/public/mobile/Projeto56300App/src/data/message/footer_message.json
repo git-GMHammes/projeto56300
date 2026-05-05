@@ -1,19 +1,19 @@
 [
     {
         "key": "timeline",
-        "label": "Mural",
+        "label": "Publicações",
         "icon": "📋",
         "description": "Linha do tempo — postagens públicas do sistema"
     },
     {
         "key": "dm",
-        "label": "Mensagens",
+        "label": "Mensagens Privadas",
         "icon": "💬",
         "description": "Mensagens diretas entre usuários"
     },
     {
         "key": "groups",
-        "label": "Grupos",
+        "label": "Mensagens de Grupos",
         "icon": "👥",
         "description": "Conversas em grupo com múltiplos participantes"
     }

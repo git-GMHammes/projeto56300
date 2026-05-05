@@ -45,7 +45,7 @@ class ResourceViewController extends BaseResourceViewController
     /**
      * POST {{www}}/index.php/api/v1/auth/login
      *
-     * Body: { "um_user": "...", "um_password": "...", "ut_tenant_id": 1 }
+     * Body: { "um_user": "...", "um_password": "...", "ut_user_saas_tenants_id": 1 }
      *
      * Autentica o usuário e retorna um token JWT.
      */
@@ -65,7 +65,7 @@ class ResourceViewController extends BaseResourceViewController
             $result = $this->processor->authenticate(
                 (string) ($body['um_user'] ?? ''),
                 (string) ($body['um_password'] ?? ''),
-                (int) ($body['ut_tenant_id'] ?? 0)
+                (int) ($body['ut_user_saas_tenants_id'] ?? 0)
             );
 
             return $this->respondSuccess($result, 'Autenticacao realizada com sucesso');

@@ -36,7 +36,7 @@ export function useLoginViewModel() {
       const session = await loginUseCase.execute({
         um_user: state.form.username.trim(),
         um_password: state.form.password,
-        ut_tenant_id: state.form.tenantId,
+        ut_user_saas_tenants_id: state.form.tenantId,
       })
       setState(prev => ({ ...prev, loading: false, session }))
       return session

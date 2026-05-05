@@ -18,7 +18,7 @@ export class AuthMapper {
       uc_whatsapp: dto.uc_whatsapp,
       uc_profile: dto.uc_profile,
       ut_id: dto.ut_id,
-      ut_tenant_id: dto.ut_tenant_id,
+      ut_user_saas_tenants_id: dto.ut_user_saas_tenants_id,
       ut_role: dto.ut_role,
     }
   }

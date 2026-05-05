@@ -96,7 +96,7 @@ class SqlViewModel extends BaseViewModel
     {
         $result = $this->db->table($this->table)
             ->where('um_user', $user)
-            ->where('ut_tenant_id', $tenantId)
+            ->where('ut_user_saas_tenants_id', $tenantId)
             ->where('um_is_active', 1)
             ->where('deleted_at IS NULL', null, false)
             ->get()

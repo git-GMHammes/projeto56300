@@ -10,7 +10,7 @@ export interface AuthUserDto {
   uc_address: string | null
   uc_profile: string | null
   uc_zip_code: string | null
-  ut_tenant_id: number
+  ut_user_saas_tenants_id: number
   deleted_at: string | null
   created_at: string
   updated_at: string

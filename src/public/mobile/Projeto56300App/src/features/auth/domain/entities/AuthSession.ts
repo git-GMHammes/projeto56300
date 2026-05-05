@@ -10,7 +10,7 @@ export interface AuthSessionUser {
   uc_whatsapp: string
   uc_profile: string
   ut_id: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
   ut_role: string
 }
 

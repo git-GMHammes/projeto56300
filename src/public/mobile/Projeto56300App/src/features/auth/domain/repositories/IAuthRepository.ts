@@ -4,7 +4,7 @@ import type { AuthUser, AuthUserGroup } from '../entities/AuthUser'
 export interface LoginPayload {
   um_user: string
   um_password: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
 }
 
 export interface RecoverPasswordPayload {

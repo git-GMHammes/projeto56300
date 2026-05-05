@@ -11,7 +11,7 @@ export class AuthRepositoryImpl implements IAuthRepository {
     const envelope = await this.ds.login({
       um_user: payload.um_user,
       um_password: payload.um_password,
-      ut_tenant_id: payload.ut_tenant_id,
+      ut_user_saas_tenants_id: payload.ut_user_saas_tenants_id,
     })
 
     if (!envelope.success || !envelope.data) {
