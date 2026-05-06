@@ -104,21 +104,10 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                   placeholder="mínimo 6 caracteres"
                   required
                   minLength={6}
-                  onChange={(_, v) => vm.setAccessField('password', v)}
-                  onValidationChange={() => {}}
-                />
-
-                <View style={styles.gap} />
-
-                <PasswordField
-                  name="confirmPassword"
-                  label="Confirmar Senha"
-                  value={vm.access.confirmPassword}
-                  placeholder="repita a senha"
-                  required
                   doubleField
-                  confirmValue={vm.access.password}
-                  onChange={(_, v) => vm.setAccessField('confirmPassword', v)}
+                  confirmValue={vm.access.confirmPassword}
+                  onChange={(_, v) => vm.setAccessField('password', v)}
+                  onConfirmChange={(_, v) => vm.setAccessField('confirmPassword', v)}
                   onValidationChange={() => {}}
                 />
 

@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TextInput, ActivityIndicator, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { isValidCep } from '../utils/validators';
 import { formatCep, getCepDigits } from '../utils/formatters';
 import Bootstrap from '../../../theme/bootstrap';
 import type { CepFieldProps, CepAddress } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const VIACEP_URL = 'https://viacep.com.br/ws/{cep}/json/';
 
@@ -21,6 +23,10 @@ const CepField: React.FC<CepFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -95,25 +101,25 @@ const CepField: React.FC<CepFieldProps> = ({
     const isValid = touched && !feedback && getCepDigits(value).length === 8;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
-            <View style={styles.row}>
+            <View style={staticStyles.row}>
                 <TextInput
                     style={[
-                        styles.input,
-                        focused && styles.focused,
-                        isInvalid && fieldStyles.inputInvalid,
-                        isValid && fieldStyles.inputValid,
-                        (disabled || readOnly) && fieldStyles.inputDisabled,
+                        ls.input,
+                        focused && fs.inputFocused,
+                        isInvalid && fs.inputInvalid,
+                        isValid && fs.inputValid,
+                        (disabled || readOnly) && fs.inputDisabled,
                     ]}
                     value={value}
                     placeholder="00.000-000"
-                    placeholderTextColor="#6c757d"
+                    placeholderTextColor={theme.colors.placeholder}
                     keyboardType="numeric"
                     maxLength={10}
                     editable={!disabled && !readOnly}
@@ -123,39 +129,43 @@ const CepField: React.FC<CepFieldProps> = ({
                 />
                 {loading && (
                     <ActivityIndicator
-                        style={styles.spinner}
+                        style={staticStyles.spinner}
                         size="small"
-                        color={Bootstrap.colors.primary}
+                        color={theme.colors.primary}
                     />
                 )}
             </View>
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
             {!isInvalid && !!success && (
-                <Text style={fieldStyles.feedbackSuccess}>{success}</Text>
+                <Text style={fs.feedbackSuccess}>{success}</Text>
             )}
         </View>
     );
 };
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    input: {
-        flex: 1,
-        height: Bootstrap.inputHeight,
-        borderWidth: 1,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        fontSize: Bootstrap.fontSize.base,
-        color: Bootstrap.colors.body,
-        backgroundColor: Bootstrap.colors.inputBg,
-    },
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
     spinner: { marginLeft: 8 },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        input: {
+            flex: 1,
+            height: Bootstrap.inputHeight,
+            borderWidth: 1,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            fontSize: Bootstrap.fontSize.base,
+            color: c.inputText,
+            backgroundColor: c.inputBg,
+        },
+    });
+}
 
 export default CepField;

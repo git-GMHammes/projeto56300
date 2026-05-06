@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import Bootstrap from '../../../theme/bootstrap';
 import type { CheckboxFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const CheckboxField: React.FC<CheckboxFieldProps> = ({
     name,
@@ -16,6 +18,10 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
     onChange,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [feedback, setFeedback] = useState('');
 
@@ -42,14 +48,14 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
     const isInvalid = touched && !!feedback;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.legend}>
+                <Text style={fs.legend}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
-            <View style={[styles.group, inline && styles.groupInline]}>
+            <View style={[staticStyles.group, inline && staticStyles.groupInline]}>
                 {options.map(opt => {
                     const checked = Array.isArray(value) && value.includes(opt.value);
                     return (
@@ -58,21 +64,21 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
                             activeOpacity={0.7}
                             disabled={disabled || readOnly || opt.disabled}
                             onPress={() => toggle(opt.value)}
-                            style={[styles.item, inline && styles.itemInline]}
+                            style={[staticStyles.item, inline && staticStyles.itemInline]}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked }}
                         >
                             <View style={[
-                                styles.box,
-                                checked && styles.boxChecked,
-                                (disabled || opt.disabled) && styles.boxDisabled,
-                                isInvalid && styles.boxInvalid,
+                                ls.box,
+                                checked && ls.boxChecked,
+                                (disabled || opt.disabled) && ls.boxDisabled,
+                                isInvalid && ls.boxInvalid,
                             ]}>
-                                {checked && <Text style={styles.checkmark}>✓</Text>}
+                                {checked && <Text style={staticStyles.checkmark}>✓</Text>}
                             </View>
                             <Text style={[
-                                styles.optLabel,
-                                (disabled || opt.disabled) && styles.optLabelDisabled,
+                                ls.optLabel,
+                                (disabled || opt.disabled) && ls.optLabelDisabled,
                             ]}>
                                 {opt.label}
                             </Text>
@@ -80,34 +86,39 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
                     );
                 })}
             </View>
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
         </View>
     );
 };
 
 const BOX = 20;
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
     group: { flexDirection: 'column', gap: 8 },
     groupInline: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     itemInline: { marginRight: 4 },
-    box: {
-        width: BOX,
-        height: BOX,
-        borderWidth: 2,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-    },
-    boxChecked: { backgroundColor: Bootstrap.colors.primary, borderColor: Bootstrap.colors.primary },
-    boxDisabled: { backgroundColor: Bootstrap.colors.inputDisabledBg, borderColor: '#adb5bd' },
-    boxInvalid: { borderColor: Bootstrap.colors.danger },
     checkmark: { color: '#fff', fontSize: 12, fontWeight: 'bold', lineHeight: 14 },
-    optLabel: { fontSize: Bootstrap.fontSize.base, color: Bootstrap.colors.body },
-    optLabelDisabled: { color: Bootstrap.colors.muted },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        box: {
+            width: BOX,
+            height: BOX,
+            borderWidth: 2,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: c.inputBg,
+        },
+        boxChecked: { backgroundColor: c.primary, borderColor: c.primary },
+        boxDisabled: { backgroundColor: c.surface, borderColor: c.border },
+        boxInvalid: { borderColor: c.danger },
+        optLabel: { fontSize: Bootstrap.fontSize.base, color: c.text },
+        optLabelDisabled: { color: c.textMuted },
+    });
+}
 
 export default CheckboxField;

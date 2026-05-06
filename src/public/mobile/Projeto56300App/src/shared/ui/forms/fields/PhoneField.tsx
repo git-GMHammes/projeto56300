@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { isValidPhone, isValidDdd } from '../utils/validators';
 import { formatPhone, getPhoneDigits } from '../utils/formatters';
-import Bootstrap from '../../../theme/bootstrap';
 import type { PhoneFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
 
 const PhoneField: React.FC<PhoneFieldProps> = ({
     name,
@@ -18,6 +18,9 @@ const PhoneField: React.FC<PhoneFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -59,24 +62,24 @@ const PhoneField: React.FC<PhoneFieldProps> = ({
     const isMobile = digits.length === 11;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
             <TextInput
                 style={[
-                    fieldStyles.input,
-                    focused && styles.focused,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    fs.input,
+                    focused && fs.inputFocused,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                 ]}
                 value={value}
                 placeholder="(XX) XXXXX-XXXX"
-                placeholderTextColor="#6c757d"
+                placeholderTextColor={theme.colors.placeholder}
                 keyboardType="phone-pad"
                 maxLength={16}
                 editable={!disabled && !readOnly}
@@ -85,9 +88,9 @@ const PhoneField: React.FC<PhoneFieldProps> = ({
                 onBlur={handleBlur}
             />
             {isInvalid
-                ? <Text style={fieldStyles.feedback}>{feedback}</Text>
+                ? <Text style={fs.feedback}>{feedback}</Text>
                 : isValid && (
-                    <Text style={fieldStyles.feedbackSuccess}>
+                    <Text style={fs.feedbackSuccess}>
                         {isMobile ? 'Celular' : 'Fixo'} válido
                     </Text>
                 )
@@ -95,9 +98,5 @@ const PhoneField: React.FC<PhoneFieldProps> = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
-});
 
 export default PhoneField;
