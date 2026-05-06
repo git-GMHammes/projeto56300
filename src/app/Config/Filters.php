@@ -86,6 +86,7 @@ class Filters extends BaseFilters
                     'api/v1/auth/login',
                     'api/v1/user-management/create',
                     'api/v1/user-customer/create',
+                    'api/v1/user-customer/upload-avatar*',
                     'api/v1/user-customer_files/create',
                     'api/v1/auth/recover-password',
                     'api/v1/auth/reset-password',

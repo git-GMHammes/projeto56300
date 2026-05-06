@@ -21,6 +21,7 @@ interface ProfileForm {
   dateBirth: string
   zipCode: string
   address: string
+  avatarUri: string | null
 }
 
 interface RegisterState {
@@ -36,7 +37,7 @@ export function useRegisterViewModel() {
   const [state, setState] = useState<RegisterState>({
     step: 'access',
     access: { username: '', password: '', confirmPassword: '' },
-    profile: { name: '', mail: '', cpf: '', whatsapp: '', phone: '', dateBirth: '', zipCode: '', address: '' },
+    profile: { name: '', mail: '', cpf: '', whatsapp: '', phone: '', dateBirth: '', zipCode: '', address: '', avatarUri: null },
     loading: false,
     error: null,
     userId: null,
@@ -48,6 +49,10 @@ export function useRegisterViewModel() {
 
   const setProfileField = useCallback((name: keyof ProfileForm, value: string) => {
     setState(prev => ({ ...prev, profile: { ...prev.profile, [name]: value }, error: null }))
+  }, [])
+
+  const setAvatarUri = useCallback((uri: string | null) => {
+    setState(prev => ({ ...prev, profile: { ...prev.profile, avatarUri: uri }, error: null }))
   }, [])
 
   const goBackToAccess = useCallback(() => {
@@ -86,6 +91,7 @@ export function useRegisterViewModel() {
         dateBirth: state.profile.dateBirth || undefined,
         zipCode: state.profile.zipCode || undefined,
         address: state.profile.address || undefined,
+        avatarUri: state.profile.avatarUri ?? undefined,
       })
       setState(prev => ({ ...prev, loading: false, step: 'done', userId: result.userId }))
     } catch (err) {
@@ -105,5 +111,5 @@ export function useRegisterViewModel() {
     state.profile.cpf.replace(/\D/g, '').length === 11 &&
     state.profile.whatsapp.replace(/\D/g, '').length >= 10
 
-  return { ...state, setAccessField, setProfileField, goBackToAccess, goToProfile, submit, isAccessValid, isProfileValid }
+  return { ...state, setAccessField, setProfileField, setAvatarUri, goBackToAccess, goToProfile, submit, isAccessValid, isProfileValid }
 }

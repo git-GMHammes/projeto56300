@@ -20,6 +20,7 @@ import CpfField from '../../../../../shared/ui/forms/fields/CpfField'
 import PhoneField from '../../../../../shared/ui/forms/fields/PhoneField'
 import Bootstrap from '../../../../../shared/theme/bootstrap'
 import BackButton from '../../../../../shared/ui/components/BackButton'
+import AvatarPickerField from '../../../../../shared/ui/forms/fields/AvatarPickerField'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { AppColors } from '../../../../../shared/theme/global/types'
 
@@ -125,6 +126,11 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             {vm.step === 'profile' && (
               <>
                 <Text style={styles.stepTitle}>Dados Pessoais</Text>
+
+                <AvatarPickerField
+                  value={vm.profile.avatarUri}
+                  onChange={vm.setAvatarUri}
+                />
 
                 <InputField
                   name="name"

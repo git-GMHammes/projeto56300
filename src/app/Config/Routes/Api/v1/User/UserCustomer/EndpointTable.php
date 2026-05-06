@@ -32,3 +32,5 @@ $routes->delete('delete-hard/(:num)', 'Api\V1\User\UserCustomer\ResourceTableCon
 $routes->delete('clear-deleted', 'Api\V1\User\UserCustomer\ResourceTableController::clearDeleted');
 // {{www}}/index.php/api/v1/user-customer/clear-deleted/{id}
 $routes->delete('clear-deleted/(:num)', 'Api\V1\User\UserCustomer\ResourceTableController::clearDeleted/$1');
+// {{www}}/index.php/api/v1/user-customer/upload-avatar/{id}
+$routes->post('upload-avatar/(:num)', 'Api\V1\User\UserCustomer\ResourceTableController::uploadAvatar/$1');

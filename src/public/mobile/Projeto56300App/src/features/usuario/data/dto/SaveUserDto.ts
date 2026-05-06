@@ -20,3 +20,8 @@ export interface CreateUserCustomerDto {
   zip_code?: string
   address?: string
 }
+
+export interface CreateUserCustomerResponseDto {
+  id: string
+  [key: string]: unknown
+}

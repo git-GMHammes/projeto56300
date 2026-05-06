@@ -15,6 +15,7 @@ export interface SaveUserInput {
   dateBirth?: string
   zipCode?: string
   address?: string
+  avatarUri?: string
 }
 
 export interface SaveUserResult {
@@ -51,7 +52,11 @@ export class SaveUserUseCase {
       address: input.address?.trim(),
     }
 
-    await this.repo.createProfile(profilePayload)
+    const { customerId } = await this.repo.createProfile(profilePayload)
+
+    if (input.avatarUri) {
+      await this.repo.uploadAvatar(customerId, input.avatarUri)
+    }
 
     return { userId }
   }

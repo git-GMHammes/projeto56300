@@ -16,8 +16,8 @@ export class UserRepositoryImpl implements IUserRepository {
     return { id: String(result.id) }
   }
 
-  async createProfile(payload: CreateProfilePayload): Promise<void> {
-    await this.ds.createCustomer({
+  async createProfile(payload: CreateProfilePayload): Promise<{ customerId: string }> {
+    const result = await this.ds.createCustomer({
       user_id: payload.userId,
       name: payload.name,
       cpf: payload.cpf,
@@ -28,6 +28,11 @@ export class UserRepositoryImpl implements IUserRepository {
       zip_code: payload.zipCode,
       address: payload.address,
     })
+    return { customerId: result.id }
+  }
+
+  async uploadAvatar(customerId: string, uri: string): Promise<void> {
+    await this.ds.uploadAvatar(customerId, uri)
   }
 
   async findUsers(params: FindUsersParams): Promise<PaginatedUsers> {
