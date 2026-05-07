@@ -86,13 +86,18 @@ class Processor extends BaseTableService
 
         $uuid       = bin2hex(random_bytes(16));
         $ext        = strtolower($file->getClientExtension() ?: 'jpg');
-        $filename   = 'avatar_' . $userCustomerId . '_' . $uuid . '.' . $ext;
-        $uploadDir  = 'uploads/Projeto56300App/user_customer_files/';
+        $filename   = 'file_upload_' . $uuid . '.' . $ext;
+        $userFolder = sprintf('usu_%019d', $userCustomerId);
+        $uploadDir  = 'uploads/Projeto56300App/user_customer_files/' . $userFolder . '/';
         $uploadPath = WRITEPATH . $uploadDir;
 
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0755, true);
         }
+
+        $originalName = $file->getName();
+        $mime         = $file->getMimeType();
+        $size         = $file->getSize();
 
         if (!$file->move($uploadPath, $filename)) {
             return ['success' => false, 'message' => 'Erro ao salvar o arquivo no servidor', 'code' => 500];
@@ -104,12 +109,12 @@ class Processor extends BaseTableService
 
         $insertData = [
             'user_customer_id' => $userCustomerId,
-            'original_name'    => $file->getClientFilename(),
+            'original_name'    => $originalName,
             'filename'         => $filename,
             'stored_path'      => $storedPath,
             'uuid'             => $uuid,
-            'mime'             => $file->getMimeType(),
-            'size'             => $file->getSize(),
+            'mime'             => $mime,
+            'size'             => $size,
             'category'         => 'avatar',
             'checksum'         => $checksum,
             'created_at'       => $now,
@@ -126,14 +131,14 @@ class Processor extends BaseTableService
             return [
                 'success' => true,
                 'data'    => [
-                    'id'           => $id,
+                    'id'               => $id,
                     'user_customer_id' => $userCustomerId,
-                    'filename'     => $filename,
-                    'stored_path'  => $storedPath,
-                    'uuid'         => $uuid,
-                    'mime'         => $file->getMimeType(),
-                    'size'         => $file->getSize(),
-                    'category'     => 'avatar',
+                    'filename'         => $filename,
+                    'stored_path'      => $storedPath,
+                    'uuid'             => $uuid,
+                    'mime'             => $mime,
+                    'size'             => $size,
+                    'category'         => 'avatar',
                 ],
             ];
         } catch (\Throwable $e) {
@@ -141,5 +146,124 @@ class Processor extends BaseTableService
 
             return ['success' => false, 'message' => 'Erro interno ao registrar o arquivo', 'code' => 500];
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Upload múltiplo
+    // -------------------------------------------------------------------------
+
+    /**
+     * Recebe um ou mais arquivos, valida cada um individualmente, salva no
+     * filesystem e registra em user_003_customer_files.
+     *
+     * Filename gerado: arquivo_{userCustomerId}_{uuid}.{ext}
+     * Diretório:       writable/uploads/Projeto56300App/user_customer_files/
+     *
+     * Uploads parciais são permitidos: erro em um arquivo não cancela os demais.
+     *
+     * @param int            $userCustomerId ID do registro em user_002_customer
+     * @param UploadedFile[] $files          Array de arquivos recebidos via multipart
+     * @return array{success: bool, results?: array, total?: int, success_count?: int, error_count?: int, message?: string, code?: int}
+     */
+    public function uploadMultiple(int $userCustomerId, array $files): array
+    {
+        if (!$this->tableModel->existsUserCustomer($userCustomerId)) {
+            return ['success' => false, 'message' => 'Cliente não encontrado', 'code' => 404];
+        }
+
+        $userFolder = sprintf('usu_%019d', $userCustomerId);
+        $uploadDir  = 'uploads/Projeto56300App/user_customer_files/' . $userFolder . '/';
+        $uploadPath = WRITEPATH . $uploadDir;
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        $results      = [];
+        $successCount = 0;
+        $errorCount   = 0;
+
+        foreach ($files as $index => $file) {
+            if (!($file instanceof UploadedFile) || !$file->isValid()) {
+                $results[] = ['index' => $index, 'success' => false, 'message' => 'Arquivo inválido ou não enviado'];
+                $errorCount++;
+                continue;
+            }
+
+            if ($file->getSize() > 10 * 1024 * 1024) {
+                $results[] = ['index' => $index, 'success' => false, 'message' => 'Arquivo muito grande. Máximo 10MB.', 'original_name' => $file->getName()];
+                $errorCount++;
+                continue;
+            }
+
+            $originalName = $file->getName();
+            $mime         = $file->getMimeType();
+            $size         = $file->getSize();
+            $uuid         = bin2hex(random_bytes(16));
+            $ext          = strtolower($file->getClientExtension() ?: 'bin');
+            $filename     = 'file_upload_' . $uuid . '.' . $ext;
+
+            if (!$file->move($uploadPath, $filename)) {
+                $results[] = ['index' => $index, 'success' => false, 'message' => 'Erro ao salvar o arquivo no servidor', 'original_name' => $originalName];
+                $errorCount++;
+                continue;
+            }
+
+            $storedPath = $uploadPath . $filename;
+            $checksum   = hash('sha256', file_get_contents($storedPath));
+            $now        = date('Y-m-d H:i:s');
+
+            $insertData = [
+                'user_customer_id' => $userCustomerId,
+                'original_name'    => $originalName,
+                'filename'         => $filename,
+                'stored_path'      => $storedPath,
+                'uuid'             => $uuid,
+                'mime'             => $mime,
+                'size'             => $size,
+                'category'         => 'document',
+                'checksum'         => $checksum,
+                'created_at'       => $now,
+                'updated_at'       => $now,
+            ];
+
+            try {
+                $id = $this->tableModel->insert($insertData);
+
+                if (!$id) {
+                    $results[] = ['index' => $index, 'success' => false, 'message' => 'Erro ao registrar no banco de dados', 'original_name' => $originalName];
+                    $errorCount++;
+                    continue;
+                }
+
+                $results[] = [
+                    'index'   => $index,
+                    'success' => true,
+                    'data'    => [
+                        'id'               => $id,
+                        'user_customer_id' => $userCustomerId,
+                        'filename'         => $filename,
+                        'stored_path'      => $storedPath,
+                        'uuid'             => $uuid,
+                        'mime'             => $mime,
+                        'size'             => $size,
+                        'category'         => 'document',
+                    ],
+                ];
+                $successCount++;
+            } catch (\Throwable $e) {
+                log_message('error', '[UserCustomerFiles::uploadMultiple] ' . $e->getMessage());
+                $results[] = ['index' => $index, 'success' => false, 'message' => 'Erro interno ao registrar o arquivo', 'original_name' => $originalName];
+                $errorCount++;
+            }
+        }
+
+        return [
+            'success'       => $successCount > 0,
+            'results'       => $results,
+            'total'         => count($files),
+            'success_count' => $successCount,
+            'error_count'   => $errorCount,
+        ];
     }
 }

@@ -29,6 +29,14 @@ $routes->group('api/v1', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserCustomer/EndPointView.php';
     });
 
+    $routes->group('user-customer-files', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserCustomerFiles/EndpointTable.php';
+    });
+
+    $routes->group('user-customer-files-view', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserCustomerFiles/EndPointView.php';
+    });
+
     $routes->group('user-password-resets', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserPasswordResets/EndpointTable.php';
     });

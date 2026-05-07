@@ -66,4 +66,40 @@ class ResourceTableController extends BaseResourceTableController
             return $this->respondServerError($e);
         }
     }
+
+    /**
+     * POST .../upload-files/{id}
+     *
+     * Recebe multipart/form-data com campo "files[]" (um ou mais arquivos de qualquer tipo).
+     * Cada arquivo é salvo individualmente em writable/uploads/Projeto56300App/user_customer_files/
+     * com o nome arquivo_{user_customer_id}_{uuid}.{ext} e registrado em user_003_customer_files.
+     *
+     * Uploads parciais são permitidos: a resposta detalha o resultado de cada arquivo.
+     */
+    public function uploadFiles(int $id): ResponseInterface
+    {
+        try {
+            $files = $this->request->getFiles();
+            $files = $files['files'] ?? [];
+
+            if (empty($files)) {
+                return $this->respondValidationError(['files' => 'Nenhum arquivo enviado. Use o campo files[] no multipart/form-data']);
+            }
+
+            $result = $this->processor->uploadMultiple($id, $files);
+
+            if (!$result['success'] && isset($result['code'])) {
+                return $this->respondError($result['message'], $result['code']);
+            }
+
+            return $this->respondSuccess([
+                'results'       => $result['results'],
+                'total'         => $result['total'],
+                'success_count' => $result['success_count'],
+                'error_count'   => $result['error_count'],
+            ], 'Upload processado');
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
 }
