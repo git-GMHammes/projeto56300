@@ -5,61 +5,54 @@ namespace App\Models\V1\User\UserCustomerFiles;
 use App\Models\V1\BaseViewModel;
 
 /**
- * Model de leitura para a view view_customer.
+ * Model de leitura para a view view_user_customer_files.
  *
- * Responsável exclusivamente por consultas (read-only).
- * A view une user_002_customer (uc) com user_001_management (um),
- * expondo os dados com prefixo uc_ para campos do cliente
- * e usando os timestamps de user_001_management.
+ * A view une user_003_customer_files (ucf), user_002_customer (uc)
+ * e user_001_management (um), expondo os dados com prefixos ucf_, uc_ e um_.
  *
  * Campos disponíveis na view:
- *   id, uc_id, um_user, uc_user_id, uc_name, uc_cpf, uc_whatsapp,
- *   uc_profile, uc_mail, uc_phone, uc_date_birth, uc_zip_code,
- *   uc_address, uc_tenant_at, uc_validity, created_at, updated_at, deleted_at
- *
- * O campo deleted_at reflete user_001_management.deleted_at.
- *
- * Todos os métodos de leitura (findPaginatedView, findById, findDeletedById,
- * findDeletedPaginatedView, searchByTermView, findGroupedView, findAllView)
- * estão disponíveis via BaseViewModel.
+ *   id, ucf_user_customer_id, ucf_original_name, ucf_filename, ucf_stored_path,
+ *   ucf_uuid, ucf_mime, ucf_size, ucf_category, ucf_checksum,
+ *   created_at, updated_at, deleted_at,
+ *   uc_id, uc_user_id, uc_name, uc_cpf, uc_whatsapp, uc_profile, uc_mail,
+ *   um_id, um_uuid, um_user, um_is_active
  */
 class SqlViewModel extends BaseViewModel
 {
     protected $DBGroup    = DB_GROUP_001;
-    protected $table      = 'view_customer';
+    protected $table      = 'view_user_customer_files';
     protected $primaryKey = 'id';
 
-    /**
-     * Campos de texto que usam LIKE %valor% no findPaginatedView.
-     */
     protected array $likeFields = [
-        'um_user', 'uc_name', 'uc_cpf', 'uc_whatsapp', 'uc_phone',
-        'uc_mail', 'uc_address', 'uc_profile', 'uc_zip_code', 'uc_tenant_at',
-    ];
-
-    /** Campos válidos para ordenação */
-    protected array $sortableFields = [
-        'id',
-        'uc_id',
-        'um_user',
+        'ucf_original_name',
+        'ucf_filename',
+        'ucf_stored_path',
+        'ucf_mime',
+        'ucf_category',
         'uc_name',
         'uc_cpf',
         'uc_mail',
         'uc_whatsapp',
-        'uc_validity',
+        'um_user',
+    ];
+
+    protected array $sortableFields = [
+        'id',
+        'ucf_original_name',
+        'ucf_filename',
+        'ucf_category',
+        'ucf_size',
+        'uc_name',
+        'um_user',
         'created_at',
         'updated_at',
     ];
 
-    /** Campos utilizados na busca textual (GET /search) */
     public array $searchFields = [
-        'um_user',
+        'ucf_original_name',
+        'ucf_filename',
+        'ucf_category',
         'uc_name',
-        'uc_cpf',
-        'uc_mail',
-        'uc_whatsapp',
-        'uc_phone',
-        'uc_address',
-        'uc_tenant_at',
+        'um_user',
     ];
 }
