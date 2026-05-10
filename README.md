@@ -21,6 +21,9 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 11. [ROADMAP — BaseResourceTableController](#11-roadmap--baseresourcetablecontroller)
 12. [ROADMAP — BaseResourceViewController](#12-roadmap--baseresourceviewcontroller)
 13. [ROADMAP — Filtros V1 (AuthFilter + LoginRateLimitFilter)](#13-roadmap--filtros-v1-authfilter--loginratelimitfilter)
+14. [ROADMAP — Helpers Globais (debug + uuid)](#14-roadmap--helpers-globais-debug--uuid)
+15. [ROADMAP — Libraries (ApiExceptionHandler + JwtHelper + ContentFilter)](#15-roadmap--libraries-apiexceptionhandler--jwthelper--contentfilter)
+16. [Requests V1 — Regras de Validação](#16-requests-v1--regras-de-validação)
 
 ---
 
@@ -507,3 +510,235 @@ Documentação dos dois filtros de segurança da API V1, localizados em `src/app
 - Tabela de erros comuns e soluções
 
 [Ver ROADMAP completo →](src/app/markdown/ROADMAP_Filters_V1.md)
+
+---
+
+## 14. ROADMAP — Helpers Globais (debug + uuid)
+
+Documentação dos dois helpers globais do projeto, localizados em `src/app/Helpers/` e carregados automaticamente em toda requisição via `Config/Autoload.php`.
+
+**`debug($data, $label, $die)`** exibe qualquer variável formatada em `<pre>` para inspeção rápida durante o desenvolvimento — com label opcional e flag `$die` para interromper a execução (equivalente ao `dd()` do Laravel). **Nunca deve ser usado em produção.**
+
+**`uuid()`** gera um UUID v4 usando `random_int` (criptograficamente seguro), retornando uma string no formato `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`. Usado para gerar o campo `uuid` ao criar novos registros.
+
+**O que o ROADMAP cobre:**
+
+- O que é um Helper no CI4 e diferença em relação a classes
+- Tabela com os 2 helpers, suas funções e responsabilidades
+- Carregamento automático via `Config/Autoload.php` e carregamento manual pontual
+- `debug()`: assinatura completa, os 3 parâmetros, 5 exemplos práticos e aviso de NÃO usar em produção
+- `uuid()`: o que é UUID v4, por que `random_int` é superior a `rand()`, implementação comentada linha a linha, 4 exemplos de uso e como o UUID é modelado no banco (`VARCHAR(36) UNIQUE`)
+- Como criar um novo helper em 3 passos com as convenções do projeto
+- Tabela de erros comuns e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Helpers.md)
+
+---
+
+## 15. ROADMAP — Libraries (ApiExceptionHandler + JwtHelper + ContentFilter)
+
+As três classes de **infraestrutura crítica** da API V1, localizadas em `src/app/Libraries/`. Uma falha em qualquer uma delas afeta toda a aplicação.
+
+**`ApiExceptionHandler`** é registrado em `Config/Exceptions.php` e garante que toda exceção não tratada em rotas `api/*` retorne JSON padronizado (nunca HTML). Diferencia `PageNotFoundException` (HTTP 404) de outros erros (HTTP 500), logando detalhes internamente sem expô-los ao cliente.
+
+**`JwtHelper`** implementa JWT HS256 em PHP puro, sem biblioteca externa. `encode()` gera o token adicionando `iat`/`exp` ao payload e assinando com HMAC-SHA256. `decode()` valida estrutura, assinatura (com `hash_equals` para proteção contra timing attack) e expiração. O segredo é obtido de uma constante ofuscada em `Puipuia.php` com fallback para a variável de ambiente `JWT_SECRET`.
+
+**`Msg/ContentFilter`** é a classe `final` de moderação de conteúdo do módulo de mensagens. Mantém duas listas: `BANNED_PHRASES` (frases multi-palavra, verificadas primeiro, sem word-boundary) e `BANNED_WORDS` (palavras isoladas, com `\b`, verificadas depois). Regex `/iu` garante case-insensitive com suporte a Unicode/acentos. Usado nos `prepareData()` dos Processors do módulo MSG.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama mostrando como as 3 classes se conectam em uma requisição
+- `ApiExceptionHandler`: registro em `Config/Exceptions.php`, lógica `api/*` vs outras rotas, respostas 404/500, logging interno
+- `JwtHelper`: estrutura de um JWT (header.payload.signature), `encode()` e `decode()` linha a linha, Base64url vs Base64, timing-safe `hash_equals`, prioridade do segredo (Puipuia → .env)
+- `ContentFilter`: ordem de verificação, por que frases longas primeiro, `\b` word-boundary, flags `/iu`, `sanitize()` e `sanitizeFields()`, como adicionar novas palavras/frases, onde é usado nos Processors
+- Tabela de erros comuns das 3 classes com causas e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Libraries.md)
+
+---
+
+## 16. Requests V1 — Regras de Validação
+
+Classes de validação de entrada da API V1, localizadas em `src/app/Requests/V1/`. São **POPOs** (Plain Old PHP Objects) — não herdam de nenhuma classe base, não implementam interfaces. Cada classe expõe dois métodos públicos: `rules()` e `messages()`.
+
+### O que é um Request
+
+Um Request encapsula as **regras de validação** de um endpoint específico — mantém a lógica de validação separada do controller. O controller chama `getCreateRules()` ou `getUpdateRules()`, que instanciam o Request e retornam as regras para o CI4 validar automaticamente.
+
+| Responsabilidade | Quem resolve |
+| --- | --- |
+| Formato do campo (`required`, `max_length`, `is_array`) | Request — `rules()` |
+| Mensagem de erro legível por campo e regra | Request — `messages()` |
+| Unicidade / regra de negócio complexa | Processor (Service) |
+| Aplicação da validação na requisição | `BaseResourceTableController` |
+
+---
+
+### Padrão dos dois métodos
+
+Toda classe de Request implementa exatamente dois métodos:
+
+```php
+<?php
+
+namespace App\Requests\V1\Mec\VehicleBrand;
+
+class CreateRequest
+{
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max_length[100]',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name' => [
+                'required'   => 'O campo name é obrigatório',
+                'max_length' => 'O nome não pode exceder 100 caracteres',
+            ],
+        ];
+    }
+}
+```
+
+---
+
+### Tipos de Request
+
+| Tipo | Endpoint relacionado | Descrição |
+| --- | --- | --- |
+| `CreateRequest` | `POST /create` | Valida campos na criação de registro |
+| `UpdateRequest` | `PUT /update/{id}` | Valida campos na atualização |
+| `FindRequestTable` | `POST /find` | Valida parâmetros de busca paginada na tabela |
+| `FindRequestView` | `POST /find` (view) | Valida parâmetros de busca paginada na view SQL |
+| `GetGroupedRequestTable` | `POST /get-grouped` | Valida parâmetros de agrupamento na tabela |
+| `GetGroupedRequestView` | `POST /get-grouped` (view) | Valida parâmetros de agrupamento na view SQL |
+| `SearchRequest` | `POST /search` | Valida parâmetros de busca full-text |
+
+**Tipos especiais do módulo `AuthUser`:**
+
+| Tipo | Endpoint |
+| --- | --- |
+| `LoginRequest` | `POST /api/v1/auth/login` |
+| `RecoverPasswordRequest` | `POST /api/v1/auth/forgot-password` |
+| `ResetPasswordRequest` | `POST /api/v1/auth/reset-password` |
+| `RefreshRequest` | `POST /api/v1/auth/refresh-token` |
+
+---
+
+### Requests por módulo
+
+| Módulo | Entidade | Requests |
+| --- | --- | --- |
+| `mec_` | VehicleBrand | 4 |
+| `user_` | AuthUser | 5 |
+| `user_` | UserCustomer | 6 |
+| `user_` | UserCustomerFiles | 6 |
+| `user_` | UserManagement | 4 |
+| `user_` | UserPasswordResets | 4 |
+| `user_` | UserSaasTenants | 4 |
+| `user_` | UserTenants | 6 |
+| `msg_` | MessageFile | 2 |
+| `msg_` | MessageGroup | 2 |
+| `msg_` | MessageGroupMember | 2 |
+| `msg_` | MessageGroupRead | 2 |
+| `msg_` | MessagePrivate | 3 |
+| `msg_` | MessageTimeline | 3 |
+| `msg_` | MessageTimelineReaction | 2 |
+| **Total** | **15 entidades** | **55** |
+
+---
+
+### Como o controller usa os Requests
+
+O controller filho implementa `getCreateRules()` e `getUpdateRules()`, instanciando o Request correspondente. A `BaseResourceTableController` aplica a validação automaticamente antes de executar `create` ou `update`:
+
+```php
+use App\Requests\V1\Mec\VehicleBrand\CreateRequest;
+use App\Requests\V1\Mec\VehicleBrand\UpdateRequest;
+
+class ResourceTableController extends BaseResourceTableController
+{
+    public function initController(...): void
+    {
+        parent::initController($request, $response, $logger);
+        $this->processor = new Processor();
+    }
+
+    protected function getCreateRules(): array
+    {
+        return (new CreateRequest())->rules();
+    }
+
+    protected function getUpdateRules(): array
+    {
+        return (new UpdateRequest())->rules();
+    }
+}
+```
+
+---
+
+### Como criar um novo Request
+
+**Passo 1 — Criar o arquivo** em `src/app/Requests/V1/{Modulo}/{Entidade}/CreateRequest.php`:
+
+```php
+<?php
+
+namespace App\Requests\V1\{Modulo}\{Entidade};
+
+class CreateRequest
+{
+    public function rules(): array
+    {
+        return [
+            'campo_a' => 'required|string|max_length[100]',
+            'campo_b' => 'permit_empty|integer',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'campo_a' => [
+                'required'   => 'O campo campo_a é obrigatório',
+                'max_length' => 'O campo_a não pode exceder 100 caracteres',
+            ],
+            'campo_b' => [
+                'integer' => 'O campo_b deve ser um número inteiro',
+            ],
+        ];
+    }
+}
+```
+
+**Passo 2 — Referenciar no controller filho:**
+
+```php
+use App\Requests\V1\{Modulo}\{Entidade}\CreateRequest;
+
+protected function getCreateRules(): array
+{
+    return (new CreateRequest())->rules();
+}
+```
+
+---
+
+### Regras CI4 mais usadas no projeto
+
+| Regra | Significado |
+| --- | --- |
+| `required` | Campo obrigatório — rejeita ausente ou vazio |
+| `permit_empty` | Campo opcional — ignora demais regras se ausente ou vazio |
+| `string` | Deve ser uma string |
+| `integer` | Deve ser inteiro |
+| `max_length[N]` | Máximo de N caracteres |
+| `min_length[N]` | Mínimo de N caracteres |
+| `is_array` | Deve ser array (usado em `filters` e `fields`) |
+| `in_list[a,b,c]` | Valor deve estar na lista delimitada por vírgula |
+| `valid_email` | Deve ser um endereço de e-mail válido |
