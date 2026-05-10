@@ -19,6 +19,7 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 9. [ROADMAP — Como criar um novo módulo](#9-roadmap--como-criar-um-novo-módulo)
 10. [ROADMAP — Módulo de Autenticação (AuthUser)](#10-roadmap--módulo-de-autenticação-authuser)
 11. [ROADMAP — BaseResourceTableController](#11-roadmap--baseresourcetablecontroller)
+12. [ROADMAP — BaseResourceViewController](#12-roadmap--baseresourceviewcontroller)
 
 ---
 
@@ -462,3 +463,25 @@ Documentação detalhada da classe base que fornece automaticamente **15 endpoin
 - Fluxo ponta a ponta de uma requisição HTTP até a resposta JSON
 
 [Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceTableController.md)
+
+---
+
+## 12. ROADMAP — BaseResourceViewController
+
+Documentação detalhada da classe base para controllers **somente leitura** via SQL View na API V1.
+
+Herda de `BaseResourceTableController` mas sobrescreve os 8 endpoints de leitura para usar métodos `*View` do processor, que leem de uma `SqlViewModel` em vez de uma tabela física. Escrita e exclusão são bloqueadas via hooks `final`.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseController` → `BaseResourceTableController` → `BaseResourceViewController`
+- Tabela comparativa: `TableController` × `ViewController` (fonte de dados, endpoints, hooks)
+- O que o controller filho **precisa** implementar: apenas `initController` com o processor de view
+- **8 endpoints de leitura via View:** `find`, `get-grouped`, `search`, `get/{id}`, `get-all`, `get-no-pagination`, `get-deleted/{id}`, `get-deleted-all`
+- Por que `getCreateRules` e `getUpdateRules` são `final` retornando `[]`
+- Helpers de resposta e utilitários de requisição herdados da classe pai
+- Exemplo completo de controller filho com registro de rotas
+- Fluxo ponta a ponta de uma requisição HTTP até a resposta JSON
+- Tabela de erros comuns e como corrigir
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceViewController.md)

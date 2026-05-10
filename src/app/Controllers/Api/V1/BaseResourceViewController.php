@@ -6,6 +6,8 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+// Documentação detalhada desta classe: src/app/markdown/ROADMAP_BaseResourceViewController.md
+
 /**
  * Controller base para recursos somente leitura via View na API V1.
  *
@@ -33,8 +35,14 @@ abstract class BaseResourceViewController extends BaseResourceTableController
     // Hooks não aplicáveis em views — sem create/update direto
     // -------------------------------------------------------------------------
 
-    final protected function getCreateRules(): array { return []; }
-    final protected function getUpdateRules(): array { return []; }
+    final protected function getCreateRules(): array
+    {
+        return [];
+    }
+    final protected function getUpdateRules(): array
+    {
+        return [];
+    }
 
     // -------------------------------------------------------------------------
     // Endpoints de leitura (view)
@@ -49,7 +57,7 @@ abstract class BaseResourceViewController extends BaseResourceTableController
     public function find(): ResponseInterface
     {
         try {
-            $body    = $this->getJsonBody();
+            $body = $this->getJsonBody();
             $filters = \is_array($body) ? $body : [];
 
             $result = $this->processor->findView($filters, $this->getPaginationParams());
@@ -105,7 +113,7 @@ abstract class BaseResourceViewController extends BaseResourceTableController
     public function search(): ResponseInterface
     {
         try {
-            $term   = trim((string) ($this->request->getGet('q') ?? ''));
+            $term = trim((string) ($this->request->getGet('q') ?? ''));
             $result = $this->processor->searchView($term, $this->getPaginationParams());
 
             return $this->respondPaginated($result['data'], $result['pagination']);
@@ -158,9 +166,9 @@ abstract class BaseResourceViewController extends BaseResourceTableController
     public function getNoPagination(): ResponseInterface
     {
         try {
-            $sort  = trim((string) ($this->request->getGet('sort') ?? 'id'));
+            $sort = trim((string) ($this->request->getGet('sort') ?? 'id'));
             $order = trim((string) ($this->request->getGet('order') ?? 'desc'));
-            $data  = $this->processor->getNoPaginationView($sort, $order);
+            $data = $this->processor->getNoPaginationView($sort, $order);
 
             return $this->respondSuccess($data);
         } catch (\Throwable $e) {
