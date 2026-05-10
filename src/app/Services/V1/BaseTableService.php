@@ -35,7 +35,10 @@ abstract class BaseTableService extends BaseViewService
 
         return $this->tableModel->findPaginated(
             $this->removeMasks($filters),
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -51,7 +54,10 @@ abstract class BaseTableService extends BaseViewService
 
         return $this->tableModel->findGrouped(
             $this->removeMasks($multiFilters),
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -68,7 +74,10 @@ abstract class BaseTableService extends BaseViewService
         return $this->tableModel->searchByTerm(
             $term,
             $this->tableModel->searchFields,
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -88,7 +97,11 @@ abstract class BaseTableService extends BaseViewService
         $p = $this->buildPaginationParams($params);
 
         return $this->tableModel->findPaginated(
-            [], $p['page'], $p['limit'], $p['sort'], $p['order']
+            [],
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -124,7 +137,10 @@ abstract class BaseTableService extends BaseViewService
         $p = $this->buildPaginationParams($params);
 
         return $this->tableModel->findDeletedPaginated(
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 

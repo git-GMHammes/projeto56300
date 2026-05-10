@@ -24,6 +24,10 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 14. [ROADMAP — Helpers Globais (debug + uuid)](#14-roadmap--helpers-globais-debug--uuid)
 15. [ROADMAP — Libraries (ApiExceptionHandler + JwtHelper + ContentFilter)](#15-roadmap--libraries-apiexceptionhandler--jwthelper--contentfilter)
 16. [Requests V1 — Regras de Validação](#16-requests-v1--regras-de-validação)
+17. [ROADMAP — BaseTableService (Template Method + Escrita + Exclusão)](#17-roadmap--basetableservice-template-method--escrita--exclusão)
+18. [ROADMAP — BaseViewService (Sanitização + Formatação + Leitura de View)](#18-roadmap--baseviewservice-sanitização--formatação--leitura-de-view)
+19. [ROADMAP — BaseTableModel (Paginação + Soft Delete + SQL Builder)](#19-roadmap--basetablemodel-paginação--soft-delete--sql-builder)
+20. [ROADMAP — BaseViewModel (Leitura de View SQL + Paginação)](#20-roadmap--baseviewmodel-leitura-de-view-sql--paginação)
 
 ---
 
@@ -565,12 +569,12 @@ Classes de validação de entrada da API V1, localizadas em `src/app/Requests/V1
 
 Um Request encapsula as **regras de validação** de um endpoint específico — mantém a lógica de validação separada do controller. O controller chama `getCreateRules()` ou `getUpdateRules()`, que instanciam o Request e retornam as regras para o CI4 validar automaticamente.
 
-| Responsabilidade | Quem resolve |
-| --- | --- |
-| Formato do campo (`required`, `max_length`, `is_array`) | Request — `rules()` |
-| Mensagem de erro legível por campo e regra | Request — `messages()` |
-| Unicidade / regra de negócio complexa | Processor (Service) |
-| Aplicação da validação na requisição | `BaseResourceTableController` |
+| Responsabilidade                                        | Quem resolve                  |
+| ------------------------------------------------------- | ----------------------------- |
+| Formato do campo (`required`, `max_length`, `is_array`) | Request — `rules()`           |
+| Mensagem de erro legível por campo e regra              | Request — `messages()`        |
+| Unicidade / regra de negócio complexa                   | Processor (Service)           |
+| Aplicação da validação na requisição                    | `BaseResourceTableController` |
 
 ---
 
@@ -608,47 +612,140 @@ class CreateRequest
 
 ### Tipos de Request
 
-| Tipo | Endpoint relacionado | Descrição |
-| --- | --- | --- |
-| `CreateRequest` | `POST /create` | Valida campos na criação de registro |
-| `UpdateRequest` | `PUT /update/{id}` | Valida campos na atualização |
-| `FindRequestTable` | `POST /find` | Valida parâmetros de busca paginada na tabela |
-| `FindRequestView` | `POST /find` (view) | Valida parâmetros de busca paginada na view SQL |
-| `GetGroupedRequestTable` | `POST /get-grouped` | Valida parâmetros de agrupamento na tabela |
-| `GetGroupedRequestView` | `POST /get-grouped` (view) | Valida parâmetros de agrupamento na view SQL |
-| `SearchRequest` | `POST /search` | Valida parâmetros de busca full-text |
+| Tipo                     | Endpoint relacionado       | Descrição                                       |
+| ------------------------ | -------------------------- | ----------------------------------------------- |
+| `CreateRequest`          | `POST /create`             | Valida campos na criação de registro            |
+| `UpdateRequest`          | `PUT /update/{id}`         | Valida campos na atualização                    |
+| `FindRequestTable`       | `POST /find`               | Valida parâmetros de busca paginada na tabela   |
+| `FindRequestView`        | `POST /find` (view)        | Valida parâmetros de busca paginada na view SQL |
+| `GetGroupedRequestTable` | `POST /get-grouped`        | Valida parâmetros de agrupamento na tabela      |
+| `GetGroupedRequestView`  | `POST /get-grouped` (view) | Valida parâmetros de agrupamento na view SQL    |
+| `SearchRequest`          | `POST /search`             | Valida parâmetros de busca full-text            |
 
 **Tipos especiais do módulo `AuthUser`:**
 
-| Tipo | Endpoint |
-| --- | --- |
-| `LoginRequest` | `POST /api/v1/auth/login` |
+| Tipo                     | Endpoint                            |
+| ------------------------ | ----------------------------------- |
+| `LoginRequest`           | `POST /api/v1/auth/login`           |
 | `RecoverPasswordRequest` | `POST /api/v1/auth/forgot-password` |
-| `ResetPasswordRequest` | `POST /api/v1/auth/reset-password` |
-| `RefreshRequest` | `POST /api/v1/auth/refresh-token` |
+| `ResetPasswordRequest`   | `POST /api/v1/auth/reset-password`  |
+| `RefreshRequest`         | `POST /api/v1/auth/refresh-token`   |
 
 ---
 
 ### Requests por módulo
 
-| Módulo | Entidade | Requests |
-| --- | --- | --- |
-| `mec_` | VehicleBrand | 4 |
-| `user_` | AuthUser | 5 |
-| `user_` | UserCustomer | 6 |
-| `user_` | UserCustomerFiles | 6 |
-| `user_` | UserManagement | 4 |
-| `user_` | UserPasswordResets | 4 |
-| `user_` | UserSaasTenants | 4 |
-| `user_` | UserTenants | 6 |
-| `msg_` | MessageFile | 2 |
-| `msg_` | MessageGroup | 2 |
-| `msg_` | MessageGroupMember | 2 |
-| `msg_` | MessageGroupRead | 2 |
-| `msg_` | MessagePrivate | 3 |
-| `msg_` | MessageTimeline | 3 |
-| `msg_` | MessageTimelineReaction | 2 |
-| **Total** | **15 entidades** | **55** |
+| Módulo    | Entidade                | Requests |
+| --------- | ----------------------- | -------- |
+| `mec_`    | VehicleBrand            | 4        |
+| `user_`   | AuthUser                | 5        |
+| `user_`   | UserCustomer            | 6        |
+| `user_`   | UserCustomerFiles       | 6        |
+| `user_`   | UserManagement          | 4        |
+| `user_`   | UserPasswordResets      | 4        |
+| `user_`   | UserSaasTenants         | 4        |
+| `user_`   | UserTenants             | 6        |
+| `msg_`    | MessageFile             | 2        |
+| `msg_`    | MessageGroup            | 2        |
+| `msg_`    | MessageGroupMember      | 2        |
+| `msg_`    | MessageGroupRead        | 2        |
+| `msg_`    | MessagePrivate          | 3        |
+| `msg_`    | MessageTimeline         | 3        |
+| `msg_`    | MessageTimelineReaction | 2        |
+| **Total** | **15 entidades**        | **55**   |
+
+---
+
+## 17. ROADMAP — BaseTableService (Template Method + Escrita + Exclusão)
+
+Documentação detalhada da classe abstrata `BaseTableService` — a base de todo Processor com tabela física na API V1, localizada em `src/app/Services/V1/BaseTableService.php`.
+
+Estende `BaseViewService` (herdando sanitização, formatação, paginação e 8 reads de view) e adiciona: **9 métodos de leitura de tabela**, **2 métodos de escrita via Template Method** (`create` e `update`) e **4 métodos de exclusão** (`deleteSoft`, `deleteRestore`, `deleteHard`, `clearDeleted`).
+
+O ponto central desta classe é o **Template Method Pattern**: os métodos `create()` e `update()` definem o algoritmo completo e delegam para **4 hooks protegidos** (`validateOnCreate`, `validateOnUpdate`, `prepareData`, `prepareUpdateData`) — que o Processor filho sobrescreve para adicionar unicidade, bcrypt, UUID, formatação de datas e qualquer regra de negócio sem duplicar a lógica de banco.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseViewService` → `BaseTableService` → `Processor`
+- O que é herdado de `BaseViewService`: `sanitizeData`, `removeMasks` (8 campos mascarados), `formatDate`, `formatDatetime`, `buildPaginationParams` + 8 reads de view
+- 9 métodos de leitura de tabela com assinaturas e diferença entre `getDeleted` e `getWithDeleted`
+- Fluxo passo a passo do `create()`: sanitização → `validateOnCreate` → `prepareData` → `insert` → `DatabaseException`
+- Fluxo passo a passo do `update()`: 404 → sanitização → `prepareUpdateData` → `validateOnUpdate` → `update` → `DatabaseException`
+- Os 4 hooks com assinaturas, propósito, retorno esperado e exemplos reais (UUID, bcrypt, unicidade com `excludeId`, campo imutável removido no update)
+- 4 métodos de exclusão com comportamento de guarda (404, 409), tabela comparativa e diferença entre soft delete e hard delete
+- Implementação mínima e completa de um Processor filho
+- Diagrama ASCII ponta a ponta: HTTP → AuthFilter → Controller → Processor → BaseTableService → Model → resposta JSON
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseTableService.md)
+
+---
+
+## 18. ROADMAP — BaseViewService (Sanitização + Formatação + Leitura de View)
+
+Documentação detalhada da classe abstrata `BaseViewService` — a **raiz de toda a hierarquia de serviços** da API V1, localizada em `src/app/Services/V1/BaseViewService.php`.
+
+É a origem de todos os utilitários compartilhados entre módulos: sanitização de strings, remoção de máscaras, formatação de datas e normalização de parâmetros de paginação. Além disso, implementa os **8 métodos de leitura via SQL View** usados pelos controllers de todos os módulos.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseViewService` → `BaseTableService` → `Processor` — e quando herdar cada uma
+- `MASKED_FIELDS` — os 8 campos com máscara (`cpf`, `whatsapp`, `phone`, `zip_code` + variantes `uc_*`), por que o prefixo `uc_` existe e a regra de armazenar apenas dígitos
+- `sanitizeString` — `trim` + `strip_tags` com exemplos de entrada/saída
+- `sanitizeData` — descarta `null`/vazio, sanitiza strings, mantém outros tipos; explicação de por que nulos são descartados para evitar UPDATE indesejado
+- `removeMasks` — regex `/\D/`, funciona com scalar e com array de valores para filtros multivalorados
+- `formatDate` — tabela de entradas/saídas incluindo formatos brasileiro, inglês e inválido
+- `formatDatetime` — `Y-m-d H:i:s`, aceita o formato `datetime-local` do HTML (`Y-m-d\TH:i`)
+- `buildPaginationParams` — tabela de defaults e limites (`page` mín 1, `limit` 1–100, `sort` `'id'`, `order` `'desc'`), exemplo com parâmetros omitidos
+- 8 métodos de leitura de view com assinaturas, diferença entre `findView` e `getGroupedView`, `getView` vs `getDeletedView`
+- Implementação mínima de Processor somente leitura (herda `BaseViewService` diretamente)
+- Diagrama ASCII ponta a ponta de `POST /find` via view
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseViewService.md)
+
+---
+
+## 19. ROADMAP — BaseTableModel (Paginação + Soft Delete + SQL Builder)
+
+Documentação detalhada da classe abstrata `BaseTableModel` — a camada de acesso a dados de todos os módulos com tabela física, localizada em `src/app/Models/V1/BaseTableModel.php`. Estende o `Model` nativo do CI4 e adiciona toda a infraestrutura de SQL do projeto.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia: `CI4 Model` → `BaseTableModel` → `SqlTableModel` — responsabilidade de cada camada
+- As **10 propriedades fixas CI4** (`useSoftDeletes`, `protectFields`, `useTimestamps`, `returnType='array'`, `dateFormat`, etc.) e o que cada uma faz na prática
+- Os **3 arrays sobrescrevíveis**: `$hidden` (campos excluídos de todas as respostas), `$sortableFields` (whitelist anti-SQL Injection), `$likeFields` (LIKE vs WHERE exato por campo)
+- Por que `find()` foi sobrescrito — CI4 não aplica `$hidden` em `returnType='array'`; solução com `array_diff_key + array_flip`
+- `findPaginated()` — `applyFilters` → `countAllResults(false)` → offset → `buildPaginatedResult`
+- `searchByTerm()` — OR entre múltiplos campos com `groupStart/orLike/groupEnd`
+- `findGrouped()` — `whereIn` para campos normais, LIKE OR para campos em `$likeFields`
+- `getOrdered()` — lista completa sem paginação, com aviso de uso em tabelas grandes
+- `existsByField($field, $value, $excludeId)` — unicidade com suporte a update, usa `db->table()` direto para evitar duplicação de scope CI4
+- **5 métodos de soft delete**: `findWithDeleted` (`withDeleted()`), `findOnlyDeleted` (`onlyDeleted()`), `findDeletedPaginated` (`db->table()` direto), `restore` (bypassa `$allowedFields`), `clearDeleted` (hard delete, retorna `int` affected)
+- **3 utilitários internos**: `applyFilters` (LIKE vs WHERE), `sanitizeSort` (whitelist com `in_array`), `buildPaginatedResult` (envelope `{data, pagination:{page,limit,total,pages}}`)
+- `SqlTableModel` filho mínimo e com `$hidden` — checklist de configuração
+- Diagrama ASCII ponta a ponta de `POST /find` com filtros
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseTableModel.md)
+
+---
+
+## 20. ROADMAP — BaseViewModel (Leitura de View SQL + Paginação)
+
+Documentação detalhada da classe abstrata `BaseViewModel` — o model base para todos os `SqlViewModel` de módulos com View SQL, localizada em `src/app/Models/V1/BaseViewModel.php`. Opera exclusivamente em leitura sobre views de banco com JOINs.
+
+Contém a diferença crítica de design em relação ao `BaseTableModel`: `useSoftDeletes=false` e `useTimestamps=false` (views não recebem escrita), `allowedFields=[]` (readonly absoluto), e todos os métodos usam `db->table()` diretamente — pois o CI4 não aplica scopes automáticos em views.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia: `CI4 Model` → `BaseViewModel` → `SqlViewModel` — e por que a view tem um model separado da tabela
+- As propriedades fixas e o motivo de cada uma (`useSoftDeletes=false`, `useTimestamps=false`, `allowedFields=[]`, ausência de `$hidden`)
+- Por que todos os métodos usam `db->table()` diretamente — e a sintaxe `where('deleted_at IS NULL', null, false)` para expressões SQL sem escape
+- Os **3 arrays sobrescrevíveis**: `$sortableFields` (whitelist anti-SQL Injection), `$likeFields` (LIKE em `applyFilters`), `$searchFields` (`public` — acessado diretamente pelo `BaseTableService`)
+- Diferença entre `$likeFields` e `$searchFields` — qual endpoint usa cada um
+- **7 métodos de leitura** com SQL gerado: `findPaginatedView` (parâmetro `$withDeleted`), `findById`, `findDeletedById`, `findDeletedPaginatedView`, `searchByTermView`, `findGroupedView` (só `whereIn` — sem LIKE/OR), `findAllView`
+- Tabela comparativa completa `BaseViewModel` vs `BaseTableModel` — 12 diferenças chave
+- `SqlViewModel` filho mínimo e com campos de view enriquecida (JOIN)
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseViewModel.md)
 
 ---
 
@@ -731,14 +828,14 @@ protected function getCreateRules(): array
 
 ### Regras CI4 mais usadas no projeto
 
-| Regra | Significado |
-| --- | --- |
-| `required` | Campo obrigatório — rejeita ausente ou vazio |
-| `permit_empty` | Campo opcional — ignora demais regras se ausente ou vazio |
-| `string` | Deve ser uma string |
-| `integer` | Deve ser inteiro |
-| `max_length[N]` | Máximo de N caracteres |
-| `min_length[N]` | Mínimo de N caracteres |
-| `is_array` | Deve ser array (usado em `filters` e `fields`) |
-| `in_list[a,b,c]` | Valor deve estar na lista delimitada por vírgula |
-| `valid_email` | Deve ser um endereço de e-mail válido |
+| Regra            | Significado                                               |
+| ---------------- | --------------------------------------------------------- |
+| `required`       | Campo obrigatório — rejeita ausente ou vazio              |
+| `permit_empty`   | Campo opcional — ignora demais regras se ausente ou vazio |
+| `string`         | Deve ser uma string                                       |
+| `integer`        | Deve ser inteiro                                          |
+| `max_length[N]`  | Máximo de N caracteres                                    |
+| `min_length[N]`  | Mínimo de N caracteres                                    |
+| `is_array`       | Deve ser array (usado em `filters` e `fields`)            |
+| `in_list[a,b,c]` | Valor deve estar na lista delimitada por vírgula          |
+| `valid_email`    | Deve ser um endereço de e-mail válido                     |

@@ -19,13 +19,13 @@ use CodeIgniter\Model;
  */
 abstract class BaseViewModel extends Model
 {
-    protected $DBGroup          = 'default';
-    protected $primaryKey       = 'id';
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $useTimestamps    = false;
-    protected $allowedFields    = [];
+    protected $DBGroup = 'default';
+    protected $primaryKey = 'id';
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
+    protected $useTimestamps = false;
+    protected $allowedFields = [];
 
     /**
      * Campos permitidos para ordenação — sobrescrever nos filhos conforme a view.
@@ -258,7 +258,7 @@ abstract class BaseViewModel extends Model
      */
     protected function sanitizeSort(string $sort, string $order): array
     {
-        $sort  = in_array($sort, $this->sortableFields, true) ? $sort : 'id';
+        $sort = in_array($sort, $this->sortableFields, true) ? $sort : 'id';
         $order = in_array(strtolower($order), ['asc', 'desc'], true) ? strtolower($order) : 'desc';
 
         return [$sort, $order];
@@ -270,9 +270,9 @@ abstract class BaseViewModel extends Model
     protected function buildPaginatedResult(array $data, int $total, int $page, int $limit): array
     {
         return [
-            'data'       => $data,
+            'data' => $data,
             'pagination' => [
-                'page'  => $page,
+                'page' => $page,
                 'limit' => $limit,
                 'total' => $total,
                 'pages' => $limit > 0 ? (int) ceil($total / $limit) : 0,
