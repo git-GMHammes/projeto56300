@@ -20,6 +20,7 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 10. [ROADMAP — Módulo de Autenticação (AuthUser)](#10-roadmap--módulo-de-autenticação-authuser)
 11. [ROADMAP — BaseResourceTableController](#11-roadmap--baseresourcetablecontroller)
 12. [ROADMAP — BaseResourceViewController](#12-roadmap--baseresourceviewcontroller)
+13. [ROADMAP — Filtros V1 (AuthFilter + LoginRateLimitFilter)](#13-roadmap--filtros-v1-authfilter--loginratelimitfilter)
 
 ---
 
@@ -485,3 +486,24 @@ Herda de `BaseResourceTableController` mas sobrescreve os 8 endpoints de leitura
 - Tabela de erros comuns e como corrigir
 
 [Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceViewController.md)
+
+---
+
+## 13. ROADMAP — Filtros V1 (AuthFilter + LoginRateLimitFilter)
+
+Documentação dos dois filtros de segurança da API V1, localizados em `src/app/Filters/V1/UserManagement/`.
+
+**AuthFilter** intercepta toda requisição e valida o JWT Bearer Token no header `Authorization` — rejeita com HTTP 401 se o token estiver ausente, inválido ou revogado (logout via cache). **LoginRateLimitFilter** protege o endpoint de login contra força bruta, limitando a 10 tentativas por 60 segundos por IP, respondendo com HTTP 429 e o header `Retry-After`.
+
+**O que o ROADMAP cobre:**
+
+- O que é um Filter no CI4 e como os métodos `before`/`after` funcionam
+- Fluxo completo do `AuthFilter`: leitura do header, `JwtHelper::decode`, verificação de revogação via cache (`jwt_revoked_` + SHA-256)
+- Fluxo completo do `LoginRateLimitFilter`: CI4 Throttler, `MAX_ATTEMPTS = 10`, `WINDOW_SECONDS = 60`, header `Retry-After`
+- Como registrar filtros em `Config/Filters.php`: aliases, `$globals`, `$filters`
+- Lista completa das rotas públicas (sem autenticação)
+- Fluxo ponta a ponta de uma requisição protegida e de uma tentativa de login bloqueada
+- Como criar um novo filtro seguindo o padrão do projeto
+- Tabela de erros comuns e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Filters_V1.md)

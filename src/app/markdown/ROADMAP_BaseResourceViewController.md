@@ -36,6 +36,7 @@ Ela herda de `BaseResourceTableController` mas **sobrescreve todos os 8 endpoint
 Operações de escrita (`create`, `update`) e exclusão (`deleteSoft`, `deleteRestore`, `deleteHard`, `clearDeleted`) **não são expostas** — são bloqueadas pelos hooks `final`.
 
 **Quando usar:**
+
 - O módulo precisa expor dados de uma SQL View com JOINs complexos
 - Os dados são lidos (agregados, formatados) mas **não alterados** diretamente pela View
 - A escrita acontece pelo `ResourceTableController` do mesmo módulo
@@ -58,16 +59,16 @@ O `BaseResourceViewController` está **um nível abaixo** do `BaseResourceTableC
 
 ## 3. Diferença entre TableController e ViewController
 
-| Característica | `BaseResourceTableController` | `BaseResourceViewController` |
-| --- | --- | --- |
-| Fonte de dados | Tabela física (`SqlTableModel`) | View SQL (`SqlViewModel`) |
-| Endpoints de leitura | 9 | 8 (usa métodos `*View` do processor) |
-| Endpoints de escrita | `create`, `update` | ❌ Bloqueados (`final []`) |
-| Endpoints de exclusão | `deleteSoft`, `deleteRestore`, `deleteHard`, `clearDeleted` | ❌ Não disponíveis |
-| `getCreateRules` | Abstrato — você implementa | `final` — retorna `[]` |
-| `getUpdateRules` | Abstrato — você implementa | `final` — retorna `[]` |
-| Processor base | `BaseTableService` | `BaseViewService` |
-| `get-with-deleted/{id}` | ✅ Disponível | ❌ Não sobrescrito |
+| Característica          | `BaseResourceTableController`                               | `BaseResourceViewController`         |
+| ----------------------- | ----------------------------------------------------------- | ------------------------------------ |
+| Fonte de dados          | Tabela física (`SqlTableModel`)                             | View SQL (`SqlViewModel`)            |
+| Endpoints de leitura    | 9                                                           | 8 (usa métodos `*View` do processor) |
+| Endpoints de escrita    | `create`, `update`                                          | ❌ Bloqueados (`final []`)           |
+| Endpoints de exclusão   | `deleteSoft`, `deleteRestore`, `deleteHard`, `clearDeleted` | ❌ Não disponíveis                   |
+| `getCreateRules`        | Abstrato — você implementa                                  | `final` — retorna `[]`               |
+| `getUpdateRules`        | Abstrato — você implementa                                  | `final` — retorna `[]`               |
+| Processor base          | `BaseTableService`                                          | `BaseViewService`                    |
+| `get-with-deleted/{id}` | ✅ Disponível                                               | ❌ Não sobrescrito                   |
 
 ---
 
@@ -87,6 +88,7 @@ public function initController(
 ```
 
 **Não precisa implementar:**
+
 - `getCreateRules()` — já é `final` retornando `[]`
 - `getUpdateRules()` — já é `final` retornando `[]`
 - Nenhum endpoint — todos os 8 já estão implementados na base
@@ -105,6 +107,7 @@ POST /api/v1/{modulo}/{recurso-view}/find
 ```
 
 **Body JSON:**
+
 ```json
 { "status": "ativo", "user_saas_tenants_id": 1 }
 ```
@@ -113,6 +116,7 @@ Cada chave é um campo da view; cada valor é um escalar para `WHERE` exato.
 **Chama:** `$this->processor->findView($filters, $pagination)`
 
 **Resposta:**
+
 ```json
 {
   "method": "POST",
@@ -135,6 +139,7 @@ POST /api/v1/{modulo}/{recurso-view}/get-grouped
 ```
 
 **Body JSON:**
+
 ```json
 { "status": ["ativo", "pendente"], "user_saas_tenants_id": [1, 2, 3] }
 ```
@@ -165,6 +170,7 @@ GET /api/v1/{modulo}/{recurso-view}/get/1
 **Chama:** `$this->processor->getView($id)`
 
 **Resposta 200:**
+
 ```json
 {
   "statusCode": 200,
@@ -175,8 +181,13 @@ GET /api/v1/{modulo}/{recurso-view}/get/1
 ```
 
 **Resposta 404:**
+
 ```json
-{ "statusCode": 404, "message": "Registro não encontrado ou foi excluído", "success": false }
+{
+  "statusCode": 404,
+  "message": "Registro não encontrado ou foi excluído",
+  "success": false
+}
 ```
 
 ---
@@ -247,13 +258,13 @@ Isso impede que um controller filho tente ativar os endpoints de escrita herdado
 
 Todos os helpers são herdados de `BaseResourceTableController`. O ViewController não os redefine.
 
-| Método | HTTP | Uso |
-| --- | --- | --- |
-| `respondSuccess($data, $message, $code)` | 200 | Registro único encontrado |
-| `respondPaginated($data, $pagination, $message)` | 200 | Listas paginadas |
-| `respondNotFound($message)` | 404 | Registro não encontrado |
-| `respondValidationError($errors, $message)` | 422 | Filtros inválidos |
-| `respondServerError($e)` | 500 | Exceção não tratada |
+| Método                                           | HTTP | Uso                       |
+| ------------------------------------------------ | ---- | ------------------------- |
+| `respondSuccess($data, $message, $code)`         | 200  | Registro único encontrado |
+| `respondPaginated($data, $pagination, $message)` | 200  | Listas paginadas          |
+| `respondNotFound($message)`                      | 404  | Registro não encontrado   |
+| `respondValidationError($errors, $message)`      | 422  | Filtros inválidos         |
+| `respondServerError($e)`                         | 500  | Exceção não tratada       |
 
 Veja exemplos completos de cada resposta em [ROADMAP_BaseResourceTableController.md](ROADMAP_BaseResourceTableController.md).
 
@@ -358,22 +369,22 @@ HTTP 200 — JSON com data[] + pagination{}
 
 ## 11. Erros Comuns
 
-| Erro | Causa | Solução |
-| --- | --- | --- |
-| `Call to undefined method ... findView()` | Processor herda de `BaseTableService` em vez de `BaseViewService` | Trocar herança do processor para `BaseViewService` |
-| `Class ... must implement abstract method getCreateRules()` | Controller herda de `BaseResourceTableController` em vez de `BaseResourceViewController` | Trocar a herança para `BaseResourceViewController` |
-| HTTP 500 em `get-deleted/{id}` | View não inclui a coluna `deleted_at` | Garantir que a view SQL expõe `deleted_at` da tabela física |
-| Endpoint `create` retorna 422 com `errors: []` | Tentou chamar `create` no ViewController | Use o `ResourceTableController` do módulo para escrita |
-| HTTP 500 em `find` com filtro | Campo do filtro não existe na view | Verificar os campos disponíveis na view SQL |
+| Erro                                                        | Causa                                                                                    | Solução                                                     |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `Call to undefined method ... findView()`                   | Processor herda de `BaseTableService` em vez de `BaseViewService`                        | Trocar herança do processor para `BaseViewService`          |
+| `Class ... must implement abstract method getCreateRules()` | Controller herda de `BaseResourceTableController` em vez de `BaseResourceViewController` | Trocar a herança para `BaseResourceViewController`          |
+| HTTP 500 em `get-deleted/{id}`                              | View não inclui a coluna `deleted_at`                                                    | Garantir que a view SQL expõe `deleted_at` da tabela física |
+| Endpoint `create` retorna 422 com `errors: []`              | Tentou chamar `create` no ViewController                                                 | Use o `ResourceTableController` do módulo para escrita      |
+| HTTP 500 em `find` com filtro                               | Campo do filtro não existe na view                                                       | Verificar os campos disponíveis na view SQL                 |
 
 ---
 
 ## 12. Sobre o Autor
 
-| Campo    | Informação |
-| -------- | ---------- |
-| Nome     | Gustavo Hammes |
-| Cargo    | Analista de Sistemas |
-| Empresa  | Habilidade .Com |
-| Site     | [habilidade.com](https://habilidade.com) |
+| Campo    | Informação                                                                                                                                      |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nome     | Gustavo Hammes                                                                                                                                  |
+| Cargo    | Analista de Sistemas                                                                                                                            |
+| Empresa  | Habilidade .Com                                                                                                                                 |
+| Site     | [habilidade.com](https://habilidade.com)                                                                                                        |
 | LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |
