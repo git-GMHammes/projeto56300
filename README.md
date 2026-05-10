@@ -6,29 +6,49 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 
 ---
 
+## Índice
+
+1. [Tecnologias Utilizadas](#1-tecnologias-utilizadas)
+2. [O Modelo SaaS](#2-o-modelo-saas-software-as-a-service)
+3. [Estrutura de Execução](#3-estrutura-de-execução)
+4. [Resumo do banco de dados](#4-resumo-do-banco-de-dados)
+5. [Módulos do sistema](#5-módulos-do-sistema)
+6. [Arquitetura](#6-arquitetura)
+7. [Stack](#7-stack)
+8. [Desenvolvedor](#8-desenvolvedor)
+9. [ROADMAP — Como criar um novo módulo](#9-roadmap--como-criar-um-novo-módulo)
+10. [ROADMAP — Módulo de Autenticação (AuthUser)](#10-roadmap--módulo-de-autenticação-authuser)
+11. [ROADMAP — BaseResourceTableController](#11-roadmap--baseresourcetablecontroller)
+
+---
+
 ## 1. Tecnologias Utilizadas
 
 ### Backend e Infraestrutura
-* **CodeIgniter 4.x**: Framework PHP robusto e leve. Utilizado para a construção da API RESTful, garantindo performance e uma estrutura MVC clara para a lógica de negócio e persistência de dados.
-* **MySQL**: Sistema de Gerenciamento de Banco de Dados Relacional (RDBMS). Responsável pelo armazenamento estruturado de dados, garantindo integridade referencial e suporte a consultas complexas.
-* **Docker Compose**: Ferramenta para definição e execução de aplicações multi-contêiner. Facilita a orquestração do ambiente de desenvolvimento e produção, garantindo paridade entre os ambientes.
-* **Podman**: Motor de contêineres sem daemon (daemonless) e rootless. Utilizado como alternativa segura e eficiente ao Docker para gerenciar imagens e contêineres, focando em segurança e conformidade com padrões OCI.
+
+- **CodeIgniter 4.x**: Framework PHP robusto e leve. Utilizado para a construção da API RESTful, garantindo performance e uma estrutura MVC clara para a lógica de negócio e persistência de dados.
+- **MySQL**: Sistema de Gerenciamento de Banco de Dados Relacional (RDBMS). Responsável pelo armazenamento estruturado de dados, garantindo integridade referencial e suporte a consultas complexas.
+- **Docker Compose**: Ferramenta para definição e execução de aplicações multi-contêiner. Facilita a orquestração do ambiente de desenvolvimento e produção, garantindo paridade entre os ambientes.
+- **Podman**: Motor de contêineres sem daemon (daemonless) e rootless. Utilizado como alternativa segura e eficiente ao Docker para gerenciar imagens e contêineres, focando em segurança e conformidade com padrões OCI.
 
 ### Frontend e Mobile
-* **React JS (Versão Atual)**: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas na web. Focada em componentes reutilizáveis e no gerenciamento eficiente do estado da aplicação (Single Page Application).
-* **React Native (Versão Atual)**: Framework para desenvolvimento de aplicativos móveis nativos (Android e iOS) utilizando a mesma base lógica do React, permitindo alta performance e acesso a APIs nativas do dispositivo.
-* **Bootstrap (Versão Atual)**: Framework CSS para desenvolvimento de interfaces responsivas e "mobile-first". Fornece uma base sólida de componentes visuais para agilizar o design do frontend web.
+
+- **React JS (Versão Atual)**: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas na web. Focada em componentes reutilizáveis e no gerenciamento eficiente do estado da aplicação (Single Page Application).
+- **React Native (Versão Atual)**: Framework para desenvolvimento de aplicativos móveis nativos (Android e iOS) utilizando a mesma base lógica do React, permitindo alta performance e acesso a APIs nativas do dispositivo.
+- **Bootstrap (Versão Atual)**: Framework CSS para desenvolvimento de interfaces responsivas e "mobile-first". Fornece uma base sólida de componentes visuais para agilizar o design do frontend web.
 
 ---
 
 ## 2. O Modelo SaaS (Software as a Service)
 
 ### O que é?
-O **SaaS** é um modelo de distribuição e licenciamento de software onde a aplicação é hospedada centralmente por um provedor e acessada pelos usuários via internet, geralmente através de um navegador web ou aplicativo móvel. 
+
+O **SaaS** é um modelo de distribuição e licenciamento de software onde a aplicação é hospedada centralmente por um provedor e acessada pelos usuários via internet, geralmente através de um navegador web ou aplicativo móvel.
 
 Diferente do modelo tradicional, o cliente não precisa instalar, manter ou atualizar o software em seus próprios servidores; tudo é gerenciado pelo provedor do serviço.
 
 ### Distribuição para Empresas e Instituições
+
 A distribuição em um contexto corporativo ou colaborativo ocorre das seguintes formas:
 
 1.  **Multi-tenancy (Arquitetura Multilocatária)**: Uma única instância do software atende a vários clientes (empresas), mas os dados de cada cliente são isolados logicamente. Isso reduz custos de manutenção e escala a operação.
@@ -61,24 +81,24 @@ isolamento de dados por empresa/plano.
 
 ---
 
-## Resumo do banco de dados
+## 4. Resumo do banco de dados
 
-| Módulo                   | Prefixo    | Tabelas | Views |
-| ------------------------ | ---------- | ------- | ----- |
-| Usuários e Autenticação  | `user_`    | 6       | 3     |
-| Agenda / Calendário      | `alog_`    | 8       | 1     |
-| Estoque                  | `est_`     | 19      | 4     |
-| Mecânica / Oficina       | `mec_`     | 16      | —     |
-| Mensagens / Comunicação  | `msg_`     | 8       | 7     |
-| Gestão Documental (SGD)  | `sgd_`     | 28      | —     |
-| Gestão de Tarefas        | `task_`    | 4       | —     |
-| Clínica Veterinária      | `vet_`     | 8       | —     |
-| Contato e Comunicação    | `contact_` | 2       | —     |
-| **Total**                |            | **99**  | **15**|
+| Módulo                  | Prefixo    | Tabelas | Views  |
+| ----------------------- | ---------- | ------- | ------ |
+| Usuários e Autenticação | `user_`    | 6       | 3      |
+| Agenda / Calendário     | `alog_`    | 8       | 1      |
+| Estoque                 | `est_`     | 19      | 4      |
+| Mecânica / Oficina      | `mec_`     | 16      | —      |
+| Mensagens / Comunicação | `msg_`     | 8       | 7      |
+| Gestão Documental (SGD) | `sgd_`     | 28      | —      |
+| Gestão de Tarefas       | `task_`    | 4       | —      |
+| Clínica Veterinária     | `vet_`     | 8       | —      |
+| Contato e Comunicação   | `contact_` | 2       | —      |
+| **Total**               |            | **99**  | **15** |
 
 ---
 
-## Módulos do sistema
+## 5. Módulos do sistema
 
 O banco de dados é organizado por prefixo de tabela. Cada prefixo representa um domínio
 de negócio independente, podendo ser ativado como um micro-serviço isolado dentro do hub.
@@ -93,22 +113,22 @@ Implementa multi-tenant completo: `user_004_saas_tenants` define as empresas e
 
 #### Tabelas
 
-| Tabela                      | Descrição                                                   |
-| --------------------------- | ----------------------------------------------------------- |
-| `user_001_management`       | Credenciais de acesso (login, senha bcrypt, UUID, is_active)|
-| `user_002_customer`         | Dados cadastrais do cliente vinculado ao usuário            |
-| `user_003_customer_files`   | Anexos e documentos do cliente (UUID, checksum SHA-256)     |
-| `user_004_saas_tenants`     | Empresas/tenants SaaS (slug único, plano free/paid)         |
-| `user_005_tenants`          | Vínculo usuário ↔ tenant com role (member / admin)          |
-| `user_006_password_resets`  | Tokens de recuperação de senha (hash SHA-256, expiração, IP)|
+| Tabela                     | Descrição                                                    |
+| -------------------------- | ------------------------------------------------------------ |
+| `user_001_management`      | Credenciais de acesso (login, senha bcrypt, UUID, is_active) |
+| `user_002_customer`        | Dados cadastrais do cliente vinculado ao usuário             |
+| `user_003_customer_files`  | Anexos e documentos do cliente (UUID, checksum SHA-256)      |
+| `user_004_saas_tenants`    | Empresas/tenants SaaS (slug único, plano free/paid)          |
+| `user_005_tenants`         | Vínculo usuário ↔ tenant com role (member / admin)           |
+| `user_006_password_resets` | Tokens de recuperação de senha (hash SHA-256, expiração, IP) |
 
 #### Views
 
-| View                            | Descrição                                                          |
-| ------------------------------- | ------------------------------------------------------------------ |
-| `view_auth_user`                | JOIN management + customer + tenant (usada na autenticação JWT)    |
-| `view_customer`                 | Dados consolidados do cliente (management + customer)              |
-| `view_user_customer_management` | JOIN management + customer sem filtro de tenant                    |
+| View                            | Descrição                                                       |
+| ------------------------------- | --------------------------------------------------------------- |
+| `view_auth_user`                | JOIN management + customer + tenant (usada na autenticação JWT) |
+| `view_customer`                 | Dados consolidados do cliente (management + customer)           |
+| `view_user_customer_management` | JOIN management + customer sem filtro de tenant                 |
 
 ---
 
@@ -120,22 +140,22 @@ multicanal (e-mail / push).
 
 #### Tabelas
 
-| Tabela                     | Descrição                                             |
-| -------------------------- | ----------------------------------------------------- |
-| `alog_001_users`           | Referência de usuários para a agenda (sem auth)       |
-| `alog_002_categories`      | Categorias de eventos com cor hexadecimal e ícone     |
-| `alog_003_resources`       | Recursos físicos reserváveis (salas, equipamentos)    |
-| `alog_004_recurrences`     | Regras de recorrência iCal-like (diária/semanal/mensal/anual) |
-| `alog_005_events`          | Eventos/compromissos com suporte a recorrência        |
+| Tabela                     | Descrição                                                      |
+| -------------------------- | -------------------------------------------------------------- |
+| `alog_001_users`           | Referência de usuários para a agenda (sem auth)                |
+| `alog_002_categories`      | Categorias de eventos com cor hexadecimal e ícone              |
+| `alog_003_resources`       | Recursos físicos reserváveis (salas, equipamentos)             |
+| `alog_004_recurrences`     | Regras de recorrência iCal-like (diária/semanal/mensal/anual)  |
+| `alog_005_events`          | Eventos/compromissos com suporte a recorrência                 |
 | `alog_006_event_attendees` | Participantes de eventos com RSVP (pending/confirmed/declined) |
-| `alog_007_event_resource`  | Recursos reservados por evento — N:N                  |
-| `alog_008_reminders`       | Lembretes por usuário com controle de envio e minutos |
+| `alog_007_event_resource`  | Recursos reservados por evento — N:N                           |
+| `alog_008_reminders`       | Lembretes por usuário com controle de envio e minutos          |
 
 #### Views
 
-| View                    | Descrição                                                        |
-| ----------------------- | ---------------------------------------------------------------- |
-| `view_alog_events_full` | Eventos completos com categoria, criador e dados de recorrência  |
+| View                    | Descrição                                                       |
+| ----------------------- | --------------------------------------------------------------- |
+| `view_alog_events_full` | Eventos completos com categoria, criador e dados de recorrência |
 
 ---
 
@@ -146,36 +166,36 @@ ajustes, controle de lote/validade, reservas e inventário físico.
 
 #### Tabelas
 
-| Tabela                        | Descrição                                             |
-| ----------------------------- | ----------------------------------------------------- |
-| `est_001_warehouse`           | Armazéns / depósitos com endereço completo            |
-| `est_002_category`            | Categorias de produto com hierarquia (parent_id)      |
-| `est_003_supplier`            | Fornecedores (PF/PJ) com dados bancários e Pix        |
-| `est_004_product`             | Cadastro de produtos (SKU, código de barras, unidade) |
-| `est_005_storage_location`    | Localizações físicas dentro do armazém                |
-| `est_006_product_stock`       | Saldo atual por produto/armazém (qtd + custo médio)   |
-| `est_007_stock_movement`      | Histórico de movimentações (entrada/saída/transferência) |
-| `est_008_transaction`         | Cabeçalho de transação de estoque                     |
-| `est_009_transaction_item`    | Itens de cada transação                               |
-| `est_010_purchase_order`      | Pedidos de compra                                     |
-| `est_011_purchase_order_item` | Itens do pedido de compra                             |
-| `est_012_stock_adjustment`    | Ajustes manuais de estoque                            |
-| `est_013_price_history`       | Histórico de preços por produto                       |
-| `est_014_minimum_stock`       | Estoque mínimo e ponto de reposição por produto/armazém |
-| `est_015_product_supplier`    | Multi-fornecedor por produto (preços e prazos individuais) |
-| `est_016_batch_lot`           | Controle de lotes e validade para produtos perecíveis |
-| `est_017_stock_reservation`   | Reservas de estoque (reserva antes da saída física)   |
-| `est_018_inventory_count`     | Sessão de inventário (cabeçalho)                      |
-| `est_019_inventory_count_item`| Itens contados em uma sessão de inventário            |
+| Tabela                         | Descrição                                                  |
+| ------------------------------ | ---------------------------------------------------------- |
+| `est_001_warehouse`            | Armazéns / depósitos com endereço completo                 |
+| `est_002_category`             | Categorias de produto com hierarquia (parent_id)           |
+| `est_003_supplier`             | Fornecedores (PF/PJ) com dados bancários e Pix             |
+| `est_004_product`              | Cadastro de produtos (SKU, código de barras, unidade)      |
+| `est_005_storage_location`     | Localizações físicas dentro do armazém                     |
+| `est_006_product_stock`        | Saldo atual por produto/armazém (qtd + custo médio)        |
+| `est_007_stock_movement`       | Histórico de movimentações (entrada/saída/transferência)   |
+| `est_008_transaction`          | Cabeçalho de transação de estoque                          |
+| `est_009_transaction_item`     | Itens de cada transação                                    |
+| `est_010_purchase_order`       | Pedidos de compra                                          |
+| `est_011_purchase_order_item`  | Itens do pedido de compra                                  |
+| `est_012_stock_adjustment`     | Ajustes manuais de estoque                                 |
+| `est_013_price_history`        | Histórico de preços por produto                            |
+| `est_014_minimum_stock`        | Estoque mínimo e ponto de reposição por produto/armazém    |
+| `est_015_product_supplier`     | Multi-fornecedor por produto (preços e prazos individuais) |
+| `est_016_batch_lot`            | Controle de lotes e validade para produtos perecíveis      |
+| `est_017_stock_reservation`    | Reservas de estoque (reserva antes da saída física)        |
+| `est_018_inventory_count`      | Sessão de inventário (cabeçalho)                           |
+| `est_019_inventory_count_item` | Itens contados em uma sessão de inventário                 |
 
 #### Views
 
-| View                           | Descrição                                                      |
-| ------------------------------ | -------------------------------------------------------------- |
-| `view_est_saldo_atual`         | Saldo por produto/armazém com valor financeiro calculado       |
-| `view_est_abaixo_minimo`       | Produtos abaixo do estoque mínimo com nível de alerta          |
-| `view_est_lotes_proximos_vencer` | Lotes com vencimento nos próximos 90 dias com nível de urgência |
-| `view_est_movimentacoes_recentes` | Movimentações dos últimos 90 dias com origens/destinos      |
+| View                              | Descrição                                                       |
+| --------------------------------- | --------------------------------------------------------------- |
+| `view_est_saldo_atual`            | Saldo por produto/armazém com valor financeiro calculado        |
+| `view_est_abaixo_minimo`          | Produtos abaixo do estoque mínimo com nível de alerta           |
+| `view_est_lotes_proximos_vencer`  | Lotes com vencimento nos próximos 90 dias com nível de urgência |
+| `view_est_movimentacoes_recentes` | Movimentações dos últimos 90 dias com origens/destinos          |
 
 ---
 
@@ -214,29 +234,29 @@ controle de leitura por grupo e anexos multimídia polimórficos.
 
 #### Tabelas
 
-| Tabela                     | Descrição                                                       |
-| -------------------------- | --------------------------------------------------------------- |
-| `msg_001_timeline`         | Posts públicos do mural da empresa por tenant (fixáveis)        |
-| `msg_002_timeline_reaction`| Reações a posts do mural (like/love/haha/wow/sad/angry)         |
-| `msg_003_private`          | Mensagens diretas ponto a ponto com read receipt                |
-| `msg_004_group`            | Grupos de chat privado com avatar e descrição                   |
-| `msg_005_group_member`     | Membros e roles de grupo (admin/member) com data de entrada/saída|
-| `msg_006_group_message`    | Mensagens de grupo com suporte a reply (auto-referência)        |
-| `msg_007_group_read`       | Ponteiro da última mensagem lida por usuário por grupo          |
-| `msg_008_file`             | Anexos multimídia polimórficos (timeline / private / group)     |
+| Tabela                      | Descrição                                                         |
+| --------------------------- | ----------------------------------------------------------------- |
+| `msg_001_timeline`          | Posts públicos do mural da empresa por tenant (fixáveis)          |
+| `msg_002_timeline_reaction` | Reações a posts do mural (like/love/haha/wow/sad/angry)           |
+| `msg_003_private`           | Mensagens diretas ponto a ponto com read receipt                  |
+| `msg_004_group`             | Grupos de chat privado com avatar e descrição                     |
+| `msg_005_group_member`      | Membros e roles de grupo (admin/member) com data de entrada/saída |
+| `msg_006_group_message`     | Mensagens de grupo com suporte a reply (auto-referência)          |
+| `msg_007_group_read`        | Ponteiro da última mensagem lida por usuário por grupo            |
+| `msg_008_file`              | Anexos multimídia polimórficos (timeline / private / group)       |
 
 #### Views
 
-| View                       | Descrição                                                       |
-| -------------------------- | --------------------------------------------------------------- |
-| `view_msg_timeline`        | Timeline com dados do autor (JOIN user_001_management)          |
-| `view_msg_timeline_reaction` | Reações com dados do usuário que reagiu                       |
-| `view_msg_private`         | Mensagens privadas com dados do remetente                       |
-| `view_msg_group_member`    | Membros com perfil completo do usuário                          |
-| `view_msg_group_message`   | Mensagens de grupo com autor e mensagem citada (reply)          |
-| `view_msg_group_read`      | Ponteiro de leitura com dados do grupo                          |
-| `view_msg_group_summary`   | Resumo do grupo: última mensagem e total de membros ativos      |
-| `view_msg_file`            | Anexos com dados do uploader                                    |
+| View                         | Descrição                                                  |
+| ---------------------------- | ---------------------------------------------------------- |
+| `view_msg_timeline`          | Timeline com dados do autor (JOIN user_001_management)     |
+| `view_msg_timeline_reaction` | Reações com dados do usuário que reagiu                    |
+| `view_msg_private`           | Mensagens privadas com dados do remetente                  |
+| `view_msg_group_member`      | Membros com perfil completo do usuário                     |
+| `view_msg_group_message`     | Mensagens de grupo com autor e mensagem citada (reply)     |
+| `view_msg_group_read`        | Ponteiro de leitura com dados do grupo                     |
+| `view_msg_group_summary`     | Resumo do grupo: última mensagem e total de membros ativos |
+| `view_msg_file`              | Anexos com dados do uploader                               |
 
 ---
 
@@ -247,36 +267,36 @@ arquivamento e descarte.
 
 #### Tabelas
 
-| Tabela                        | Descrição                                       |
-| ----------------------------- | ----------------------------------------------- |
-| `sgd_001_document_categories` | Categorias de documento                         |
-| `sgd_002_document_types`      | Tipos de documento por categoria                |
-| `sgd_003_departments`         | Departamentos / setores                         |
-| `sgd_004_entities`            | Entidades externas (clientes, parceiros)        |
-| `sgd_005_workflows`           | Fluxos de aprovação configuráveis               |
-| `sgd_006_templates`           | Templates de documentos                         |
-| `sgd_007_numbering_sequences` | Sequências de numeração automática              |
-| `sgd_008_retention_schedules` | Tabela de temporalidade (prazo de guarda)       |
-| `sgd_009_tags`                | Tags livres para classificação                  |
-| `sgd_010_documents`           | Documentos (cabeçalho principal)                |
-| `sgd_011_files`               | Arquivos físicos vinculados ao documento        |
-| `sgd_012_versions`            | Controle de versões de cada documento           |
-| `sgd_013_signatures`          | Assinaturas digitais                            |
-| `sgd_014_approvals`           | Aprovações por etapa de workflow                |
-| `sgd_015_relationships`       | Vínculos entre documentos                       |
-| `sgd_016_parties`             | Partes envolvidas em contratos/processos        |
-| `sgd_017_protocols`           | Protocolos de entrega/recebimento               |
-| `sgd_018_movements`           | Movimentação física de documentos               |
-| `sgd_019_indexes`             | Índices de busca por metadados                  |
-| `sgd_020_document_tags`       | Relacionamento documento ↔ tag                  |
-| `sgd_021_disposals`           | Descarte e eliminação de documentos             |
-| `sgd_022_access_logs`         | Log de acessos e visualizações                  |
-| `sgd_023_permissions`         | Permissões de acesso por usuário/documento      |
-| `sgd_024_notifications`       | Notificações de prazo, aprovação e vencimento   |
-| `sgd_025_comments`            | Comentários e anotações nos documentos          |
-| `sgd_026_contracts`           | Contratos (extensão do documento)               |
-| `sgd_027_processes`           | Processos administrativos / jurídicos           |
-| `sgd_028_invoices`            | Notas fiscais vinculadas a documentos           |
+| Tabela                        | Descrição                                     |
+| ----------------------------- | --------------------------------------------- |
+| `sgd_001_document_categories` | Categorias de documento                       |
+| `sgd_002_document_types`      | Tipos de documento por categoria              |
+| `sgd_003_departments`         | Departamentos / setores                       |
+| `sgd_004_entities`            | Entidades externas (clientes, parceiros)      |
+| `sgd_005_workflows`           | Fluxos de aprovação configuráveis             |
+| `sgd_006_templates`           | Templates de documentos                       |
+| `sgd_007_numbering_sequences` | Sequências de numeração automática            |
+| `sgd_008_retention_schedules` | Tabela de temporalidade (prazo de guarda)     |
+| `sgd_009_tags`                | Tags livres para classificação                |
+| `sgd_010_documents`           | Documentos (cabeçalho principal)              |
+| `sgd_011_files`               | Arquivos físicos vinculados ao documento      |
+| `sgd_012_versions`            | Controle de versões de cada documento         |
+| `sgd_013_signatures`          | Assinaturas digitais                          |
+| `sgd_014_approvals`           | Aprovações por etapa de workflow              |
+| `sgd_015_relationships`       | Vínculos entre documentos                     |
+| `sgd_016_parties`             | Partes envolvidas em contratos/processos      |
+| `sgd_017_protocols`           | Protocolos de entrega/recebimento             |
+| `sgd_018_movements`           | Movimentação física de documentos             |
+| `sgd_019_indexes`             | Índices de busca por metadados                |
+| `sgd_020_document_tags`       | Relacionamento documento ↔ tag                |
+| `sgd_021_disposals`           | Descarte e eliminação de documentos           |
+| `sgd_022_access_logs`         | Log de acessos e visualizações                |
+| `sgd_023_permissions`         | Permissões de acesso por usuário/documento    |
+| `sgd_024_notifications`       | Notificações de prazo, aprovação e vencimento |
+| `sgd_025_comments`            | Comentários e anotações nos documentos        |
+| `sgd_026_contracts`           | Contratos (extensão do documento)             |
+| `sgd_027_processes`           | Processos administrativos / jurídicos         |
+| `sgd_028_invoices`            | Notas fiscais vinculadas a documentos         |
 
 ---
 
@@ -301,16 +321,16 @@ Agendamento, prontuários e gestão de consultas para clínicas veterinárias.
 
 #### Tabelas
 
-| Tabela                                | Descrição                              |
-| ------------------------------------- | -------------------------------------- |
+| Tabela                                | Descrição                                       |
+| ------------------------------------- | ----------------------------------------------- |
 | `vet_001_breeds`                      | Raças de animais (espécie, porte, temperamento) |
-| `vet_002_veterinarians`               | Veterinários                           |
-| `vet_003_pets`                        | Animais cadastrados                    |
-| `vet_004_veterinarian_schedules`      | Grade de horários do veterinário       |
-| `vet_005_veterinarian_unavailability` | Bloqueios de agenda (folgas, férias)   |
-| `vet_006_appointments`                | Consultas agendadas                    |
-| `vet_007_medical_records`             | Prontuários médicos                    |
-| `vet_008_medical_record_attachments`  | Exames e anexos do prontuário          |
+| `vet_002_veterinarians`               | Veterinários                                    |
+| `vet_003_pets`                        | Animais cadastrados                             |
+| `vet_004_veterinarian_schedules`      | Grade de horários do veterinário                |
+| `vet_005_veterinarian_unavailability` | Bloqueios de agenda (folgas, férias)            |
+| `vet_006_appointments`                | Consultas agendadas                             |
+| `vet_007_medical_records`             | Prontuários médicos                             |
+| `vet_008_medical_record_attachments`  | Exames e anexos do prontuário                   |
 
 ---
 
@@ -323,7 +343,7 @@ Agendamento, prontuários e gestão de consultas para clínicas veterinárias.
 
 ---
 
-## Arquitetura
+## 6. Arquitetura
 
 ```
 API V1
@@ -360,7 +380,7 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 
 ---
 
-## Stack
+## 7. Stack
 
 | Componente    | Tecnologia                |
 | ------------- | ------------------------- |
@@ -375,7 +395,7 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 
 ---
 
-## Desenvolvedor
+## 8. Desenvolvedor
 
 | Campo    | Informação                                                                                                                                      |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -384,3 +404,61 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 | Empresa  | Habilidade .Com                                                                                                                                 |
 | Site     | [habilidade.com](https://habilidade.com)                                                                                                        |
 | LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |
+
+---
+
+## 9. ROADMAP — Como criar um novo módulo
+
+Guia passo a passo com **10 etapas** para criar um módulo completo na API V1 do zero.
+
+O objetivo é herdar toda a infraestrutura das classes base e escrever apenas o que é específico do domínio: DDL da tabela, `SqlTableModel`, `SqlViewModel`, classes de Request, Processor (Service) e `ResourceTableController`.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama de arquitetura em camadas e responsabilidade de cada uma
+- Passo 0: consulta obrigatória ao banco antes de começar
+- Passos 1–9: SQL DDL → Model → ViewModel → Request → Processor → Controller → Rotas
+- Exemplos reais usando o módulo `mec_01_vehicle_brand`
+- Fluxo interno de `create` e `update` com hooks do `BaseTableService`
+- Tabela completa dos 15 endpoints herdados automaticamente
+- Formato JSON de resposta e parâmetros de paginação
+- Tabela de erros comuns e como corrigir
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_novo_modulo.md)
+
+---
+
+## 10. ROADMAP — Módulo de Autenticação (AuthUser)
+
+Documentação completa do fluxo de autenticação JWT da API V1 — do banco de dados até a resposta HTTP.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama das tabelas `user_001` a `user_006` e seus relacionamentos
+- Fluxo passo a passo do login (verificação de credenciais → JWT → response)
+- Documentação dos endpoints: `login`, `logout`, `refresh-token`, `forgot-password`, `reset-password`
+- Arquitetura de classes: Controller → Processor → Model → View
+- Regras de segurança: bcrypt para senha, SHA-256 para tokens de reset, Bearer Token nas rotas protegidas
+- Campos retornados no response de login (30 variáveis globais do app mobile)
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_fluxo_login.md)
+
+---
+
+## 11. ROADMAP — BaseResourceTableController
+
+Documentação detalhada da classe base que fornece automaticamente **15 endpoints REST** a todos os controllers de módulo.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseController` → `BaseResourceTableController` → `BaseResourceViewController`
+- O que o controller filho **precisa** implementar: `initController`, `getCreateRules`, `getUpdateRules`
+- **9 endpoints de leitura:** `find`, `get-grouped`, `search`, `get/{id}`, `get-all`, `get-no-pagination`, `get-deleted/{id}`, `get-with-deleted/{id}`, `get-deleted-all`
+- **2 endpoints de escrita:** `create`, `update/{id}`
+- **4 endpoints de exclusão:** `delete-soft/{id}`, `delete-restore/{id}`, `delete-hard/{id}`, `clear-deleted`
+- **7 helpers de resposta** padronizados com exemplos JSON completos
+- Utilitários de requisição: `getPaginationParams`, `getJsonBody`
+- Exemplo completo de implementação de um controller filho
+- Fluxo ponta a ponta de uma requisição HTTP até a resposta JSON
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceTableController.md)
