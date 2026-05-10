@@ -7,14 +7,10 @@ import LoginScreen from '../ui/screens/LoginScreen'
 import RegisterScreen from '../ui/screens/RegisterScreen'
 import ForgotPasswordScreen from '../ui/screens/ForgotPasswordScreen'
 import { ODS_SCREENS_MAP } from '../../../ods/presentation/ui/screens/odsScreensMap'
-import HomeScreen from '../../../home/presentation/ui/screens/HomeScreen'
-import MessagingNavigator from '../../../messaging/V1/MessagingNavigator'
-import MessageFooterBar from '../../../../shared/ui/components/MessageFooterBar'
-import MessageDrawer, { type MessageDrawerType } from '../../../../shared/ui/components/MessageDrawer'
+import { ODS_PATHS } from '../../../ods/presentation/routes/paths'
+import { APP_CONTRACT_CODE } from '../../../../core/config/env'
 
-const PUBLIC_HOME = 'Home'
-const PUBLIC_MESSAGING = 'Messaging'
-type AuthScreen = keyof AuthStackParamList | typeof PUBLIC_HOME | typeof PUBLIC_MESSAGING
+type AuthScreen = keyof AuthStackParamList | string
 
 function makeNav(
   setCurrent: (s: AuthScreen) => void,
@@ -34,20 +30,15 @@ interface AuthNavigatorProps {
 }
 
 export function AuthNavigator({ onAuthenticated }: AuthNavigatorProps) {
-  const [current, setCurrent] = useState<AuthScreen>(PUBLIC_HOME)
-  const [activeDrawer, setActiveDrawer] = useState<MessageDrawerType | null>(null)
-
-  const isLogin = current === AUTH_PATHS.LOGIN
+  const [current, setCurrent] = useState<AuthScreen>(
+    APP_CONTRACT_CODE === 'cont0001' ? ODS_PATHS.HOME : AUTH_PATHS.LOGIN
+  )
 
   function renderScreen() {
-    if (current === PUBLIC_HOME)
-      return <HomeScreen navigate={(name) => setCurrent(name as AuthScreen)} />
-
-    if (current === PUBLIC_MESSAGING)
-      return <MessagingNavigator goBack={() => setCurrent(PUBLIC_HOME)} />
-
-    const OdsPage = (ODS_SCREENS_MAP as Record<string, React.ComponentType<any>>)[current]
-    if (OdsPage) return <OdsPage {...makeNav(setCurrent, current as keyof AuthStackParamList)} />
+    if (APP_CONTRACT_CODE === 'cont0001') {
+      const OdsPage = (ODS_SCREENS_MAP as Record<string, React.ComponentType<any>>)[current]
+      if (OdsPage) return <OdsPage {...makeNav(setCurrent, current as keyof AuthStackParamList)} />
+    }
 
     if (current === AUTH_PATHS.REGISTER)
       return <RegisterScreen {...makeNav(setCurrent, AUTH_PATHS.REGISTER)} />
@@ -61,17 +52,6 @@ export function AuthNavigator({ onAuthenticated }: AuthNavigatorProps) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>{renderScreen()}</View>
-      {!isLogin && (
-        <MessageFooterBar
-          activeKey={activeDrawer}
-          onPress={(key) => setActiveDrawer(key as MessageDrawerType)}
-        />
-      )}
-      <MessageDrawer
-        visible={activeDrawer !== null}
-        type={activeDrawer}
-        onClose={() => setActiveDrawer(null)}
-      />
     </View>
   )
 }

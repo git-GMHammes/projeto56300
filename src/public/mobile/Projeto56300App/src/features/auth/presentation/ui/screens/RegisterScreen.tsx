@@ -59,11 +59,15 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   return (
     <SafeAreaView style={styles.safe}>
       <BackButton
-        onPress={() => vm.step === 'profile' ? vm.goBackToAccess() : navigation.navigate(AUTH_PATHS.LOGIN)}
+        onPress={() => {
+          if (vm.step === 'profile') return vm.goBackToAccess()
+          if (vm.step === 'photo') return vm.goBackToProfile()
+          navigation.navigate(AUTH_PATHS.LOGIN)
+        }}
       />
       <View style={styles.header}>
         <Text style={styles.title}>Criar conta</Text>
-        <StepIndicator current={vm.step === 'access' ? 1 : 2} total={2} />
+        <StepIndicator current={vm.step === 'access' ? 1 : vm.step === 'profile' ? 2 : 3} total={3} />
       </View>
 
       <KeyboardAvoidingView
@@ -113,12 +117,15 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 />
 
                 <TouchableOpacity
-                  style={[styles.btn, !vm.isAccessValid && styles.btnDisabled]}
-                  disabled={!vm.isAccessValid}
+                  style={[styles.btn, (!vm.isAccessValid || vm.loading) && styles.btnDisabled]}
+                  disabled={!vm.isAccessValid || vm.loading}
                   activeOpacity={0.8}
-                  onPress={vm.goToProfile}
+                  onPress={vm.submitAccess}
                 >
-                  <Text style={styles.btnText}>Próximo</Text>
+                  {vm.loading
+                    ? <ActivityIndicator color={theme.colors.primaryText} />
+                    : <Text style={styles.btnText}>Próximo</Text>
+                  }
                 </TouchableOpacity>
               </>
             )}
@@ -126,11 +133,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             {vm.step === 'profile' && (
               <>
                 <Text style={styles.stepTitle}>Dados Pessoais</Text>
-
-                <AvatarPickerField
-                  value={vm.profile.avatarUri}
-                  onChange={vm.setAvatarUri}
-                />
 
                 <InputField
                   name="name"
@@ -195,16 +197,47 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                   style={[styles.btn, (!vm.isProfileValid || vm.loading) && styles.btnDisabled]}
                   disabled={!vm.isProfileValid || vm.loading}
                   activeOpacity={0.8}
-                  onPress={vm.submit}
+                  onPress={vm.submitProfile}
                 >
                   {vm.loading
                     ? <ActivityIndicator color={theme.colors.primaryText} />
-                    : <Text style={styles.btnText}>Cadastrar</Text>
+                    : <Text style={styles.btnText}>Próximo</Text>
                   }
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.link} onPress={vm.goBackToAccess}>
                   <Text style={styles.linkText}>← Voltar para Acesso</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {vm.step === 'photo' && (
+              <>
+                <Text style={styles.stepTitle}>Foto do Perfil</Text>
+
+                <AvatarPickerField
+                  value={vm.photo.fileUri}
+                  onChange={vm.setFileUri}
+                />
+
+                <TouchableOpacity
+                  style={[styles.btn, (!vm.photo.fileUri || vm.loading) && styles.btnDisabled]}
+                  disabled={!vm.photo.fileUri || vm.loading}
+                  activeOpacity={0.8}
+                  onPress={vm.submitPhoto}
+                >
+                  {vm.loading
+                    ? <ActivityIndicator color={theme.colors.primaryText} />
+                    : <Text style={styles.btnText}>Enviar foto e Concluir</Text>
+                  }
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.link, { marginTop: Bootstrap.spacing.lg }]}
+                  disabled={vm.loading}
+                  onPress={vm.skipPhoto}
+                >
+                  <Text style={styles.linkText}>Concluir sem foto →</Text>
                 </TouchableOpacity>
               </>
             )}

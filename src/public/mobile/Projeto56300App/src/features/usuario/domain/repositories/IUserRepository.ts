@@ -44,4 +44,5 @@ export interface IUserRepository {
   updateUser(id: string, payload: Partial<CreateUserPayload>): Promise<void>
   updateProfile(userId: string, payload: Partial<CreateProfilePayload>): Promise<void>
   uploadAvatar(customerId: string, uri: string): Promise<void>
+  uploadFiles(userId: string, fileUri: string): Promise<void>
 }

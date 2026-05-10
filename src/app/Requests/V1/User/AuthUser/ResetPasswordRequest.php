@@ -14,7 +14,7 @@ class ResetPasswordRequest
     {
         return [
             'token'            => 'required|string|min_length[64]|max_length[64]',
-            'password'         => 'required|string|min_length[5]',
+            'password'         => 'required|string|min_length[8]',
             'password_confirm' => 'required|string|matches[password]',
         ];
     }
@@ -29,7 +29,7 @@ class ResetPasswordRequest
             ],
             'password' => [
                 'required'   => 'A nova senha é obrigatória',
-                'min_length' => 'A nova senha deve ter no mínimo 5 caracteres',
+                'min_length' => 'A nova senha deve ter no mínimo 8 caracteres',
             ],
             'password_confirm' => [
                 'required' => 'A confirmação de senha é obrigatória',

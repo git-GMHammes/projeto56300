@@ -6,6 +6,7 @@ use App\Libraries\JwtHelper;
 use App\Models\V1\User\AuthUser\SqlViewModel;
 use App\Models\V1\User\UserManagement\SqlTableModel as UserManagementModel;
 use App\Models\V1\User\UserPasswordResets\SqlTableModel as PasswordResetsModel;
+use App\Models\V1\User\UserRefreshTokens\SqlTableModel as RefreshTokensModel;
 use App\Services\V1\BaseViewService;
 
 /**
@@ -27,18 +28,23 @@ class Processor extends BaseViewService
     /** Tempo de vida do token de reset de senha em segundos (1 hora). */
     private const RESET_TOKEN_TTL = 3600;
 
+    /** Tempo de vida do refresh token em segundos (7 dias). */
+    private const REFRESH_TOKEN_TTL = 604800;
+
     /** View do template de e-mail de recuperação de senha. */
     private const EMAIL_VIEW_RECOVERY = 'emails/recovery_password';
 
-    protected SqlViewModel       $viewModel;
-    protected UserManagementModel $userModel;
-    protected PasswordResetsModel $resetModel;
+    protected SqlViewModel        $viewModel;
+    protected UserManagementModel  $userModel;
+    protected PasswordResetsModel  $resetModel;
+    protected RefreshTokensModel   $refreshModel;
 
     public function __construct()
     {
-        $this->viewModel  = new SqlViewModel();
-        $this->userModel  = new UserManagementModel();
-        $this->resetModel = new PasswordResetsModel();
+        $this->viewModel    = new SqlViewModel();
+        $this->userModel    = new UserManagementModel();
+        $this->resetModel   = new PasswordResetsModel();
+        $this->refreshModel = new RefreshTokensModel();
     }
 
     // -------------------------------------------------------------------------
@@ -80,11 +86,26 @@ class Processor extends BaseViewService
         $userData = $record;
         unset($userData['um_password']);
 
+        $refreshTokenPlain = bin2hex(random_bytes(32));
+        $refreshTokenHash  = hash('sha256', $refreshTokenPlain);
+        $refreshExpiresAt  = date('Y-m-d H:i:s', time() + self::REFRESH_TOKEN_TTL);
+
+        $this->refreshModel->insert([
+            'user_id'              => (int) ($record['uc_user_id'] ?? 0),
+            'user_saas_tenants_id' => $tenantId,
+            'token_hash'           => $refreshTokenHash,
+            'expires_at'           => $refreshExpiresAt,
+            'ip_address'           => substr(service('request')->getIPAddress(), 0, 45),
+            'user_agent'           => substr((string) service('request')->getUserAgent()->getAgentString(), 0, 255),
+        ]);
+
         return [
-            'token'      => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => self::JWT_TTL,
-            'user'       => $userData,
+            'token'              => $token,
+            'token_type'         => 'Bearer',
+            'expires_in'         => self::JWT_TTL,
+            'refresh_token'      => $refreshTokenPlain,
+            'refresh_expires_in' => self::REFRESH_TOKEN_TTL,
+            'user'               => $userData,
         ];
     }
 
@@ -250,9 +271,12 @@ class Processor extends BaseViewService
             cache()->save('jwt_revoked_' . hash('sha256', $token), true, $ttl);
         }
 
-        return [
-            'user_id' => $payload['sub'] ?? null,
-        ];
+        $userId = $payload['sub'] ?? null;
+        if ($userId !== null) {
+            $this->refreshModel->revokeByUserId((int) $userId);
+        }
+
+        return ['user_id' => $userId];
     }
 
     // -------------------------------------------------------------------------

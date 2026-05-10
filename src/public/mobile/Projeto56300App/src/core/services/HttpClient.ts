@@ -3,11 +3,17 @@ import { API_BASE_URL, API_TIMEOUT_MS } from '../config/env'
 const BASE = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL
 
 type TokenReader = () => Promise<string | null>
+type RefreshHandler = () => Promise<string | null>
 
 let _tokenReader: TokenReader = async () => null
+let _refreshHandler: RefreshHandler | null = null
 
 export function setTokenReader(reader: TokenReader): void {
   _tokenReader = reader
+}
+
+export function setRefreshHandler(handler: RefreshHandler | null): void {
+  _refreshHandler = handler
 }
 
 export interface ApiEnvelope<T = unknown> {
@@ -50,6 +56,16 @@ export async function httpClient<T>(
     clearTimeout(timer)
     const json = await res.json().catch(() => ({}))
     if (!res.ok) {
+      if (res.status === 401 && _refreshHandler) {
+        const newToken = await _refreshHandler()
+        if (newToken) {
+          const retryHeaders = { ...headers, Authorization: `Bearer ${newToken}` }
+          const retryRes = await fetch(`${BASE}${path}`, { ...options, headers: retryHeaders, signal: controller.signal })
+          const retryJson = await retryRes.json().catch(() => ({}))
+          if (!retryRes.ok) throw new HttpError(retryJson?.message ?? `HTTP ${retryRes.status}`, retryRes.status, retryJson)
+          return retryJson as T
+        }
+      }
       throw new HttpError(json?.message ?? `HTTP ${res.status}`, res.status, json)
     }
     return json as T

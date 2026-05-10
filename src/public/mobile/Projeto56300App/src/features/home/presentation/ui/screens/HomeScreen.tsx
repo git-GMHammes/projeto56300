@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { SafeAreaView } from '../../../../../core/navigation'
-import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import TopBar from '../../../../../shared/ui/components/TopBar'
 import HamburgerMenuButton from '../../../../../shared/ui/components/HamburgerMenuButton'
@@ -51,14 +50,6 @@ export default function HomeScreen({ navigate, onLogout }: Props) {
         onNavigate={navigate}
         onAction={handleUserAction}
       />
-      <View style={styles.center}>
-        <Text style={[styles.label, { color: theme.colors.text }]}>
-          HOME / Pública
-        </Text>
-        <Text style={[styles.subtitle, { color: theme.colors.text }]}>
-          Olá mundo
-        </Text>
-      </View>
     </SafeAreaView>
   )
 }
@@ -66,18 +57,5 @@ export default function HomeScreen({ navigate, onLogout }: Props) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    fontSize: Bootstrap.fontSize.xl,
-    fontWeight: Bootstrap.fontWeight.bold,
-  },
-  subtitle: {
-    fontSize: Bootstrap.fontSize.base,
-    marginTop: 8,
   },
 })

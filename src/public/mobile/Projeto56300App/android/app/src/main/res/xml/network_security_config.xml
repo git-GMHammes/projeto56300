@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Permite HTTP apenas para o emulador Android apontando para o host local (desenvolvimento) -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+    <!-- Todos os outros domínios exigem HTTPS (staging e produção) -->
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

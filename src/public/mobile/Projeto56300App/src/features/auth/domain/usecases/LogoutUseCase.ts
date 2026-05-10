@@ -6,8 +6,8 @@ export class LogoutUseCase {
   constructor(private readonly repo: IAuthRepository) {}
 
   async execute(): Promise<void> {
-    await this.repo.logout().catch(() => {})
     await clearSession()
     setHttpTokenReader(async () => null)
+    await this.repo.logout()
   }
 }

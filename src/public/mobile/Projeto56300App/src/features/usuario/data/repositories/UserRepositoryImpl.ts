@@ -35,6 +35,10 @@ export class UserRepositoryImpl implements IUserRepository {
     await this.ds.uploadAvatar(customerId, uri)
   }
 
+  async uploadFiles(userId: string, fileUri: string): Promise<void> {
+    await this.ds.uploadFiles(userId, fileUri)
+  }
+
   async findUsers(params: FindUsersParams): Promise<PaginatedUsers> {
     const dto = await this.ds.find(params as Record<string, unknown>)
     return UserMapper.toPaginatedUsers(dto)

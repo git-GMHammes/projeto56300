@@ -49,6 +49,27 @@ export class UserRemoteDataSource {
     })
   }
 
+  async uploadFiles(userId: string, uri: string): Promise<void> {
+    const filename = uri.split('/').pop() ?? 'photo.jpg'
+    const ext = filename.split('.').pop()?.toLowerCase() ?? 'jpg'
+    const mimeTypes: Record<string, string> = {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      webp: 'image/webp',
+    }
+    const mime = mimeTypes[ext] ?? 'image/jpeg'
+
+    const formData = new FormData()
+    formData.append('files[]', { uri, type: mime, name: filename } as unknown as Blob)
+
+    const base = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL
+    await fetch(`${base}/api/v1/user-customer-files/upload-files/${userId}`, {
+      method: 'POST',
+      body: formData,
+    })
+  }
+
   async find(params: Record<string, unknown>): Promise<PaginatedUserDto> {
     return httpClient<PaginatedUserDto>(`${BASE}/user-management/find`, {
       method: 'POST',
