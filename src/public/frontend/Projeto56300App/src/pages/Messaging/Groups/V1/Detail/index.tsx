@@ -93,7 +93,7 @@ function MessagingGroupDetail() {
     if (!confirm('Remover este membro do grupo?')) return
     try {
       await GroupService.removeMember(id, userId)
-      setMembers(prev => prev.filter(m => m.user_id !== userId))
+      setMembers(prev => prev.filter(m => m.user_management_id !== userId))
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Erro ao remover membro')
     }
@@ -102,16 +102,16 @@ function MessagingGroupDetail() {
   async function handleToggleRole(member: GroupService.GroupMember) {
     const newRole = member.role === 'admin' ? 'member' : 'admin'
     try {
-      await GroupService.updateMemberRole(id, member.user_id, newRole)
+      await GroupService.updateMemberRole(id, member.user_management_id, newRole)
       setMembers(prev =>
-        prev.map(m => m.user_id === member.user_id ? { ...m, role: newRole } : m),
+        prev.map(m => m.user_management_id === member.user_management_id ? { ...m, role: newRole } : m),
       )
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Erro ao alterar papel')
     }
   }
 
-  const myRole = members.find(m => m.user_id === currentUserId && !m.left_at)?.role
+  const myRole = members.find(m => m.user_management_id === currentUserId && !m.left_at)?.role
   const activeMembers = members.filter(m => !m.left_at)
   const chatHeight = 'calc(100vh - 160px)'
 
@@ -198,8 +198,8 @@ function MessagingGroupDetail() {
                   </div>
                   <div className="flex-grow-1 overflow-hidden">
                     <div className="text-truncate" style={{ fontSize: '0.82rem', fontWeight: 500 }}>
-                      {m.user_name ?? `Usuário #${m.user_id}`}
-                      {m.user_id === currentUserId && (
+                      {m.user_name ?? `Usuário #${m.user_management_id}`}
+                      {m.user_management_id === currentUserId && (
                         <span className="text-muted ms-1" style={{ fontSize: '0.7rem' }}>(você)</span>
                       )}
                     </div>
@@ -210,7 +210,7 @@ function MessagingGroupDetail() {
                     </div>
                   </div>
 
-                  {myRole === 'admin' && m.user_id !== currentUserId && (
+                  {myRole === 'admin' && m.user_management_id !== currentUserId && (
                     <div className="dropdown">
                       <button
                         className="btn btn-sm btn-link text-muted p-0"
@@ -232,7 +232,7 @@ function MessagingGroupDetail() {
                         <li>
                           <button
                             className="dropdown-item text-danger"
-                            onClick={() => handleRemoveMember(m.user_id)}
+                            onClick={() => handleRemoveMember(m.user_management_id)}
                           >
                             Remover do grupo
                           </button>
@@ -262,7 +262,7 @@ function MessagingGroupDetail() {
               </p>
             ) : (
               messages.map(msg => {
-                const isMine = msg.user_id === currentUserId
+                const isMine = msg.user_management_id === currentUserId
                 return (
                   <div
                     key={msg.id}
@@ -271,7 +271,7 @@ function MessagingGroupDetail() {
                     <div style={{ maxWidth: '70%' }}>
                       {!isMine && (
                         <div className="text-muted mb-1" style={{ fontSize: '0.72rem' }}>
-                          {msg.author_name ?? `Usuário #${msg.user_id}`}
+                          {msg.author_name ?? `Usuário #${msg.user_management_id}`}
                         </div>
                       )}
 
@@ -321,7 +321,7 @@ function MessagingGroupDetail() {
               style={{ flexShrink: 0 }}
             >
               <small className="text-muted">
-                Respondendo a <strong>{replyTo.author_name ?? `#${replyTo.user_id}`}</strong>:{' '}
+                Respondendo a <strong>{replyTo.author_name ?? `#${replyTo.user_management_id}`}</strong>:{' '}
                 <em>{replyTo.content?.slice(0, 60) ?? ''}...</em>
               </small>
               <button

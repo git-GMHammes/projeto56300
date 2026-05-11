@@ -22,7 +22,7 @@ export interface PrivateMessage {
 }
 
 export interface Conversation {
-  user_id: number
+  user_management_id: number
   user_name: string
   user_profile: string | null
   last_message: string | null

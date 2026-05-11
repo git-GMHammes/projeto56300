@@ -33,21 +33,21 @@ class ResourceTableController extends BaseResourceTableController
 
     /**
      * PATCH .../mark-read
-     * Body JSON: { "group_id": 1, "user_id": 2, "last_read_id": 99 }
+     * Body JSON: { "group_id": 1, "user_management_id": 2, "last_read_id": 99 }
      */
     public function markRead(): ResponseInterface
     {
         try {
             $body       = $this->getJsonBody();
             $groupId    = (int) ($body['group_id'] ?? 0);
-            $userId     = (int) ($body['user_id'] ?? 0);
+            $userId     = (int) ($body['user_management_id'] ?? 0);
             $lastReadId = (int) ($body['last_read_id'] ?? 0);
 
             if (!$groupId || !$userId || !$lastReadId) {
                 return $this->respondValidationError([
-                    'group_id'     => 'group_id é obrigatório e deve ser maior que zero',
-                    'user_id'      => 'user_id é obrigatório e deve ser maior que zero',
-                    'last_read_id' => 'last_read_id é obrigatório e deve ser maior que zero',
+                    'group_id'           => 'group_id é obrigatório e deve ser maior que zero',
+                    'user_management_id' => 'user_management_id é obrigatório e deve ser maior que zero',
+                    'last_read_id'       => 'last_read_id é obrigatório e deve ser maior que zero',
                 ]);
             }
 

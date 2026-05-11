@@ -13,7 +13,7 @@ class CreateRequest
     {
         return [
             'group_id'  => 'required|is_natural_no_zero',
-            'user_id'   => 'required|is_natural_no_zero',
+            'user_management_id'   => 'required|is_natural_no_zero',
             'role'      => 'permit_empty|in_list[admin,member]',
             'joined_at' => 'permit_empty|valid_date[Y-m-d H:i:s]',
         ];
@@ -23,7 +23,7 @@ class CreateRequest
     {
         return [
             'group_id' => ['required' => 'O group_id é obrigatório'],
-            'user_id'  => ['required' => 'O user_id é obrigatório'],
+            'user_management_id'  => ['required' => 'O user_management_id é obrigatório'],
             'role'     => ['in_list'  => 'Role inválido. Valores aceitos: admin, member'],
         ];
     }

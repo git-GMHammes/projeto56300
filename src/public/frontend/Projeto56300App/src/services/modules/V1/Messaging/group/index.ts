@@ -25,7 +25,7 @@ export interface Group {
 export interface GroupMember {
   id: number
   group_id: number
-  user_id: number
+  user_management_id: number
   role: 'admin' | 'member'
   joined_at: string
   left_at: string | null
@@ -36,7 +36,7 @@ export interface GroupMember {
 export interface MessageGroup {
   id: number
   group_id: number
-  user_id: number
+  user_management_id: number
   reply_to_id: number | null
   content: string | null
   created_at: string
@@ -138,7 +138,7 @@ export async function addMember(
 ): Promise<ApiResponse<GroupMember>> {
   return http(`${BASE}/${groupId}/members`, {
     method: 'POST',
-    body: JSON.stringify({ user_id: userId, role }),
+    body: JSON.stringify({ user_management_id: userId, role }),
   })
 }
 

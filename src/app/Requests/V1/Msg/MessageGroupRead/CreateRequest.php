@@ -13,7 +13,7 @@ class CreateRequest
     {
         return [
             'group_id'     => 'required|is_natural_no_zero',
-            'user_id'      => 'required|is_natural_no_zero',
+            'user_management_id'      => 'required|is_natural_no_zero',
             'last_read_id' => 'permit_empty|is_natural_no_zero',
         ];
     }
@@ -22,7 +22,7 @@ class CreateRequest
     {
         return [
             'group_id' => ['required' => 'O group_id é obrigatório'],
-            'user_id'  => ['required' => 'O user_id é obrigatório'],
+            'user_management_id'  => ['required' => 'O user_management_id é obrigatório'],
         ];
     }
 }

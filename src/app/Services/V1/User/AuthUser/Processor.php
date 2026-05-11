@@ -91,7 +91,7 @@ class Processor extends BaseViewService
         $refreshExpiresAt  = date('Y-m-d H:i:s', time() + self::REFRESH_TOKEN_TTL);
 
         $this->refreshModel->insert([
-            'user_id'              => (int) ($record['uc_user_id'] ?? 0),
+            'user_management_id'   => (int) ($record['uc_user_id'] ?? 0),
             'user_saas_tenants_id' => $tenantId,
             'token_hash'           => $refreshTokenHash,
             'expires_at'           => $refreshExpiresAt,
@@ -149,7 +149,7 @@ class Processor extends BaseViewService
         $expiresAt = date('Y-m-d H:i:s', time() + self::RESET_TOKEN_TTL);
 
         $resetId = $this->resetModel->insert([
-            'user_id'    => $userId,
+            'user_management_id' => $userId,
             'token_hash' => $tokenHash,
             'expires_at' => $expiresAt,
             'ip_address' => substr(service('request')->getIPAddress(), 0, 45),
@@ -198,9 +198,9 @@ class Processor extends BaseViewService
         }
 
         return [
-            'id'         => (int) $record['id'],
-            'user_id'    => (int) $record['user_id'],
-            'expires_at' => $record['expires_at'],
+            'id'                 => (int) $record['id'],
+            'user_management_id' => (int) $record['user_management_id'],
+            'expires_at'         => $record['expires_at'],
         ];
     }
 
@@ -227,7 +227,7 @@ class Processor extends BaseViewService
             throw new \InvalidArgumentException('Token inválido, expirado ou já utilizado');
         }
 
-        $userId  = (int) $record['user_id'];
+        $userId  = (int) $record['user_management_id'];
         $resetId = (int) $record['id'];
 
         if ($this->userModel->find($userId) === null) {
@@ -241,7 +241,7 @@ class Processor extends BaseViewService
         $this->resetModel->markAsUsed($resetId);
 
         return [
-            'user_id' => $userId,
+            'user_management_id' => $userId,
         ];
     }
 
@@ -276,7 +276,7 @@ class Processor extends BaseViewService
             $this->refreshModel->revokeByUserId((int) $userId);
         }
 
-        return ['user_id' => $userId];
+        return ['user_management_id' => $userId];
     }
 
     // -------------------------------------------------------------------------

@@ -39,7 +39,7 @@ class RefreshProcessor extends BaseViewService
             throw new \InvalidArgumentException('Refresh token inválido, expirado ou já utilizado');
         }
 
-        $userId   = (int) $record['user_id'];
+        $userId   = (int) $record['user_management_id'];
         $tenantId = (int) $record['user_saas_tenants_id'];
 
         $this->refreshModel->markAsUsed((int) $record['id']);
@@ -57,7 +57,7 @@ class RefreshProcessor extends BaseViewService
         $newExpiresAt    = date('Y-m-d H:i:s', time() + self::REFRESH_TOKEN_TTL);
 
         $this->refreshModel->insert([
-            'user_id'              => $userId,
+            'user_management_id'   => $userId,
             'user_saas_tenants_id' => $tenantId,
             'token_hash'           => $newRefreshHash,
             'expires_at'           => $newExpiresAt,

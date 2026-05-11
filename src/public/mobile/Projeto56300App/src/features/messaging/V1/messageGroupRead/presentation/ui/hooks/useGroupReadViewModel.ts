@@ -16,7 +16,7 @@ export function useGroupReadViewModel() {
   const markRead = useCallback(async (groupId: number, userId: number, lastReadId: number) => {
     setState({ marking: true, error: null })
     try {
-      await markReadUseCase.execute({ group_id: groupId, user_id: userId, last_read_id: lastReadId })
+      await markReadUseCase.execute({ group_id: groupId, user_management_id: userId, last_read_id: lastReadId })
       setState({ marking: false, error: null })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao marcar como lido'

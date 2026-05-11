@@ -42,7 +42,7 @@ class Processor extends BaseTableService
      */
     protected function validateOnCreate(array $data): ?array
     {
-        if (!empty($data['user_id']) && !$this->tableModel->existsUserManagement((int) $data['user_id'])) {
+        if (!empty($data['user_management_id']) && !$this->tableModel->existsUserManagement((int) $data['user_management_id'])) {
             return ['success' => false, 'message' => 'Usuário não encontrado em user_001_management', 'code' => 422];
         }
 
@@ -107,7 +107,7 @@ class Processor extends BaseTableService
      */
     protected function prepareUpdateData(int $id, array $data): array
     {
-        unset($data['user_id']);
+        unset($data['user_management_id']);
 
         return $this->prepareData($data);
     }

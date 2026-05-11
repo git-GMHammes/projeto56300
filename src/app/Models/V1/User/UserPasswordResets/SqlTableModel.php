@@ -26,7 +26,7 @@ class SqlTableModel extends BaseTableModel
      * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps).
      */
     protected $allowedFields = [
-        'user_id',
+        'user_management_id',
         'token_hash',
         'expires_at',
         'used_at',
@@ -46,7 +46,7 @@ class SqlTableModel extends BaseTableModel
     /** Campos válidos para ordenação */
     protected array $sortableFields = [
         'id',
-        'user_id',
+        'user_management_id',
         'expires_at',
         'used_at',
         'created_at',
@@ -85,7 +85,7 @@ class SqlTableModel extends BaseTableModel
     public function softDeleteActiveByUserId(int $userId): void
     {
         $this->db->table($this->table)
-                 ->where('user_id', $userId)
+                 ->where('user_management_id', $userId)
                  ->where('used_at IS NULL', null, false)
                  ->where('expires_at >', date('Y-m-d H:i:s'))
                  ->where('deleted_at IS NULL', null, false)

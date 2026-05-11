@@ -18,7 +18,7 @@ export class UserRepositoryImpl implements IUserRepository {
 
   async createProfile(payload: CreateProfilePayload): Promise<{ customerId: string }> {
     const result = await this.ds.createCustomer({
-      user_id: payload.userId,
+      user_management_id: payload.userId,
       name: payload.name,
       cpf: payload.cpf,
       whatsapp: payload.whatsapp,

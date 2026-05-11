@@ -52,11 +52,11 @@ function MessagingPrivate() {
     setLoadingMsgs(true)
     setMessages([])
     try {
-      const result = await PrivateService.getThread(conv.user_id)
+      const result = await PrivateService.getThread(conv.user_management_id)
       setMessages(result.data)
-      await PrivateService.markRead(conv.user_id)
+      await PrivateService.markRead(conv.user_management_id)
       setConversations(prev =>
-        prev.map(c => c.user_id === conv.user_id ? { ...c, unread_count: 0 } : c),
+        prev.map(c => c.user_management_id === conv.user_management_id ? { ...c, unread_count: 0 } : c),
       )
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao carregar mensagens')
@@ -69,9 +69,9 @@ function MessagingPrivate() {
     if (!content.trim() || !selectedConv) return
     setSending(true)
     try {
-      await PrivateService.send({ receiver_id: selectedConv.user_id, content: content.trim() })
+      await PrivateService.send({ receiver_id: selectedConv.user_management_id, content: content.trim() })
       setContent('')
-      const result = await PrivateService.getThread(selectedConv.user_id)
+      const result = await PrivateService.getThread(selectedConv.user_management_id)
       setMessages(result.data)
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Erro ao enviar mensagem')
@@ -117,8 +117,8 @@ function MessagingPrivate() {
             <ul className="list-group list-group-flush">
               {conversations.map(conv => (
                 <li
-                  key={conv.user_id}
-                  className={`list-group-item list-group-item-action py-3 px-3${selectedConv?.user_id === conv.user_id ? ' active' : ''}`}
+                  key={conv.user_management_id}
+                  className={`list-group-item list-group-item-action py-3 px-3${selectedConv?.user_management_id === conv.user_management_id ? ' active' : ''}`}
                   style={{ cursor: 'pointer' }}
                   onClick={() => selectConversation(conv)}
                 >

@@ -120,7 +120,7 @@ export interface RecoverPasswordPayload {
 
 export interface ResetTokenInfo {
   id: number
-  user_id: number
+  user_management_id: number
   expires_at: string
 }
 

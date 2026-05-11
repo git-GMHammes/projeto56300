@@ -158,7 +158,7 @@ function MessagingTimeline() {
                   </div>
                   <div>
                     <div className="fw-semibold" style={{ fontSize: '0.9rem' }}>
-                      {post.author_name ?? `Usuário #${post.user_id}`}
+                      {post.author_name ?? `Usuário #${post.user_management_id}`}
                     </div>
                     <div className="text-muted" style={{ fontSize: '0.74rem' }}>
                       {formatDateTime(post.created_at)}

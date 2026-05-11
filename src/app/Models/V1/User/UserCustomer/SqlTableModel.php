@@ -28,7 +28,7 @@ class SqlTableModel extends BaseTableModel
      * Exclui: id (PK), created_at/updated_at/deleted_at (timestamps), user_id_active (coluna gerada).
      */
     protected $allowedFields = [
-        'user_id',
+        'user_management_id',
         'is_active',
         'name',
         'cpf',
@@ -64,7 +64,7 @@ class SqlTableModel extends BaseTableModel
     protected array $sortableFields = [
         'id',
         'is_active',
-        'user_id',
+        'user_management_id',
         'name',
         'cpf',
         'mail',

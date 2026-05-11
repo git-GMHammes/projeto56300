@@ -9,7 +9,7 @@ export interface UserManagementPayload {
 }
 
 export interface UserCustomerPayload {
-  user_id: string
+  user_management_id: string
   name: string
   cpf: string
   whatsapp: string

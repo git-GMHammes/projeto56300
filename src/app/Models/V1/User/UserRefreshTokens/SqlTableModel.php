@@ -14,7 +14,7 @@ class SqlTableModel extends BaseTableModel
     protected $useTimestamps  = true;
 
     protected $allowedFields = [
-        'user_id',
+        'user_management_id',
         'user_saas_tenants_id',
         'token_hash',
         'expires_at',
@@ -43,7 +43,7 @@ class SqlTableModel extends BaseTableModel
 
     public function revokeByUserId(int $userId): void
     {
-        $this->where('user_id', $userId)
+        $this->where('user_management_id', $userId)
              ->where('used_at', null)
              ->set(['used_at' => date('Y-m-d H:i:s')])
              ->update();

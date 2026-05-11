@@ -26,7 +26,7 @@ class SqlTableModel extends BaseTableModel
     protected $allowedFields = [
         'source',
         'source_id',
-        'user_id',
+        'user_management_id',
         'original_name',
         'filename',
         'stored_path',

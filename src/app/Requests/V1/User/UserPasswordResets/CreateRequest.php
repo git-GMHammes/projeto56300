@@ -20,7 +20,7 @@ class CreateRequest
     public function rules(): array
     {
         return [
-            'user_id'    => 'required|is_natural_no_zero',
+            'user_management_id'    => 'required|is_natural_no_zero',
             'token_hash' => 'required|string|min_length[64]|max_length[64]',
             'expires_at' => 'required|string',
             'used_at'    => 'permit_empty|string',
@@ -32,9 +32,9 @@ class CreateRequest
     public function messages(): array
     {
         return [
-            'user_id' => [
-                'required'            => 'O campo user_id é obrigatório',
-                'is_natural_no_zero'  => 'O campo user_id deve ser um inteiro positivo',
+            'user_management_id' => [
+                'required'            => 'O campo user_management_id é obrigatório',
+                'is_natural_no_zero'  => 'O campo user_management_id deve ser um inteiro positivo',
             ],
             'token_hash' => [
                 'required'   => 'O campo token_hash é obrigatório',

@@ -13,7 +13,7 @@ export interface MsgFile {
   id: number
   source: FileSource
   source_id: number
-  user_id: number
+  user_management_id: number
   original_name: string
   filename: string
   stored_path: string
