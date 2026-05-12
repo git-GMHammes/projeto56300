@@ -140,3 +140,4 @@ $RECYCLE.BIN/
 docs/
 .claude/worktrees/eager-herschel/
 .claude/worktrees/sweet-blackwell/
+src/system/ThirdParty/Jugwoko.php
