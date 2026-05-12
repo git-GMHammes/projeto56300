@@ -1,5 +1,31 @@
 # CLAUDE.md — Frontend Web (React / TypeScript)
 
+---
+
+> ## ⚠️ FLUXO DE PLANEJAMENTO OBRIGATÓRIO
+>
+> Este arquivo é complementar ao **CLAUDE.md raiz** do projeto.
+> O fluxo de planejamento e os modelos de JSON são definidos lá e devem ser
+> seguidos **à risca** em qualquer tarefa que envolva criar, editar ou excluir arquivos.
+>
+> **Regras completas:**
+> `C:\laragon\www\php\habilidade\projeto56300\CLAUDE.md`
+> → Seção: *"Fluxo de Trabalho Obrigatório — Planejamento e Registro"*
+>
+> **Modelo do plano principal** (`_plano.json` — com estimativa APF/IFPUG):
+> `src/writable/claude/AAAAMMDDHHMMSS_nome_plano.json`
+>
+> **Modelo do registro pós-execução** (`_no_plano.json` — ações não planejadas):
+> `src/writable/claude/AAAAMMDDHHMMSS_nome_no_plano.json`
+>
+> **Sequência obrigatória:**
+> 1. Criar `_plano.json` com estimativa em Pontos de Função
+> 2. Apresentar o plano e aguardar aprovação explícita
+> 3. Executar somente o que foi aprovado
+> 4. Se surgir algo não previsto → criar `_no_plano.json`
+
+---
+
 Instruções específicas do frontend web Projeto56300App.
 Carregado automaticamente ao trabalhar neste diretório.
 

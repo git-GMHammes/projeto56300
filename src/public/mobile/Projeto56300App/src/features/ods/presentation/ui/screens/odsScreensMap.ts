@@ -1,4 +1,5 @@
 import type React from 'react'
+import OdsHomeScreen from './OdsHomeScreen'
 import POds001 from './pods001'
 import POds002 from './pods002'
 import POds003 from './pods003'
@@ -20,6 +21,7 @@ import POds018 from './pods018'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ODS_SCREENS_MAP: Record<string, React.ComponentType<any>> = {
+  OdsHome: OdsHomeScreen,
   OdsP01: POds001,
   OdsP02: POds002,
   OdsP03: POds003,

@@ -1,7 +1,7 @@
 export interface LoginRequestDto {
   um_user: string
   um_password: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
 }
 
 export interface SessionUserDto {
@@ -24,9 +24,17 @@ export interface SessionUserDto {
   uc_date_birth: string
   uc_zip_code: string
   uc_address: string
+  uc_tenant_at: string
+  uc_validity: string
+  uc_created_at: string
+  uc_updated_at: string
+  uc_deleted_at: string | null
+  uc_user_id_active: string
   ut_id: string
-  ut_tenant_id: string
+  ut_user_id: string
+  ut_user_saas_tenants_id: string
   ut_role: string
+  ut_created_at: string
   ut_deleted_at: string | null
 }
 
@@ -34,5 +42,7 @@ export interface LoginResponseDto {
   token: string
   token_type: string
   expires_in: number
+  refresh_token: string
+  refresh_expires_in: number
   user: SessionUserDto
 }

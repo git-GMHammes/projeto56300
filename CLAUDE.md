@@ -129,7 +129,7 @@ src/writable/claude/{AAAAMMDDHHMMSS}_{titulo}_plano.json
 - `{titulo}` = slug do prompt (lowercase, espaços → `_`, sem caracteres especiais). Ex: `criar_modulo_estoque`
 
 > **⚠️ MODELO OBRIGATÓRIO:** A estrutura do JSON deve seguir **exatamente** o arquivo modelo:
-> `src/writable/claude/nome_modelo_001_planejamento.json`
+> `src/writable/claude/AAAAMMDDHHMMSS_nome_plano.json`
 >
 > Leia o modelo antes de criar qualquer planejamento. Não invente campos nem simplifique a estrutura.
 
@@ -152,6 +152,30 @@ Estrutura obrigatória do JSON de planejamento (conforme modelo):
       "estrategia": "restaurar_do_backup | reverter_via_git | nao_aplicavel",
       "comando": "git checkout HEAD -- caminho/do/arquivo"
     }
+  },
+  "estimativa_pf": {
+    "metodologia": { "sigla": "APF", "padrao_internacional": "IFPUG", "versao_referencia": "CPM 4.x" },
+    "metricas_internacionais_pontos_funcao": { "tipos_funcoes": {"dados": [...], "transacionais": [...]}, "matriz_complexidade": {...} },
+    "fatores_ajuste_geral": [ "... 14 fatores com grau_influencia: 0 ..." ],
+    "calculo_ajuste": { "soma_graus_influencia": 0, "fator_ajuste": 0.65, "formula": "VAF = 0.65 + (ΣDI * 0.01)" },
+    "parametros_estimativa": { "horas_por_ponto_funcao": 8, "minutos_por_ponto_funcao": 480 },
+    "tarefas": [
+      {
+        "id": 1,
+        "nome": "Nome da tarefa",
+        "descricao": "O que será entregue funcionalmente.",
+        "funcoes_ponto_funcao": [
+          { "tipo": "ALI | AIE | EE | SE | CE", "complexidade": "baixa | media | alta",
+            "quantidade": 1, "pontos_funcao_unitario": 0, "pontos_funcao_total": 0,
+            "desenvolvimento": { "min": 0, "hour": 0 } }
+        ],
+        "resumo_estimativa": {
+          "pontos_funcao_nao_ajustados": 0, "fator_ajuste": 0.65,
+          "pontos_funcao_ajustados": 0, "desenvolvimento": { "min": 0, "hour": 0 }
+        }
+      }
+    ],
+    "totais": { "pontos_funcao_nao_ajustados": 0, "pontos_funcao_ajustados": 0, "desenvolvimento": { "min": 0, "hour": 0 } }
   },
   "passos": [
     {
@@ -183,21 +207,50 @@ Se todas as ações foram exatamente as planejadas, **a tarefa está concluída 
 
 Se durante a execução for necessária alguma ação que não constava no planejamento original, criar o arquivo:
 ```
-src/writable/claude/{AAAAMMDDHHMMSS}_{titulo}_pos_plano.json
+src/writable/claude/{AAAAMMDDHHMMSS}_{titulo}_no_plano.json
 ```
 
-Estrutura do JSON de ações pós-planejamento:
+> **⚠️ MODELO OBRIGATÓRIO:** A estrutura do JSON deve seguir **exatamente** o arquivo modelo:
+> `src/writable/claude/AAAAMMDDHHMMSS_nome_no_plano.json`
+
+Estrutura do JSON de ações não planejadas (conforme modelo):
 ```json
 {
-  "titulo": "Título legível da tarefa",
-  "timestamp": "AAAAMMDDHHMMSS",
+  "pos_plano": {
+    "plano_referencia": "plan_YYYY_MM_DD_NNN",
+    "titulo": "Título legível da tarefa (igual ao plano original)",
+    "timestamp": "AAAAMMDDHHMMSS",
+    "criado_em": "YYYY-MM-DDTHH:MM:SS-03:00",
+    "motivo_registro": "O que tornou necessário registrar ações além do plano original."
+  },
+  "estimativa_pf_adicional": {
+    "parametros_estimativa": { "horas_por_ponto_funcao": 8, "minutos_por_ponto_funcao": 480 },
+    "tarefas_nao_planejadas": [
+      {
+        "id": 1,
+        "nome": "Nome da tarefa adicional",
+        "funcoes_ponto_funcao": [
+          { "tipo": "EE | CE | SE | ALI | AIE", "complexidade": "baixa | media | alta",
+            "quantidade": 1, "pontos_funcao_unitario": 0, "pontos_funcao_total": 0,
+            "desenvolvimento": { "min": 0, "hour": 0 } }
+        ],
+        "resumo_estimativa": {
+          "pontos_funcao_nao_ajustados": 0, "fator_ajuste": 0.65,
+          "pontos_funcao_ajustados": 0, "desenvolvimento": { "min": 0, "hour": 0 }
+        }
+      }
+    ],
+    "totais_adicionais": { "pontos_funcao_nao_ajustados": 0, "pontos_funcao_ajustados": 0, "desenvolvimento": { "min": 0, "hour": 0 } }
+  },
   "acoes_nao_planejadas": [
     {
       "ordem": 1,
       "tipo": "create | edit | delete | read | bash | query",
-      "acao": "Descrição da ação não planejada",
-      "motivo": "Por que foi necessária",
-      "arquivo": "caminho/do/arquivo (se aplicável)"
+      "alvo": "C:\\caminho\\absoluto\\do\\arquivo.ext",
+      "acao": "Descrição objetiva da ação realizada.",
+      "motivo": "Por que foi necessária — restrição encontrada, dependência oculta, comportamento inesperado.",
+      "descoberta": "O que foi encontrado ou aprendido durante a execução que não constava no plano.",
+      "depende_de": []
     }
   ]
 }

@@ -1,11 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
     View, Text, TextInput, TouchableOpacity, Modal,
     FlatList, ActivityIndicator, StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import Bootstrap from '../../../theme/bootstrap';
 import type { SelectFieldProps, SelectOption } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const SelectField: React.FC<SelectFieldProps> = ({
     name,
@@ -24,6 +26,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
     onBlur: _onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [feedback, setFeedback] = useState('');
     const [visible, setVisible] = useState(false);
@@ -31,7 +37,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
     const [items, setItems] = useState<SelectOption[]>(options);
     const [loading, setLoading] = useState(false);
 
-    // Fetch remoto se src estiver definido
     useEffect(() => {
         if (!src) return;
         setLoading(true);
@@ -76,11 +81,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
     const isValid = touched && !feedback && !!value;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
 
@@ -89,33 +94,33 @@ const SelectField: React.FC<SelectFieldProps> = ({
                 disabled={disabled || readOnly || loading}
                 onPress={() => setVisible(true)}
                 style={[
-                    styles.selector,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    ls.selector,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                 ]}
             >
                 {loading
-                    ? <ActivityIndicator size="small" color={Bootstrap.colors.primary} />
+                    ? <ActivityIndicator size="small" color={theme.colors.primary} />
                     : <>
-                        <Text style={[styles.selectorText, !selectedLabel && styles.placeholder]}>
+                        <Text style={[ls.selectorText, !selectedLabel && ls.placeholder]}>
                             {selectedLabel || placeholder}
                         </Text>
-                        <Text style={styles.caret}>▾</Text>
+                        <Text style={ls.caret}>▾</Text>
                     </>
                 }
             </TouchableOpacity>
 
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
 
             <Modal visible={visible} transparent animationType="fade" onRequestClose={() => setVisible(false)}>
-                <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={() => setVisible(false)} />
-                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.sheet}>
-                    <View style={styles.handle} />
+                <TouchableOpacity style={staticStyles.overlay} activeOpacity={1} onPress={() => setVisible(false)} />
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={ls.sheet}>
+                    <View style={ls.handle} />
                     <TextInput
-                        style={styles.search}
+                        style={ls.search}
                         placeholder="Buscar..."
-                        placeholderTextColor="#6c757d"
+                        placeholderTextColor={theme.colors.placeholder}
                         value={search}
                         onChangeText={setSearch}
                         autoFocus
@@ -123,19 +128,19 @@ const SelectField: React.FC<SelectFieldProps> = ({
                     <FlatList
                         data={filtered}
                         keyExtractor={item => item.value}
-                        style={styles.list}
+                        style={staticStyles.list}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                style={[styles.item, item.value === value && styles.itemSelected]}
+                                style={[ls.item, item.value === value && ls.itemSelected]}
                                 onPress={() => handleSelect(item)}
                             >
-                                <Text style={[styles.itemText, item.value === value && styles.itemTextSelected]}>
+                                <Text style={[ls.itemText, item.value === value && ls.itemTextSelected]}>
                                     {item.label}
                                 </Text>
                             </TouchableOpacity>
                         )}
                         ListEmptyComponent={
-                            <Text style={styles.empty}>Nenhuma opção encontrada.</Text>
+                            <Text style={ls.empty}>Nenhuma opção encontrada.</Text>
                         }
                     />
                 </KeyboardAvoidingView>
@@ -144,29 +149,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
-    selector: {
-        height: Bootstrap.inputHeight,
-        borderWidth: 1,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        paddingHorizontal: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: Bootstrap.colors.inputBg,
-    },
-    selectorText: {
-        flex: 1,
-        fontSize: Bootstrap.fontSize.base,
-        color: Bootstrap.colors.body,
-    },
-    placeholder: { color: '#6c757d' },
-    caret: {
-        fontSize: 14,
-        color: Bootstrap.colors.muted,
-        marginLeft: 4,
-    },
+const staticStyles = StyleSheet.create({
     overlay: {
         position: 'absolute',
         top: 0,
@@ -175,61 +158,90 @@ const styles = StyleSheet.create({
         bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.35)',
     },
-    sheet: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        maxHeight: '70%',
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-        paddingBottom: 16,
-        elevation: 8,
-    },
-    handle: {
-        width: 40,
-        height: 4,
-        borderRadius: 2,
-        backgroundColor: '#dee2e6',
-        alignSelf: 'center',
-        marginTop: 8,
-        marginBottom: 12,
-    },
-    search: {
-        marginHorizontal: 16,
-        marginBottom: 8,
-        height: 40,
-        borderWidth: 1,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        paddingHorizontal: 10,
-        fontSize: Bootstrap.fontSize.base,
-    },
     list: { flex: 1 },
-    item: {
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f8f9fa',
-    },
-    itemSelected: {
-        backgroundColor: '#e7f1ff',
-    },
-    itemText: {
-        fontSize: Bootstrap.fontSize.base,
-        color: Bootstrap.colors.body,
-    },
-    itemTextSelected: {
-        color: Bootstrap.colors.primary,
-        fontWeight: Bootstrap.fontWeight.semibold as 'bold',
-    },
-    empty: {
-        textAlign: 'center',
-        padding: 24,
-        color: Bootstrap.colors.muted,
-        fontSize: Bootstrap.fontSize.base,
-    },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        selector: {
+            height: Bootstrap.inputHeight,
+            borderWidth: 1,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            paddingHorizontal: 12,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: c.inputBg,
+        },
+        selectorText: {
+            flex: 1,
+            fontSize: Bootstrap.fontSize.base,
+            color: c.inputText,
+        },
+        placeholder: { color: c.placeholder },
+        caret: {
+            fontSize: 14,
+            color: c.textMuted,
+            marginLeft: 4,
+        },
+        sheet: {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            maxHeight: '70%',
+            backgroundColor: c.surface,
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+            paddingBottom: 16,
+            elevation: 8,
+        },
+        handle: {
+            width: 40,
+            height: 4,
+            borderRadius: 2,
+            backgroundColor: c.border,
+            alignSelf: 'center',
+            marginTop: 8,
+            marginBottom: 12,
+        },
+        search: {
+            marginHorizontal: 16,
+            marginBottom: 8,
+            height: 40,
+            borderWidth: 1,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            paddingHorizontal: 10,
+            fontSize: Bootstrap.fontSize.base,
+            color: c.inputText,
+            backgroundColor: c.inputBg,
+        },
+        item: {
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+            borderBottomWidth: 1,
+            borderBottomColor: c.divider,
+        },
+        itemSelected: {
+            backgroundColor: c.bg,
+        },
+        itemText: {
+            fontSize: Bootstrap.fontSize.base,
+            color: c.text,
+        },
+        itemTextSelected: {
+            color: c.primary,
+            fontWeight: Bootstrap.fontWeight.semibold as 'bold',
+        },
+        empty: {
+            textAlign: 'center',
+            padding: 24,
+            color: c.textMuted,
+            fontSize: Bootstrap.fontSize.base,
+        },
+    });
+}
 
 export default SelectField;

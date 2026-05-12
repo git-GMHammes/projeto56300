@@ -12,7 +12,7 @@ class CreateRequest
     {
         return [
             'timeline_id' => 'required|is_natural_no_zero',
-            'user_id'     => 'required|is_natural_no_zero',
+            'user_management_id'     => 'required|is_natural_no_zero',
             'reaction'    => 'required|in_list[like,love,haha,wow,sad,angry]',
         ];
     }
@@ -21,7 +21,7 @@ class CreateRequest
     {
         return [
             'timeline_id' => ['required' => 'O timeline_id é obrigatório'],
-            'user_id'     => ['required' => 'O user_id é obrigatório'],
+            'user_management_id'     => ['required' => 'O user_management_id é obrigatório'],
             'reaction'    => [
                 'required' => 'O tipo de reação é obrigatório',
                 'in_list'  => 'Reação inválida. Valores aceitos: like, love, haha, wow, sad, angry',

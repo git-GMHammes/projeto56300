@@ -6,29 +6,58 @@ Este documento descreve as tecnologias utilizadas e a fundamentação do modelo 
 
 ---
 
+## Índice
+
+1. [Tecnologias Utilizadas](#1-tecnologias-utilizadas)
+2. [O Modelo SaaS](#2-o-modelo-saas-software-as-a-service)
+3. [Estrutura de Execução](#3-estrutura-de-execução)
+4. [Resumo do banco de dados](#4-resumo-do-banco-de-dados)
+5. [Módulos do sistema](#5-módulos-do-sistema)
+6. [Arquitetura](#6-arquitetura)
+7. [Stack](#7-stack)
+8. [Desenvolvedor](#8-desenvolvedor)
+9. [ROADMAP — Como criar um novo módulo](#9-roadmap--como-criar-um-novo-módulo)
+10. [ROADMAP — Módulo de Autenticação (AuthUser)](#10-roadmap--módulo-de-autenticação-authuser)
+11. [ROADMAP — BaseResourceTableController](#11-roadmap--baseresourcetablecontroller)
+12. [ROADMAP — BaseResourceViewController](#12-roadmap--baseresourceviewcontroller)
+13. [ROADMAP — Filtros V1 (AuthFilter + LoginRateLimitFilter)](#13-roadmap--filtros-v1-authfilter--loginratelimitfilter)
+14. [ROADMAP — Helpers Globais (debug + uuid)](#14-roadmap--helpers-globais-debug--uuid)
+15. [ROADMAP — Libraries (ApiExceptionHandler + JwtHelper + ContentFilter)](#15-roadmap--libraries-apiexceptionhandler--jwthelper--contentfilter)
+16. [Requests V1 — Regras de Validação](#16-requests-v1--regras-de-validação)
+17. [ROADMAP — BaseTableService (Template Method + Escrita + Exclusão)](#17-roadmap--basetableservice-template-method--escrita--exclusão)
+18. [ROADMAP — BaseViewService (Sanitização + Formatação + Leitura de View)](#18-roadmap--baseviewservice-sanitização--formatação--leitura-de-view)
+19. [ROADMAP — BaseTableModel (Paginação + Soft Delete + SQL Builder)](#19-roadmap--basetablemodel-paginação--soft-delete--sql-builder)
+20. [ROADMAP — BaseViewModel (Leitura de View SQL + Paginação)](#20-roadmap--baseviewmodel-leitura-de-view-sql--paginação)
+
+---
+
 ## 1. Tecnologias Utilizadas
 
 ### Backend e Infraestrutura
-* **CodeIgniter 4.x**: Framework PHP robusto e leve. Utilizado para a construção da API RESTful, garantindo performance e uma estrutura MVC clara para a lógica de negócio e persistência de dados.
-* **MySQL**: Sistema de Gerenciamento de Banco de Dados Relacional (RDBMS). Responsável pelo armazenamento estruturado de dados, garantindo integridade referencial e suporte a consultas complexas.
-* **Docker Compose**: Ferramenta para definição e execução de aplicações multi-contêiner. Facilita a orquestração do ambiente de desenvolvimento e produção, garantindo paridade entre os ambientes.
-* **Podman**: Motor de contêineres sem daemon (daemonless) e rootless. Utilizado como alternativa segura e eficiente ao Docker para gerenciar imagens e contêineres, focando em segurança e conformidade com padrões OCI.
+
+- **CodeIgniter 4.x**: Framework PHP robusto e leve. Utilizado para a construção da API RESTful, garantindo performance e uma estrutura MVC clara para a lógica de negócio e persistência de dados.
+- **MySQL**: Sistema de Gerenciamento de Banco de Dados Relacional (RDBMS). Responsável pelo armazenamento estruturado de dados, garantindo integridade referencial e suporte a consultas complexas.
+- **Docker Compose**: Ferramenta para definição e execução de aplicações multi-contêiner. Facilita a orquestração do ambiente de desenvolvimento e produção, garantindo paridade entre os ambientes.
+- **Podman**: Motor de contêineres sem daemon (daemonless) e rootless. Utilizado como alternativa segura e eficiente ao Docker para gerenciar imagens e contêineres, focando em segurança e conformidade com padrões OCI.
 
 ### Frontend e Mobile
-* **React JS (Versão Atual)**: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas na web. Focada em componentes reutilizáveis e no gerenciamento eficiente do estado da aplicação (Single Page Application).
-* **React Native (Versão Atual)**: Framework para desenvolvimento de aplicativos móveis nativos (Android e iOS) utilizando a mesma base lógica do React, permitindo alta performance e acesso a APIs nativas do dispositivo.
-* **Bootstrap (Versão Atual)**: Framework CSS para desenvolvimento de interfaces responsivas e "mobile-first". Fornece uma base sólida de componentes visuais para agilizar o design do frontend web.
+
+- **React JS (Versão Atual)**: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas na web. Focada em componentes reutilizáveis e no gerenciamento eficiente do estado da aplicação (Single Page Application).
+- **React Native (Versão Atual)**: Framework para desenvolvimento de aplicativos móveis nativos (Android e iOS) utilizando a mesma base lógica do React, permitindo alta performance e acesso a APIs nativas do dispositivo.
+- **Bootstrap (Versão Atual)**: Framework CSS para desenvolvimento de interfaces responsivas e "mobile-first". Fornece uma base sólida de componentes visuais para agilizar o design do frontend web.
 
 ---
 
 ## 2. O Modelo SaaS (Software as a Service)
 
 ### O que é?
-O **SaaS** é um modelo de distribuição e licenciamento de software onde a aplicação é hospedada centralmente por um provedor e acessada pelos usuários via internet, geralmente através de um navegador web ou aplicativo móvel. 
+
+O **SaaS** é um modelo de distribuição e licenciamento de software onde a aplicação é hospedada centralmente por um provedor e acessada pelos usuários via internet, geralmente através de um navegador web ou aplicativo móvel.
 
 Diferente do modelo tradicional, o cliente não precisa instalar, manter ou atualizar o software em seus próprios servidores; tudo é gerenciado pelo provedor do serviço.
 
 ### Distribuição para Empresas e Instituições
+
 A distribuição em um contexto corporativo ou colaborativo ocorre das seguintes formas:
 
 1.  **Multi-tenancy (Arquitetura Multilocatária)**: Uma única instância do software atende a vários clientes (empresas), mas os dados de cada cliente são isolados logicamente. Isso reduz custos de manutenção e escala a operação.
@@ -61,24 +90,24 @@ isolamento de dados por empresa/plano.
 
 ---
 
-## Resumo do banco de dados
+## 4. Resumo do banco de dados
 
-| Módulo                   | Prefixo    | Tabelas | Views |
-| ------------------------ | ---------- | ------- | ----- |
-| Usuários e Autenticação  | `user_`    | 6       | 3     |
-| Agenda / Calendário      | `alog_`    | 8       | 1     |
-| Estoque                  | `est_`     | 19      | 4     |
-| Mecânica / Oficina       | `mec_`     | 16      | —     |
-| Mensagens / Comunicação  | `msg_`     | 8       | 7     |
-| Gestão Documental (SGD)  | `sgd_`     | 28      | —     |
-| Gestão de Tarefas        | `task_`    | 4       | —     |
-| Clínica Veterinária      | `vet_`     | 8       | —     |
-| Contato e Comunicação    | `contact_` | 2       | —     |
-| **Total**                |            | **99**  | **15**|
+| Módulo                  | Prefixo    | Tabelas | Views  |
+| ----------------------- | ---------- | ------- | ------ |
+| Usuários e Autenticação | `user_`    | 6       | 3      |
+| Agenda / Calendário     | `alog_`    | 8       | 1      |
+| Estoque                 | `est_`     | 19      | 4      |
+| Mecânica / Oficina      | `mec_`     | 16      | —      |
+| Mensagens / Comunicação | `msg_`     | 8       | 7      |
+| Gestão Documental (SGD) | `sgd_`     | 28      | —      |
+| Gestão de Tarefas       | `task_`    | 4       | —      |
+| Clínica Veterinária     | `vet_`     | 8       | —      |
+| Contato e Comunicação   | `contact_` | 2       | —      |
+| **Total**               |            | **99**  | **15** |
 
 ---
 
-## Módulos do sistema
+## 5. Módulos do sistema
 
 O banco de dados é organizado por prefixo de tabela. Cada prefixo representa um domínio
 de negócio independente, podendo ser ativado como um micro-serviço isolado dentro do hub.
@@ -93,22 +122,22 @@ Implementa multi-tenant completo: `user_004_saas_tenants` define as empresas e
 
 #### Tabelas
 
-| Tabela                      | Descrição                                                   |
-| --------------------------- | ----------------------------------------------------------- |
-| `user_001_management`       | Credenciais de acesso (login, senha bcrypt, UUID, is_active)|
-| `user_002_customer`         | Dados cadastrais do cliente vinculado ao usuário            |
-| `user_003_customer_files`   | Anexos e documentos do cliente (UUID, checksum SHA-256)     |
-| `user_004_saas_tenants`     | Empresas/tenants SaaS (slug único, plano free/paid)         |
-| `user_005_tenants`          | Vínculo usuário ↔ tenant com role (member / admin)          |
-| `user_006_password_resets`  | Tokens de recuperação de senha (hash SHA-256, expiração, IP)|
+| Tabela                     | Descrição                                                    |
+| -------------------------- | ------------------------------------------------------------ |
+| `user_001_management`      | Credenciais de acesso (login, senha bcrypt, UUID, is_active) |
+| `user_002_customer`        | Dados cadastrais do cliente vinculado ao usuário             |
+| `user_003_customer_files`  | Anexos e documentos do cliente (UUID, checksum SHA-256)      |
+| `user_004_saas_tenants`    | Empresas/tenants SaaS (slug único, plano free/paid)          |
+| `user_005_tenants`         | Vínculo usuário ↔ tenant com role (member / admin)           |
+| `user_006_password_resets` | Tokens de recuperação de senha (hash SHA-256, expiração, IP) |
 
 #### Views
 
-| View                            | Descrição                                                          |
-| ------------------------------- | ------------------------------------------------------------------ |
-| `view_auth_user`                | JOIN management + customer + tenant (usada na autenticação JWT)    |
-| `view_customer`                 | Dados consolidados do cliente (management + customer)              |
-| `view_user_customer_management` | JOIN management + customer sem filtro de tenant                    |
+| View                            | Descrição                                                       |
+| ------------------------------- | --------------------------------------------------------------- |
+| `view_auth_user`                | JOIN management + customer + tenant (usada na autenticação JWT) |
+| `view_customer`                 | Dados consolidados do cliente (management + customer)           |
+| `view_user_customer_management` | JOIN management + customer sem filtro de tenant                 |
 
 ---
 
@@ -120,22 +149,22 @@ multicanal (e-mail / push).
 
 #### Tabelas
 
-| Tabela                     | Descrição                                             |
-| -------------------------- | ----------------------------------------------------- |
-| `alog_001_users`           | Referência de usuários para a agenda (sem auth)       |
-| `alog_002_categories`      | Categorias de eventos com cor hexadecimal e ícone     |
-| `alog_003_resources`       | Recursos físicos reserváveis (salas, equipamentos)    |
-| `alog_004_recurrences`     | Regras de recorrência iCal-like (diária/semanal/mensal/anual) |
-| `alog_005_events`          | Eventos/compromissos com suporte a recorrência        |
+| Tabela                     | Descrição                                                      |
+| -------------------------- | -------------------------------------------------------------- |
+| `alog_001_users`           | Referência de usuários para a agenda (sem auth)                |
+| `alog_002_categories`      | Categorias de eventos com cor hexadecimal e ícone              |
+| `alog_003_resources`       | Recursos físicos reserváveis (salas, equipamentos)             |
+| `alog_004_recurrences`     | Regras de recorrência iCal-like (diária/semanal/mensal/anual)  |
+| `alog_005_events`          | Eventos/compromissos com suporte a recorrência                 |
 | `alog_006_event_attendees` | Participantes de eventos com RSVP (pending/confirmed/declined) |
-| `alog_007_event_resource`  | Recursos reservados por evento — N:N                  |
-| `alog_008_reminders`       | Lembretes por usuário com controle de envio e minutos |
+| `alog_007_event_resource`  | Recursos reservados por evento — N:N                           |
+| `alog_008_reminders`       | Lembretes por usuário com controle de envio e minutos          |
 
 #### Views
 
-| View                    | Descrição                                                        |
-| ----------------------- | ---------------------------------------------------------------- |
-| `view_alog_events_full` | Eventos completos com categoria, criador e dados de recorrência  |
+| View                    | Descrição                                                       |
+| ----------------------- | --------------------------------------------------------------- |
+| `view_alog_events_full` | Eventos completos com categoria, criador e dados de recorrência |
 
 ---
 
@@ -146,36 +175,36 @@ ajustes, controle de lote/validade, reservas e inventário físico.
 
 #### Tabelas
 
-| Tabela                        | Descrição                                             |
-| ----------------------------- | ----------------------------------------------------- |
-| `est_001_warehouse`           | Armazéns / depósitos com endereço completo            |
-| `est_002_category`            | Categorias de produto com hierarquia (parent_id)      |
-| `est_003_supplier`            | Fornecedores (PF/PJ) com dados bancários e Pix        |
-| `est_004_product`             | Cadastro de produtos (SKU, código de barras, unidade) |
-| `est_005_storage_location`    | Localizações físicas dentro do armazém                |
-| `est_006_product_stock`       | Saldo atual por produto/armazém (qtd + custo médio)   |
-| `est_007_stock_movement`      | Histórico de movimentações (entrada/saída/transferência) |
-| `est_008_transaction`         | Cabeçalho de transação de estoque                     |
-| `est_009_transaction_item`    | Itens de cada transação                               |
-| `est_010_purchase_order`      | Pedidos de compra                                     |
-| `est_011_purchase_order_item` | Itens do pedido de compra                             |
-| `est_012_stock_adjustment`    | Ajustes manuais de estoque                            |
-| `est_013_price_history`       | Histórico de preços por produto                       |
-| `est_014_minimum_stock`       | Estoque mínimo e ponto de reposição por produto/armazém |
-| `est_015_product_supplier`    | Multi-fornecedor por produto (preços e prazos individuais) |
-| `est_016_batch_lot`           | Controle de lotes e validade para produtos perecíveis |
-| `est_017_stock_reservation`   | Reservas de estoque (reserva antes da saída física)   |
-| `est_018_inventory_count`     | Sessão de inventário (cabeçalho)                      |
-| `est_019_inventory_count_item`| Itens contados em uma sessão de inventário            |
+| Tabela                         | Descrição                                                  |
+| ------------------------------ | ---------------------------------------------------------- |
+| `est_001_warehouse`            | Armazéns / depósitos com endereço completo                 |
+| `est_002_category`             | Categorias de produto com hierarquia (parent_id)           |
+| `est_003_supplier`             | Fornecedores (PF/PJ) com dados bancários e Pix             |
+| `est_004_product`              | Cadastro de produtos (SKU, código de barras, unidade)      |
+| `est_005_storage_location`     | Localizações físicas dentro do armazém                     |
+| `est_006_product_stock`        | Saldo atual por produto/armazém (qtd + custo médio)        |
+| `est_007_stock_movement`       | Histórico de movimentações (entrada/saída/transferência)   |
+| `est_008_transaction`          | Cabeçalho de transação de estoque                          |
+| `est_009_transaction_item`     | Itens de cada transação                                    |
+| `est_010_purchase_order`       | Pedidos de compra                                          |
+| `est_011_purchase_order_item`  | Itens do pedido de compra                                  |
+| `est_012_stock_adjustment`     | Ajustes manuais de estoque                                 |
+| `est_013_price_history`        | Histórico de preços por produto                            |
+| `est_014_minimum_stock`        | Estoque mínimo e ponto de reposição por produto/armazém    |
+| `est_015_product_supplier`     | Multi-fornecedor por produto (preços e prazos individuais) |
+| `est_016_batch_lot`            | Controle de lotes e validade para produtos perecíveis      |
+| `est_017_stock_reservation`    | Reservas de estoque (reserva antes da saída física)        |
+| `est_018_inventory_count`      | Sessão de inventário (cabeçalho)                           |
+| `est_019_inventory_count_item` | Itens contados em uma sessão de inventário                 |
 
 #### Views
 
-| View                           | Descrição                                                      |
-| ------------------------------ | -------------------------------------------------------------- |
-| `view_est_saldo_atual`         | Saldo por produto/armazém com valor financeiro calculado       |
-| `view_est_abaixo_minimo`       | Produtos abaixo do estoque mínimo com nível de alerta          |
-| `view_est_lotes_proximos_vencer` | Lotes com vencimento nos próximos 90 dias com nível de urgência |
-| `view_est_movimentacoes_recentes` | Movimentações dos últimos 90 dias com origens/destinos      |
+| View                              | Descrição                                                       |
+| --------------------------------- | --------------------------------------------------------------- |
+| `view_est_saldo_atual`            | Saldo por produto/armazém com valor financeiro calculado        |
+| `view_est_abaixo_minimo`          | Produtos abaixo do estoque mínimo com nível de alerta           |
+| `view_est_lotes_proximos_vencer`  | Lotes com vencimento nos próximos 90 dias com nível de urgência |
+| `view_est_movimentacoes_recentes` | Movimentações dos últimos 90 dias com origens/destinos          |
 
 ---
 
@@ -214,29 +243,29 @@ controle de leitura por grupo e anexos multimídia polimórficos.
 
 #### Tabelas
 
-| Tabela                     | Descrição                                                       |
-| -------------------------- | --------------------------------------------------------------- |
-| `msg_001_timeline`         | Posts públicos do mural da empresa por tenant (fixáveis)        |
-| `msg_002_timeline_reaction`| Reações a posts do mural (like/love/haha/wow/sad/angry)         |
-| `msg_003_private`          | Mensagens diretas ponto a ponto com read receipt                |
-| `msg_004_group`            | Grupos de chat privado com avatar e descrição                   |
-| `msg_005_group_member`     | Membros e roles de grupo (admin/member) com data de entrada/saída|
-| `msg_006_group_message`    | Mensagens de grupo com suporte a reply (auto-referência)        |
-| `msg_007_group_read`       | Ponteiro da última mensagem lida por usuário por grupo          |
-| `msg_008_file`             | Anexos multimídia polimórficos (timeline / private / group)     |
+| Tabela                      | Descrição                                                         |
+| --------------------------- | ----------------------------------------------------------------- |
+| `msg_001_timeline`          | Posts públicos do mural da empresa por tenant (fixáveis)          |
+| `msg_002_timeline_reaction` | Reações a posts do mural (like/love/haha/wow/sad/angry)           |
+| `msg_003_private`           | Mensagens diretas ponto a ponto com read receipt                  |
+| `msg_004_group`             | Grupos de chat privado com avatar e descrição                     |
+| `msg_005_group_member`      | Membros e roles de grupo (admin/member) com data de entrada/saída |
+| `msg_006_group_message`     | Mensagens de grupo com suporte a reply (auto-referência)          |
+| `msg_007_group_read`        | Ponteiro da última mensagem lida por usuário por grupo            |
+| `msg_008_file`              | Anexos multimídia polimórficos (timeline / private / group)       |
 
 #### Views
 
-| View                       | Descrição                                                       |
-| -------------------------- | --------------------------------------------------------------- |
-| `view_msg_timeline`        | Timeline com dados do autor (JOIN user_001_management)          |
-| `view_msg_timeline_reaction` | Reações com dados do usuário que reagiu                       |
-| `view_msg_private`         | Mensagens privadas com dados do remetente                       |
-| `view_msg_group_member`    | Membros com perfil completo do usuário                          |
-| `view_msg_group_message`   | Mensagens de grupo com autor e mensagem citada (reply)          |
-| `view_msg_group_read`      | Ponteiro de leitura com dados do grupo                          |
-| `view_msg_group_summary`   | Resumo do grupo: última mensagem e total de membros ativos      |
-| `view_msg_file`            | Anexos com dados do uploader                                    |
+| View                         | Descrição                                                  |
+| ---------------------------- | ---------------------------------------------------------- |
+| `view_msg_timeline`          | Timeline com dados do autor (JOIN user_001_management)     |
+| `view_msg_timeline_reaction` | Reações com dados do usuário que reagiu                    |
+| `view_msg_private`           | Mensagens privadas com dados do remetente                  |
+| `view_msg_group_member`      | Membros com perfil completo do usuário                     |
+| `view_msg_group_message`     | Mensagens de grupo com autor e mensagem citada (reply)     |
+| `view_msg_group_read`        | Ponteiro de leitura com dados do grupo                     |
+| `view_msg_group_summary`     | Resumo do grupo: última mensagem e total de membros ativos |
+| `view_msg_file`              | Anexos com dados do uploader                               |
 
 ---
 
@@ -247,36 +276,36 @@ arquivamento e descarte.
 
 #### Tabelas
 
-| Tabela                        | Descrição                                       |
-| ----------------------------- | ----------------------------------------------- |
-| `sgd_001_document_categories` | Categorias de documento                         |
-| `sgd_002_document_types`      | Tipos de documento por categoria                |
-| `sgd_003_departments`         | Departamentos / setores                         |
-| `sgd_004_entities`            | Entidades externas (clientes, parceiros)        |
-| `sgd_005_workflows`           | Fluxos de aprovação configuráveis               |
-| `sgd_006_templates`           | Templates de documentos                         |
-| `sgd_007_numbering_sequences` | Sequências de numeração automática              |
-| `sgd_008_retention_schedules` | Tabela de temporalidade (prazo de guarda)       |
-| `sgd_009_tags`                | Tags livres para classificação                  |
-| `sgd_010_documents`           | Documentos (cabeçalho principal)                |
-| `sgd_011_files`               | Arquivos físicos vinculados ao documento        |
-| `sgd_012_versions`            | Controle de versões de cada documento           |
-| `sgd_013_signatures`          | Assinaturas digitais                            |
-| `sgd_014_approvals`           | Aprovações por etapa de workflow                |
-| `sgd_015_relationships`       | Vínculos entre documentos                       |
-| `sgd_016_parties`             | Partes envolvidas em contratos/processos        |
-| `sgd_017_protocols`           | Protocolos de entrega/recebimento               |
-| `sgd_018_movements`           | Movimentação física de documentos               |
-| `sgd_019_indexes`             | Índices de busca por metadados                  |
-| `sgd_020_document_tags`       | Relacionamento documento ↔ tag                  |
-| `sgd_021_disposals`           | Descarte e eliminação de documentos             |
-| `sgd_022_access_logs`         | Log de acessos e visualizações                  |
-| `sgd_023_permissions`         | Permissões de acesso por usuário/documento      |
-| `sgd_024_notifications`       | Notificações de prazo, aprovação e vencimento   |
-| `sgd_025_comments`            | Comentários e anotações nos documentos          |
-| `sgd_026_contracts`           | Contratos (extensão do documento)               |
-| `sgd_027_processes`           | Processos administrativos / jurídicos           |
-| `sgd_028_invoices`            | Notas fiscais vinculadas a documentos           |
+| Tabela                        | Descrição                                     |
+| ----------------------------- | --------------------------------------------- |
+| `sgd_001_document_categories` | Categorias de documento                       |
+| `sgd_002_document_types`      | Tipos de documento por categoria              |
+| `sgd_003_departments`         | Departamentos / setores                       |
+| `sgd_004_entities`            | Entidades externas (clientes, parceiros)      |
+| `sgd_005_workflows`           | Fluxos de aprovação configuráveis             |
+| `sgd_006_templates`           | Templates de documentos                       |
+| `sgd_007_numbering_sequences` | Sequências de numeração automática            |
+| `sgd_008_retention_schedules` | Tabela de temporalidade (prazo de guarda)     |
+| `sgd_009_tags`                | Tags livres para classificação                |
+| `sgd_010_documents`           | Documentos (cabeçalho principal)              |
+| `sgd_011_files`               | Arquivos físicos vinculados ao documento      |
+| `sgd_012_versions`            | Controle de versões de cada documento         |
+| `sgd_013_signatures`          | Assinaturas digitais                          |
+| `sgd_014_approvals`           | Aprovações por etapa de workflow              |
+| `sgd_015_relationships`       | Vínculos entre documentos                     |
+| `sgd_016_parties`             | Partes envolvidas em contratos/processos      |
+| `sgd_017_protocols`           | Protocolos de entrega/recebimento             |
+| `sgd_018_movements`           | Movimentação física de documentos             |
+| `sgd_019_indexes`             | Índices de busca por metadados                |
+| `sgd_020_document_tags`       | Relacionamento documento ↔ tag                |
+| `sgd_021_disposals`           | Descarte e eliminação de documentos           |
+| `sgd_022_access_logs`         | Log de acessos e visualizações                |
+| `sgd_023_permissions`         | Permissões de acesso por usuário/documento    |
+| `sgd_024_notifications`       | Notificações de prazo, aprovação e vencimento |
+| `sgd_025_comments`            | Comentários e anotações nos documentos        |
+| `sgd_026_contracts`           | Contratos (extensão do documento)             |
+| `sgd_027_processes`           | Processos administrativos / jurídicos         |
+| `sgd_028_invoices`            | Notas fiscais vinculadas a documentos         |
 
 ---
 
@@ -301,16 +330,16 @@ Agendamento, prontuários e gestão de consultas para clínicas veterinárias.
 
 #### Tabelas
 
-| Tabela                                | Descrição                              |
-| ------------------------------------- | -------------------------------------- |
+| Tabela                                | Descrição                                       |
+| ------------------------------------- | ----------------------------------------------- |
 | `vet_001_breeds`                      | Raças de animais (espécie, porte, temperamento) |
-| `vet_002_veterinarians`               | Veterinários                           |
-| `vet_003_pets`                        | Animais cadastrados                    |
-| `vet_004_veterinarian_schedules`      | Grade de horários do veterinário       |
-| `vet_005_veterinarian_unavailability` | Bloqueios de agenda (folgas, férias)   |
-| `vet_006_appointments`                | Consultas agendadas                    |
-| `vet_007_medical_records`             | Prontuários médicos                    |
-| `vet_008_medical_record_attachments`  | Exames e anexos do prontuário          |
+| `vet_002_veterinarians`               | Veterinários                                    |
+| `vet_003_pets`                        | Animais cadastrados                             |
+| `vet_004_veterinarian_schedules`      | Grade de horários do veterinário                |
+| `vet_005_veterinarian_unavailability` | Bloqueios de agenda (folgas, férias)            |
+| `vet_006_appointments`                | Consultas agendadas                             |
+| `vet_007_medical_records`             | Prontuários médicos                             |
+| `vet_008_medical_record_attachments`  | Exames e anexos do prontuário                   |
 
 ---
 
@@ -323,7 +352,7 @@ Agendamento, prontuários e gestão de consultas para clínicas veterinárias.
 
 ---
 
-## Arquitetura
+## 6. Arquitetura
 
 ```
 API V1
@@ -360,7 +389,7 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 
 ---
 
-## Stack
+## 7. Stack
 
 | Componente    | Tecnologia                |
 | ------------- | ------------------------- |
@@ -375,7 +404,7 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 
 ---
 
-## Desenvolvedor
+## 8. Desenvolvedor
 
 | Campo    | Informação                                                                                                                                      |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -384,3 +413,429 @@ BaseResourceTableController  ← ResourceTableController de cada módulo
 | Empresa  | Habilidade .Com                                                                                                                                 |
 | Site     | [habilidade.com](https://habilidade.com)                                                                                                        |
 | LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |
+
+---
+
+## 9. ROADMAP — Como criar um novo módulo
+
+Guia passo a passo com **10 etapas** para criar um módulo completo na API V1 do zero.
+
+O objetivo é herdar toda a infraestrutura das classes base e escrever apenas o que é específico do domínio: DDL da tabela, `SqlTableModel`, `SqlViewModel`, classes de Request, Processor (Service) e `ResourceTableController`.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama de arquitetura em camadas e responsabilidade de cada uma
+- Passo 0: consulta obrigatória ao banco antes de começar
+- Passos 1–9: SQL DDL → Model → ViewModel → Request → Processor → Controller → Rotas
+- Exemplos reais usando o módulo `mec_01_vehicle_brand`
+- Fluxo interno de `create` e `update` com hooks do `BaseTableService`
+- Tabela completa dos 15 endpoints herdados automaticamente
+- Formato JSON de resposta e parâmetros de paginação
+- Tabela de erros comuns e como corrigir
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_novo_modulo.md)
+
+---
+
+## 10. ROADMAP — Módulo de Autenticação (AuthUser)
+
+Documentação completa do fluxo de autenticação JWT da API V1 — do banco de dados até a resposta HTTP.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama das tabelas `user_001` a `user_006` e seus relacionamentos
+- Fluxo passo a passo do login (verificação de credenciais → JWT → response)
+- Documentação dos endpoints: `login`, `logout`, `refresh-token`, `forgot-password`, `reset-password`
+- Arquitetura de classes: Controller → Processor → Model → View
+- Regras de segurança: bcrypt para senha, SHA-256 para tokens de reset, Bearer Token nas rotas protegidas
+- Campos retornados no response de login (30 variáveis globais do app mobile)
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_fluxo_login.md)
+
+---
+
+## 11. ROADMAP — BaseResourceTableController
+
+Documentação detalhada da classe base que fornece automaticamente **15 endpoints REST** a todos os controllers de módulo.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseController` → `BaseResourceTableController` → `BaseResourceViewController`
+- O que o controller filho **precisa** implementar: `initController`, `getCreateRules`, `getUpdateRules`
+- **9 endpoints de leitura:** `find`, `get-grouped`, `search`, `get/{id}`, `get-all`, `get-no-pagination`, `get-deleted/{id}`, `get-with-deleted/{id}`, `get-deleted-all`
+- **2 endpoints de escrita:** `create`, `update/{id}`
+- **4 endpoints de exclusão:** `delete-soft/{id}`, `delete-restore/{id}`, `delete-hard/{id}`, `clear-deleted`
+- **7 helpers de resposta** padronizados com exemplos JSON completos
+- Utilitários de requisição: `getPaginationParams`, `getJsonBody`
+- Exemplo completo de implementação de um controller filho
+- Fluxo ponta a ponta de uma requisição HTTP até a resposta JSON
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceTableController.md)
+
+---
+
+## 12. ROADMAP — BaseResourceViewController
+
+Documentação detalhada da classe base para controllers **somente leitura** via SQL View na API V1.
+
+Herda de `BaseResourceTableController` mas sobrescreve os 8 endpoints de leitura para usar métodos `*View` do processor, que leem de uma `SqlViewModel` em vez de uma tabela física. Escrita e exclusão são bloqueadas via hooks `final`.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseController` → `BaseResourceTableController` → `BaseResourceViewController`
+- Tabela comparativa: `TableController` × `ViewController` (fonte de dados, endpoints, hooks)
+- O que o controller filho **precisa** implementar: apenas `initController` com o processor de view
+- **8 endpoints de leitura via View:** `find`, `get-grouped`, `search`, `get/{id}`, `get-all`, `get-no-pagination`, `get-deleted/{id}`, `get-deleted-all`
+- Por que `getCreateRules` e `getUpdateRules` são `final` retornando `[]`
+- Helpers de resposta e utilitários de requisição herdados da classe pai
+- Exemplo completo de controller filho com registro de rotas
+- Fluxo ponta a ponta de uma requisição HTTP até a resposta JSON
+- Tabela de erros comuns e como corrigir
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseResourceViewController.md)
+
+---
+
+## 13. ROADMAP — Filtros V1 (AuthFilter + LoginRateLimitFilter)
+
+Documentação dos dois filtros de segurança da API V1, localizados em `src/app/Filters/V1/UserManagement/`.
+
+**AuthFilter** intercepta toda requisição e valida o JWT Bearer Token no header `Authorization` — rejeita com HTTP 401 se o token estiver ausente, inválido ou revogado (logout via cache). **LoginRateLimitFilter** protege o endpoint de login contra força bruta, limitando a 10 tentativas por 60 segundos por IP, respondendo com HTTP 429 e o header `Retry-After`.
+
+**O que o ROADMAP cobre:**
+
+- O que é um Filter no CI4 e como os métodos `before`/`after` funcionam
+- Fluxo completo do `AuthFilter`: leitura do header, `JwtHelper::decode`, verificação de revogação via cache (`jwt_revoked_` + SHA-256)
+- Fluxo completo do `LoginRateLimitFilter`: CI4 Throttler, `MAX_ATTEMPTS = 10`, `WINDOW_SECONDS = 60`, header `Retry-After`
+- Como registrar filtros em `Config/Filters.php`: aliases, `$globals`, `$filters`
+- Lista completa das rotas públicas (sem autenticação)
+- Fluxo ponta a ponta de uma requisição protegida e de uma tentativa de login bloqueada
+- Como criar um novo filtro seguindo o padrão do projeto
+- Tabela de erros comuns e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Filters_V1.md)
+
+---
+
+## 14. ROADMAP — Helpers Globais (debug + uuid)
+
+Documentação dos dois helpers globais do projeto, localizados em `src/app/Helpers/` e carregados automaticamente em toda requisição via `Config/Autoload.php`.
+
+**`debug($data, $label, $die)`** exibe qualquer variável formatada em `<pre>` para inspeção rápida durante o desenvolvimento — com label opcional e flag `$die` para interromper a execução (equivalente ao `dd()` do Laravel). **Nunca deve ser usado em produção.**
+
+**`uuid()`** gera um UUID v4 usando `random_int` (criptograficamente seguro), retornando uma string no formato `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`. Usado para gerar o campo `uuid` ao criar novos registros.
+
+**O que o ROADMAP cobre:**
+
+- O que é um Helper no CI4 e diferença em relação a classes
+- Tabela com os 2 helpers, suas funções e responsabilidades
+- Carregamento automático via `Config/Autoload.php` e carregamento manual pontual
+- `debug()`: assinatura completa, os 3 parâmetros, 5 exemplos práticos e aviso de NÃO usar em produção
+- `uuid()`: o que é UUID v4, por que `random_int` é superior a `rand()`, implementação comentada linha a linha, 4 exemplos de uso e como o UUID é modelado no banco (`VARCHAR(36) UNIQUE`)
+- Como criar um novo helper em 3 passos com as convenções do projeto
+- Tabela de erros comuns e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Helpers.md)
+
+---
+
+## 15. ROADMAP — Libraries (ApiExceptionHandler + JwtHelper + ContentFilter)
+
+As três classes de **infraestrutura crítica** da API V1, localizadas em `src/app/Libraries/`. Uma falha em qualquer uma delas afeta toda a aplicação.
+
+**`ApiExceptionHandler`** é registrado em `Config/Exceptions.php` e garante que toda exceção não tratada em rotas `api/*` retorne JSON padronizado (nunca HTML). Diferencia `PageNotFoundException` (HTTP 404) de outros erros (HTTP 500), logando detalhes internamente sem expô-los ao cliente.
+
+**`JwtHelper`** implementa JWT HS256 em PHP puro, sem biblioteca externa. `encode()` gera o token adicionando `iat`/`exp` ao payload e assinando com HMAC-SHA256. `decode()` valida estrutura, assinatura (com `hash_equals` para proteção contra timing attack) e expiração. O segredo é obtido de uma constante ofuscada em `Puipuia.php` com fallback para a variável de ambiente `JWT_SECRET`.
+
+**`Msg/ContentFilter`** é a classe `final` de moderação de conteúdo do módulo de mensagens. Mantém duas listas: `BANNED_PHRASES` (frases multi-palavra, verificadas primeiro, sem word-boundary) e `BANNED_WORDS` (palavras isoladas, com `\b`, verificadas depois). Regex `/iu` garante case-insensitive com suporte a Unicode/acentos. Usado nos `prepareData()` dos Processors do módulo MSG.
+
+**O que o ROADMAP cobre:**
+
+- Diagrama mostrando como as 3 classes se conectam em uma requisição
+- `ApiExceptionHandler`: registro em `Config/Exceptions.php`, lógica `api/*` vs outras rotas, respostas 404/500, logging interno
+- `JwtHelper`: estrutura de um JWT (header.payload.signature), `encode()` e `decode()` linha a linha, Base64url vs Base64, timing-safe `hash_equals`, prioridade do segredo (Puipuia → .env)
+- `ContentFilter`: ordem de verificação, por que frases longas primeiro, `\b` word-boundary, flags `/iu`, `sanitize()` e `sanitizeFields()`, como adicionar novas palavras/frases, onde é usado nos Processors
+- Tabela de erros comuns das 3 classes com causas e soluções
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_Libraries.md)
+
+---
+
+## 16. Requests V1 — Regras de Validação
+
+Classes de validação de entrada da API V1, localizadas em `src/app/Requests/V1/`. São **POPOs** (Plain Old PHP Objects) — não herdam de nenhuma classe base, não implementam interfaces. Cada classe expõe dois métodos públicos: `rules()` e `messages()`.
+
+### O que é um Request
+
+Um Request encapsula as **regras de validação** de um endpoint específico — mantém a lógica de validação separada do controller. O controller chama `getCreateRules()` ou `getUpdateRules()`, que instanciam o Request e retornam as regras para o CI4 validar automaticamente.
+
+| Responsabilidade                                        | Quem resolve                  |
+| ------------------------------------------------------- | ----------------------------- |
+| Formato do campo (`required`, `max_length`, `is_array`) | Request — `rules()`           |
+| Mensagem de erro legível por campo e regra              | Request — `messages()`        |
+| Unicidade / regra de negócio complexa                   | Processor (Service)           |
+| Aplicação da validação na requisição                    | `BaseResourceTableController` |
+
+---
+
+### Padrão dos dois métodos
+
+Toda classe de Request implementa exatamente dois métodos:
+
+```php
+<?php
+
+namespace App\Requests\V1\Mec\VehicleBrand;
+
+class CreateRequest
+{
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max_length[100]',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name' => [
+                'required'   => 'O campo name é obrigatório',
+                'max_length' => 'O nome não pode exceder 100 caracteres',
+            ],
+        ];
+    }
+}
+```
+
+---
+
+### Tipos de Request
+
+| Tipo                     | Endpoint relacionado       | Descrição                                       |
+| ------------------------ | -------------------------- | ----------------------------------------------- |
+| `CreateRequest`          | `POST /create`             | Valida campos na criação de registro            |
+| `UpdateRequest`          | `PUT /update/{id}`         | Valida campos na atualização                    |
+| `FindRequestTable`       | `POST /find`               | Valida parâmetros de busca paginada na tabela   |
+| `FindRequestView`        | `POST /find` (view)        | Valida parâmetros de busca paginada na view SQL |
+| `GetGroupedRequestTable` | `POST /get-grouped`        | Valida parâmetros de agrupamento na tabela      |
+| `GetGroupedRequestView`  | `POST /get-grouped` (view) | Valida parâmetros de agrupamento na view SQL    |
+| `SearchRequest`          | `POST /search`             | Valida parâmetros de busca full-text            |
+
+**Tipos especiais do módulo `AuthUser`:**
+
+| Tipo                     | Endpoint                            |
+| ------------------------ | ----------------------------------- |
+| `LoginRequest`           | `POST /api/v1/auth/login`           |
+| `RecoverPasswordRequest` | `POST /api/v1/auth/forgot-password` |
+| `ResetPasswordRequest`   | `POST /api/v1/auth/reset-password`  |
+| `RefreshRequest`         | `POST /api/v1/auth/refresh-token`   |
+
+---
+
+### Requests por módulo
+
+| Módulo    | Entidade                | Requests |
+| --------- | ----------------------- | -------- |
+| `mec_`    | VehicleBrand            | 4        |
+| `user_`   | AuthUser                | 5        |
+| `user_`   | UserCustomer            | 6        |
+| `user_`   | UserCustomerFiles       | 6        |
+| `user_`   | UserManagement          | 4        |
+| `user_`   | UserPasswordResets      | 4        |
+| `user_`   | UserSaasTenants         | 4        |
+| `user_`   | UserTenants             | 6        |
+| `msg_`    | MessageFile             | 2        |
+| `msg_`    | MessageGroup            | 2        |
+| `msg_`    | MessageGroupMember      | 2        |
+| `msg_`    | MessageGroupRead        | 2        |
+| `msg_`    | MessagePrivate          | 3        |
+| `msg_`    | MessageTimeline         | 3        |
+| `msg_`    | MessageTimelineReaction | 2        |
+| **Total** | **15 entidades**        | **55**   |
+
+---
+
+## 17. ROADMAP — BaseTableService (Template Method + Escrita + Exclusão)
+
+Documentação detalhada da classe abstrata `BaseTableService` — a base de todo Processor com tabela física na API V1, localizada em `src/app/Services/V1/BaseTableService.php`.
+
+Estende `BaseViewService` (herdando sanitização, formatação, paginação e 8 reads de view) e adiciona: **9 métodos de leitura de tabela**, **2 métodos de escrita via Template Method** (`create` e `update`) e **4 métodos de exclusão** (`deleteSoft`, `deleteRestore`, `deleteHard`, `clearDeleted`).
+
+O ponto central desta classe é o **Template Method Pattern**: os métodos `create()` e `update()` definem o algoritmo completo e delegam para **4 hooks protegidos** (`validateOnCreate`, `validateOnUpdate`, `prepareData`, `prepareUpdateData`) — que o Processor filho sobrescreve para adicionar unicidade, bcrypt, UUID, formatação de datas e qualquer regra de negócio sem duplicar a lógica de banco.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseViewService` → `BaseTableService` → `Processor`
+- O que é herdado de `BaseViewService`: `sanitizeData`, `removeMasks` (8 campos mascarados), `formatDate`, `formatDatetime`, `buildPaginationParams` + 8 reads de view
+- 9 métodos de leitura de tabela com assinaturas e diferença entre `getDeleted` e `getWithDeleted`
+- Fluxo passo a passo do `create()`: sanitização → `validateOnCreate` → `prepareData` → `insert` → `DatabaseException`
+- Fluxo passo a passo do `update()`: 404 → sanitização → `prepareUpdateData` → `validateOnUpdate` → `update` → `DatabaseException`
+- Os 4 hooks com assinaturas, propósito, retorno esperado e exemplos reais (UUID, bcrypt, unicidade com `excludeId`, campo imutável removido no update)
+- 4 métodos de exclusão com comportamento de guarda (404, 409), tabela comparativa e diferença entre soft delete e hard delete
+- Implementação mínima e completa de um Processor filho
+- Diagrama ASCII ponta a ponta: HTTP → AuthFilter → Controller → Processor → BaseTableService → Model → resposta JSON
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseTableService.md)
+
+---
+
+## 18. ROADMAP — BaseViewService (Sanitização + Formatação + Leitura de View)
+
+Documentação detalhada da classe abstrata `BaseViewService` — a **raiz de toda a hierarquia de serviços** da API V1, localizada em `src/app/Services/V1/BaseViewService.php`.
+
+É a origem de todos os utilitários compartilhados entre módulos: sanitização de strings, remoção de máscaras, formatação de datas e normalização de parâmetros de paginação. Além disso, implementa os **8 métodos de leitura via SQL View** usados pelos controllers de todos os módulos.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia de classes: `BaseViewService` → `BaseTableService` → `Processor` — e quando herdar cada uma
+- `MASKED_FIELDS` — os 8 campos com máscara (`cpf`, `whatsapp`, `phone`, `zip_code` + variantes `uc_*`), por que o prefixo `uc_` existe e a regra de armazenar apenas dígitos
+- `sanitizeString` — `trim` + `strip_tags` com exemplos de entrada/saída
+- `sanitizeData` — descarta `null`/vazio, sanitiza strings, mantém outros tipos; explicação de por que nulos são descartados para evitar UPDATE indesejado
+- `removeMasks` — regex `/\D/`, funciona com scalar e com array de valores para filtros multivalorados
+- `formatDate` — tabela de entradas/saídas incluindo formatos brasileiro, inglês e inválido
+- `formatDatetime` — `Y-m-d H:i:s`, aceita o formato `datetime-local` do HTML (`Y-m-d\TH:i`)
+- `buildPaginationParams` — tabela de defaults e limites (`page` mín 1, `limit` 1–100, `sort` `'id'`, `order` `'desc'`), exemplo com parâmetros omitidos
+- 8 métodos de leitura de view com assinaturas, diferença entre `findView` e `getGroupedView`, `getView` vs `getDeletedView`
+- Implementação mínima de Processor somente leitura (herda `BaseViewService` diretamente)
+- Diagrama ASCII ponta a ponta de `POST /find` via view
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseViewService.md)
+
+---
+
+## 19. ROADMAP — BaseTableModel (Paginação + Soft Delete + SQL Builder)
+
+Documentação detalhada da classe abstrata `BaseTableModel` — a camada de acesso a dados de todos os módulos com tabela física, localizada em `src/app/Models/V1/BaseTableModel.php`. Estende o `Model` nativo do CI4 e adiciona toda a infraestrutura de SQL do projeto.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia: `CI4 Model` → `BaseTableModel` → `SqlTableModel` — responsabilidade de cada camada
+- As **10 propriedades fixas CI4** (`useSoftDeletes`, `protectFields`, `useTimestamps`, `returnType='array'`, `dateFormat`, etc.) e o que cada uma faz na prática
+- Os **3 arrays sobrescrevíveis**: `$hidden` (campos excluídos de todas as respostas), `$sortableFields` (whitelist anti-SQL Injection), `$likeFields` (LIKE vs WHERE exato por campo)
+- Por que `find()` foi sobrescrito — CI4 não aplica `$hidden` em `returnType='array'`; solução com `array_diff_key + array_flip`
+- `findPaginated()` — `applyFilters` → `countAllResults(false)` → offset → `buildPaginatedResult`
+- `searchByTerm()` — OR entre múltiplos campos com `groupStart/orLike/groupEnd`
+- `findGrouped()` — `whereIn` para campos normais, LIKE OR para campos em `$likeFields`
+- `getOrdered()` — lista completa sem paginação, com aviso de uso em tabelas grandes
+- `existsByField($field, $value, $excludeId)` — unicidade com suporte a update, usa `db->table()` direto para evitar duplicação de scope CI4
+- **5 métodos de soft delete**: `findWithDeleted` (`withDeleted()`), `findOnlyDeleted` (`onlyDeleted()`), `findDeletedPaginated` (`db->table()` direto), `restore` (bypassa `$allowedFields`), `clearDeleted` (hard delete, retorna `int` affected)
+- **3 utilitários internos**: `applyFilters` (LIKE vs WHERE), `sanitizeSort` (whitelist com `in_array`), `buildPaginatedResult` (envelope `{data, pagination:{page,limit,total,pages}}`)
+- `SqlTableModel` filho mínimo e com `$hidden` — checklist de configuração
+- Diagrama ASCII ponta a ponta de `POST /find` com filtros
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseTableModel.md)
+
+---
+
+## 20. ROADMAP — BaseViewModel (Leitura de View SQL + Paginação)
+
+Documentação detalhada da classe abstrata `BaseViewModel` — o model base para todos os `SqlViewModel` de módulos com View SQL, localizada em `src/app/Models/V1/BaseViewModel.php`. Opera exclusivamente em leitura sobre views de banco com JOINs.
+
+Contém a diferença crítica de design em relação ao `BaseTableModel`: `useSoftDeletes=false` e `useTimestamps=false` (views não recebem escrita), `allowedFields=[]` (readonly absoluto), e todos os métodos usam `db->table()` diretamente — pois o CI4 não aplica scopes automáticos em views.
+
+**O que o ROADMAP cobre:**
+
+- Hierarquia: `CI4 Model` → `BaseViewModel` → `SqlViewModel` — e por que a view tem um model separado da tabela
+- As propriedades fixas e o motivo de cada uma (`useSoftDeletes=false`, `useTimestamps=false`, `allowedFields=[]`, ausência de `$hidden`)
+- Por que todos os métodos usam `db->table()` diretamente — e a sintaxe `where('deleted_at IS NULL', null, false)` para expressões SQL sem escape
+- Os **3 arrays sobrescrevíveis**: `$sortableFields` (whitelist anti-SQL Injection), `$likeFields` (LIKE em `applyFilters`), `$searchFields` (`public` — acessado diretamente pelo `BaseTableService`)
+- Diferença entre `$likeFields` e `$searchFields` — qual endpoint usa cada um
+- **7 métodos de leitura** com SQL gerado: `findPaginatedView` (parâmetro `$withDeleted`), `findById`, `findDeletedById`, `findDeletedPaginatedView`, `searchByTermView`, `findGroupedView` (só `whereIn` — sem LIKE/OR), `findAllView`
+- Tabela comparativa completa `BaseViewModel` vs `BaseTableModel` — 12 diferenças chave
+- `SqlViewModel` filho mínimo e com campos de view enriquecida (JOIN)
+
+[Ver ROADMAP completo →](src/app/markdown/ROADMAP_BaseViewModel.md)
+
+---
+
+### Como o controller usa os Requests
+
+O controller filho implementa `getCreateRules()` e `getUpdateRules()`, instanciando o Request correspondente. A `BaseResourceTableController` aplica a validação automaticamente antes de executar `create` ou `update`:
+
+```php
+use App\Requests\V1\Mec\VehicleBrand\CreateRequest;
+use App\Requests\V1\Mec\VehicleBrand\UpdateRequest;
+
+class ResourceTableController extends BaseResourceTableController
+{
+    public function initController(...): void
+    {
+        parent::initController($request, $response, $logger);
+        $this->processor = new Processor();
+    }
+
+    protected function getCreateRules(): array
+    {
+        return (new CreateRequest())->rules();
+    }
+
+    protected function getUpdateRules(): array
+    {
+        return (new UpdateRequest())->rules();
+    }
+}
+```
+
+---
+
+### Como criar um novo Request
+
+**Passo 1 — Criar o arquivo** em `src/app/Requests/V1/{Modulo}/{Entidade}/CreateRequest.php`:
+
+```php
+<?php
+
+namespace App\Requests\V1\{Modulo}\{Entidade};
+
+class CreateRequest
+{
+    public function rules(): array
+    {
+        return [
+            'campo_a' => 'required|string|max_length[100]',
+            'campo_b' => 'permit_empty|integer',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'campo_a' => [
+                'required'   => 'O campo campo_a é obrigatório',
+                'max_length' => 'O campo_a não pode exceder 100 caracteres',
+            ],
+            'campo_b' => [
+                'integer' => 'O campo_b deve ser um número inteiro',
+            ],
+        ];
+    }
+}
+```
+
+**Passo 2 — Referenciar no controller filho:**
+
+```php
+use App\Requests\V1\{Modulo}\{Entidade}\CreateRequest;
+
+protected function getCreateRules(): array
+{
+    return (new CreateRequest())->rules();
+}
+```
+
+---
+
+### Regras CI4 mais usadas no projeto
+
+| Regra            | Significado                                               |
+| ---------------- | --------------------------------------------------------- |
+| `required`       | Campo obrigatório — rejeita ausente ou vazio              |
+| `permit_empty`   | Campo opcional — ignora demais regras se ausente ou vazio |
+| `string`         | Deve ser uma string                                       |
+| `integer`        | Deve ser inteiro                                          |
+| `max_length[N]`  | Máximo de N caracteres                                    |
+| `min_length[N]`  | Mínimo de N caracteres                                    |
+| `is_array`       | Deve ser array (usado em `filters` e `fields`)            |
+| `in_list[a,b,c]` | Valor deve estar na lista delimitada por vírgula          |
+| `valid_email`    | Deve ser um endereço de e-mail válido                     |

@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { validateInputRules } from '../utils/validators';
 import Bootstrap from '../../../theme/bootstrap';
 import type { TextareaFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const TextareaField: React.FC<TextareaFieldProps> = ({
     name,
@@ -24,6 +26,10 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -55,25 +61,25 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
     const nearLimit = !!maxLength && charCount > maxLength * 0.85;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
             <TextInput
                 style={[
-                    styles.textarea,
-                    focused && styles.focused,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    ls.textarea,
+                    focused && fs.inputFocused,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                     { height: rows * 22 + 16 },
                 ]}
                 value={value}
                 placeholder={placeholder}
-                placeholderTextColor="#6c757d"
+                placeholderTextColor={theme.colors.placeholder}
                 maxLength={maxLength}
                 editable={!disabled && !readOnly}
                 multiline
@@ -83,13 +89,13 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
                 onFocus={() => setFocused(true)}
                 onBlur={handleBlur}
             />
-            <View style={styles.footer}>
+            <View style={staticStyles.footer}>
                 {isInvalid
-                    ? <Text style={fieldStyles.feedback}>{feedback}</Text>
+                    ? <Text style={fs.feedback}>{feedback}</Text>
                     : <Text />
                 }
                 {showCounter && (
-                    <Text style={[styles.counter, nearLimit ? styles.counterNear : undefined]}>
+                    <Text style={[ls.counter, nearLimit && ls.counterNear]}>
                         {charCount}/{maxLength}
                     </Text>
                 )}
@@ -98,32 +104,36 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
-    textarea: {
-        borderWidth: 1,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        fontSize: Bootstrap.fontSize.base,
-        color: Bootstrap.colors.body,
-        backgroundColor: Bootstrap.colors.inputBg,
-    },
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
+const staticStyles = StyleSheet.create({
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginTop: 2,
     },
-    counter: {
-        fontSize: Bootstrap.fontSize.sm,
-        color: Bootstrap.colors.muted,
-        fontStyle: 'italic',
-    },
-    counterNear: {
-        color: Bootstrap.colors.danger,
-    },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        textarea: {
+            borderWidth: 1,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            fontSize: Bootstrap.fontSize.base,
+            color: c.inputText,
+            backgroundColor: c.inputBg,
+        },
+        counter: {
+            fontSize: Bootstrap.fontSize.sm,
+            color: c.textMuted,
+            fontStyle: 'italic' as const,
+        },
+        counterNear: {
+            color: c.danger,
+        },
+    });
+}
 
 export default TextareaField;

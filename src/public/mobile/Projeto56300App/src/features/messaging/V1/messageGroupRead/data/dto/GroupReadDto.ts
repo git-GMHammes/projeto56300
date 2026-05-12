@@ -20,6 +20,6 @@ export interface UpdateGroupReadDtoRequest {
 
 export interface MarkReadDtoRequest {
   group_id: number
-  user_id: number
+  user_management_id: number
   last_read_id: number
 }

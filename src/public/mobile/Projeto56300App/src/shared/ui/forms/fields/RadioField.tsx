@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import Bootstrap from '../../../theme/bootstrap';
 import type { RadioFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const RadioField: React.FC<RadioFieldProps> = ({
     name,
@@ -16,6 +18,10 @@ const RadioField: React.FC<RadioFieldProps> = ({
     onChange,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [feedback, setFeedback] = useState('');
 
@@ -37,14 +43,14 @@ const RadioField: React.FC<RadioFieldProps> = ({
     const isInvalid = touched && !!feedback;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.legend}>
+                <Text style={fs.legend}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
-            <View style={[styles.group, inline && styles.groupInline]}>
+            <View style={[staticStyles.group, inline && staticStyles.groupInline]}>
                 {options.map(opt => {
                     const checked = value === opt.value;
                     return (
@@ -53,21 +59,21 @@ const RadioField: React.FC<RadioFieldProps> = ({
                             activeOpacity={0.7}
                             disabled={disabled || readOnly || opt.disabled}
                             onPress={() => handleSelect(opt.value)}
-                            style={[styles.item, inline && styles.itemInline]}
+                            style={[staticStyles.item, inline && staticStyles.itemInline]}
                             accessibilityRole="radio"
                             accessibilityState={{ checked }}
                         >
                             <View style={[
-                                styles.circle,
-                                checked && styles.circleChecked,
-                                (disabled || opt.disabled) && styles.circleDisabled,
-                                isInvalid && styles.circleInvalid,
+                                ls.circle,
+                                checked && ls.circleChecked,
+                                (disabled || opt.disabled) && ls.circleDisabled,
+                                isInvalid && ls.circleInvalid,
                             ]}>
-                                {checked && <View style={styles.dot} />}
+                                {checked && <View style={ls.dot} />}
                             </View>
                             <Text style={[
-                                styles.optLabel,
-                                (disabled || opt.disabled) && styles.optLabelDisabled,
+                                ls.optLabel,
+                                (disabled || opt.disabled) && ls.optLabelDisabled,
                             ]}>
                                 {opt.label}
                             </Text>
@@ -75,39 +81,44 @@ const RadioField: React.FC<RadioFieldProps> = ({
                     );
                 })}
             </View>
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
         </View>
     );
 };
 
 const R = 10;
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
     group: { flexDirection: 'column', gap: 8 },
     groupInline: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     itemInline: { marginRight: 4 },
-    circle: {
-        width: R * 2,
-        height: R * 2,
-        borderRadius: R,
-        borderWidth: 2,
-        borderColor: Bootstrap.colors.inputBorder,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-    },
-    circleChecked: { borderColor: Bootstrap.colors.primary },
-    circleDisabled: { backgroundColor: Bootstrap.colors.inputDisabledBg, borderColor: '#adb5bd' },
-    circleInvalid: { borderColor: Bootstrap.colors.danger },
-    dot: {
-        width: R,
-        height: R,
-        borderRadius: R / 2,
-        backgroundColor: Bootstrap.colors.primary,
-    },
-    optLabel: { fontSize: Bootstrap.fontSize.base, color: Bootstrap.colors.body },
-    optLabelDisabled: { color: Bootstrap.colors.muted },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        circle: {
+            width: R * 2,
+            height: R * 2,
+            borderRadius: R,
+            borderWidth: 2,
+            borderColor: c.inputBorder,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: c.inputBg,
+        },
+        circleChecked: { borderColor: c.primary },
+        circleDisabled: { backgroundColor: c.surface, borderColor: c.border },
+        circleInvalid: { borderColor: c.danger },
+        dot: {
+            width: R,
+            height: R,
+            borderRadius: R / 2,
+            backgroundColor: c.primary,
+        },
+        optLabel: { fontSize: Bootstrap.fontSize.base, color: c.text },
+        optLabelDisabled: { color: c.textMuted },
+    });
+}
 
 export default RadioField;

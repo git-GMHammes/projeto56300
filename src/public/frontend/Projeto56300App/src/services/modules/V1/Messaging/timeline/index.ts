@@ -16,7 +16,7 @@ export interface ReactionCount {
 export interface TimelinePost {
   id: number
   tenant_id: number
-  user_id: number
+  user_management_id: number
   content: string
   is_pinned: 0 | 1
   created_at: string
@@ -32,7 +32,7 @@ export interface TimelinePost {
 export interface TimelineReaction {
   id: number
   timeline_id: number
-  user_id: number
+  user_management_id: number
   reaction: ReactionType
   created_at: string
 }

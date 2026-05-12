@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import Bootstrap from '../../theme/bootstrap'
 import { useTheme } from '../../../app/providers/ThemeProvider'
+import { ANDROID_BOTTOM_INSET } from '../../../core/navigation'
 import footerData from '../../../data/message/footer_message.json'
 
 interface Props {
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 1,
     minHeight: 56,
+    paddingBottom: ANDROID_BOTTOM_INSET,
   },
   tab: {
     flex: 1,

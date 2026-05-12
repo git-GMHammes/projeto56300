@@ -90,7 +90,7 @@ abstract class MsgBaseService extends BaseTableService
     {
         return $this->msgDb()->table('msg_005_group_member')
             ->where('group_id', $groupId)
-            ->where('user_id', $userId)
+            ->where('user_management_id', $userId)
             ->where('left_at IS NULL', null, false)
             ->where('deleted_at IS NULL', null, false)
             ->countAllResults() > 0;
@@ -104,7 +104,7 @@ abstract class MsgBaseService extends BaseTableService
     {
         return $this->msgDb()->table('msg_002_timeline_reaction')
             ->where('timeline_id', $timelineId)
-            ->where('user_id', $userId)
+            ->where('user_management_id', $userId)
             ->where('deleted_at IS NULL', null, false)
             ->countAllResults() > 0;
     }
@@ -117,7 +117,7 @@ abstract class MsgBaseService extends BaseTableService
     {
         return $this->msgDb()->table('msg_007_group_read')
             ->where('group_id', $groupId)
-            ->where('user_id', $userId)
+            ->where('user_management_id', $userId)
             ->countAllResults() > 0;
     }
 }

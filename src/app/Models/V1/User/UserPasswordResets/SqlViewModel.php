@@ -29,7 +29,7 @@ class SqlViewModel extends BaseViewModel
 
     protected array $sortableFields = [
         'id',
-        'user_id',
+        'user_management_id',
         'expires_at',
         'used_at',
         'created_at',

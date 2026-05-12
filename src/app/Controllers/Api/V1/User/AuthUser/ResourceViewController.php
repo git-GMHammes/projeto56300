@@ -5,8 +5,10 @@ namespace App\Controllers\Api\V1\User\AuthUser;
 use App\Controllers\Api\V1\BaseResourceViewController;
 use App\Requests\V1\User\AuthUser\LoginRequest;
 use App\Requests\V1\User\AuthUser\RecoverPasswordRequest;
+use App\Requests\V1\User\AuthUser\RefreshRequest;
 use App\Requests\V1\User\AuthUser\ResetPasswordRequest;
 use App\Services\V1\User\AuthUser\Processor;
+use App\Services\V1\User\AuthUser\RefreshProcessor;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -45,7 +47,7 @@ class ResourceViewController extends BaseResourceViewController
     /**
      * POST {{www}}/index.php/api/v1/auth/login
      *
-     * Body: { "um_user": "...", "um_password": "...", "ut_tenant_id": 1 }
+     * Body: { "um_user": "...", "um_password": "...", "ut_user_saas_tenants_id": 1 }
      *
      * Autentica o usuário e retorna um token JWT.
      */
@@ -65,7 +67,7 @@ class ResourceViewController extends BaseResourceViewController
             $result = $this->processor->authenticate(
                 (string) ($body['um_user'] ?? ''),
                 (string) ($body['um_password'] ?? ''),
-                (int) ($body['ut_tenant_id'] ?? 0)
+                (int) ($body['ut_user_saas_tenants_id'] ?? 0)
             );
 
             return $this->respondSuccess($result, 'Autenticacao realizada com sucesso');
@@ -159,6 +161,37 @@ class ResourceViewController extends BaseResourceViewController
             return $this->respondSuccess($result, 'Senha redefinida com sucesso');
         } catch (\InvalidArgumentException $e) {
             return $this->respondError($e->getMessage(), 422);
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
+
+    /**
+     * POST {{www}}/index.php/api/v1/auth/refresh
+     *
+     * Body: { "refresh_token": "<64 hex chars>" }
+     *
+     * Valida e revoga o refresh token atual; emite novo access token e novo refresh token (rotação).
+     * Rota pública — excluída do authFilter pois o access token pode estar expirado.
+     */
+    public function refresh(): ResponseInterface
+    {
+        try {
+            $refreshRequest = new RefreshRequest();
+            $validation     = \Config\Services::validation();
+            $validation->setRules($refreshRequest->rules(), $refreshRequest->messages());
+
+            $body = $this->getJsonBody();
+
+            if (!$validation->run($body)) {
+                return $this->respondValidationError($validation->getErrors());
+            }
+
+            $result = (new RefreshProcessor())->refresh((string) ($body['refresh_token'] ?? ''));
+
+            return $this->respondSuccess($result, 'Token renovado com sucesso');
+        } catch (\InvalidArgumentException $e) {
+            return $this->respondError($e->getMessage(), 401);
         } catch (\Throwable $e) {
             return $this->respondServerError($e);
         }

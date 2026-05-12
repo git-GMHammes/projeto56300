@@ -44,12 +44,12 @@ class Processor extends MsgBaseService
             return ['success' => false, 'message' => 'Grupo não encontrado', 'code' => 422];
         }
 
-        if (!empty($data['user_id']) && !$this->existsUser((int) $data['user_id'])) {
+        if (!empty($data['user_management_id']) && !$this->existsUser((int) $data['user_management_id'])) {
             return ['success' => false, 'message' => 'Usuário não encontrado', 'code' => 422];
         }
 
-        if (!empty($data['group_id']) && !empty($data['user_id'])
-            && $this->isActiveMember((int) $data['group_id'], (int) $data['user_id'])
+        if (!empty($data['group_id']) && !empty($data['user_management_id'])
+            && $this->isActiveMember((int) $data['group_id'], (int) $data['user_management_id'])
         ) {
             return ['success' => false, 'message' => 'Usuário já é membro ativo do grupo', 'code' => 409];
         }
@@ -82,7 +82,7 @@ class Processor extends MsgBaseService
      */
     protected function prepareUpdateData(int $id, array $data): array
     {
-        unset($data['group_id'], $data['user_id']);
+        unset($data['group_id'], $data['user_management_id']);
 
         return $this->prepareData($data);
     }

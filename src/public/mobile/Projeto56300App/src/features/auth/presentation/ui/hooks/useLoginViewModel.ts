@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { LoginUseCase } from '../../../domain/usecases/LoginUseCase'
 import { AuthRepositoryImpl } from '../../../data/repositories/AuthRepositoryImpl'
+import { HttpError } from '../../../../../core/services/HttpClient'
 import type { AuthSession } from '../../../domain/entities/AuthSession'
 
 const loginUseCase = new LoginUseCase(new AuthRepositoryImpl())
@@ -36,12 +37,20 @@ export function useLoginViewModel() {
       const session = await loginUseCase.execute({
         um_user: state.form.username.trim(),
         um_password: state.form.password,
-        ut_tenant_id: state.form.tenantId,
+        ut_user_saas_tenants_id: state.form.tenantId,
       })
       setState(prev => ({ ...prev, loading: false, session }))
       return session
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao fazer login.'
+      let message = 'Erro ao fazer login.'
+      if (err instanceof HttpError && err.statusCode === 429) {
+        const retryAfter = (err.body as Record<string, unknown>)?.retry_after
+        message = typeof retryAfter === 'number'
+          ? `Muitas tentativas. Aguarde ${retryAfter} segundos.`
+          : 'Muitas tentativas de login. Aguarde 1 minuto e tente novamente.'
+      } else if (err instanceof Error) {
+        message = err.message
+      }
       setState(prev => ({ ...prev, loading: false, error: message }))
       return null
     }

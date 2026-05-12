@@ -26,8 +26,14 @@ abstract class BaseViewService
      * quanto a view com prefixo uc_ (uc_cpf, uc_whatsapp, uc_phone, uc_zip_code).
      */
     private const MASKED_FIELDS = [
-        'cpf', 'whatsapp', 'phone', 'zip_code',
-        'uc_cpf', 'uc_whatsapp', 'uc_phone', 'uc_zip_code',
+        'cpf',
+        'whatsapp',
+        'phone',
+        'zip_code',
+        'uc_cpf',
+        'uc_whatsapp',
+        'uc_phone',
+        'uc_zip_code',
     ];
 
     // -------------------------------------------------------------------------
@@ -140,9 +146,9 @@ abstract class BaseViewService
     protected function buildPaginationParams(array $params): array
     {
         return [
-            'page'  => max(1, (int) ($params['page'] ?? 1)),
+            'page' => max(1, (int) ($params['page'] ?? 1)),
             'limit' => min(100, max(1, (int) ($params['limit'] ?? 20))),
-            'sort'  => trim((string) ($params['sort'] ?? 'id')),
+            'sort' => trim((string) ($params['sort'] ?? 'id')),
             'order' => trim((string) ($params['order'] ?? 'desc')),
         ];
     }
@@ -160,7 +166,10 @@ abstract class BaseViewService
 
         return $this->viewModel->findPaginatedView(
             $this->removeMasks($filters),
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -176,7 +185,10 @@ abstract class BaseViewService
 
         return $this->viewModel->findGroupedView(
             $this->removeMasks($multiFilters),
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -189,7 +201,10 @@ abstract class BaseViewService
 
         return $this->viewModel->searchByTermView(
             $term,
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -209,7 +224,11 @@ abstract class BaseViewService
         $p = $this->buildPaginationParams($params);
 
         return $this->viewModel->findPaginatedView(
-            [], $p['page'], $p['limit'], $p['sort'], $p['order']
+            [],
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 
@@ -237,7 +256,10 @@ abstract class BaseViewService
         $p = $this->buildPaginationParams($params);
 
         return $this->viewModel->findDeletedPaginatedView(
-            $p['page'], $p['limit'], $p['sort'], $p['order']
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
         );
     }
 }

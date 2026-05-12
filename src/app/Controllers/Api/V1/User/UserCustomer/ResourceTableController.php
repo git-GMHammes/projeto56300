@@ -36,4 +36,33 @@ class ResourceTableController extends BaseResourceTableController
     {
         return (new UpdateRequest())->rules();
     }
+
+    /**
+     * POST .../upload-avatar/{id}
+     *
+     * Recebe multipart/form-data com campo "file" (imagem).
+     * Salva o arquivo, registra em user_003_customer_files e
+     * atualiza user_002_customer.profile com o caminho gravado.
+     * Endpoint público — não requer autenticação (fluxo de registro).
+     */
+    public function uploadAvatar(int $id): ResponseInterface
+    {
+        try {
+            $file = $this->request->getFile('file');
+
+            if (!$file || !$file->isValid()) {
+                return $this->respondValidationError(['file' => 'Arquivo inválido ou não enviado']);
+            }
+
+            $result = $this->processor->uploadAvatar($id, $file);
+
+            if (!$result['success']) {
+                return $this->respondError($result['message'], $result['code'] ?? 400);
+            }
+
+            return $this->respondSuccess($result['data'], 'Foto de perfil enviada com sucesso');
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
 }

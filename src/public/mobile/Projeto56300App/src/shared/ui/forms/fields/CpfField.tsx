@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { isValidCpf } from '../utils/validators';
 import { formatCpf, getCpfDigits } from '../utils/formatters';
-import Bootstrap from '../../../theme/bootstrap';
 import type { CpfFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
 
 const CpfField: React.FC<CpfFieldProps> = ({
     name,
@@ -17,6 +17,9 @@ const CpfField: React.FC<CpfFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -52,24 +55,24 @@ const CpfField: React.FC<CpfFieldProps> = ({
     const isValid = touched && !feedback && getCpfDigits(value).length === 11;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
             <TextInput
                 style={[
-                    fieldStyles.input,
-                    focused && styles.focused,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    fs.input,
+                    focused && fs.inputFocused,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                 ]}
                 value={value}
                 placeholder="000.000.000-00"
-                placeholderTextColor="#6c757d"
+                placeholderTextColor={theme.colors.placeholder}
                 keyboardType="numeric"
                 maxLength={14}
                 editable={!disabled && !readOnly}
@@ -77,13 +80,9 @@ const CpfField: React.FC<CpfFieldProps> = ({
                 onFocus={() => setFocused(true)}
                 onBlur={handleBlur}
             />
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
-});
 
 export default CpfField;

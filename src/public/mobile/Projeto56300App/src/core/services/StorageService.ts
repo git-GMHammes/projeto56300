@@ -7,6 +7,8 @@ type Session = {
   token: string
   tokenType: string
   expiresAt: number
+  refreshToken: string
+  refreshExpiresAt: number
   user: unknown
 }
 
@@ -16,12 +18,16 @@ export async function saveSession(
   token: string,
   tokenType: string,
   expiresIn: number,
+  refreshToken: string,
+  refreshExpiresIn: number,
   user: unknown,
 ): Promise<void> {
   _session = {
     token,
     tokenType,
     expiresAt: Date.now() + expiresIn * 1000,
+    refreshToken,
+    refreshExpiresAt: Date.now() + refreshExpiresIn * 1000,
     user,
   }
 }
@@ -36,6 +42,12 @@ export async function getTokenType(): Promise<string> {
 
 export async function getUser<T>(): Promise<T | null> {
   return (_session?.user as T) ?? null
+}
+
+export async function getRefreshToken(): Promise<string | null> {
+  if (!_session) return null
+  if (Date.now() >= _session.refreshExpiresAt) return null
+  return _session.refreshToken
 }
 
 export async function isAuthenticated(): Promise<boolean> {

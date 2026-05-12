@@ -1,4 +1,5 @@
 export const ODS_PATHS = {
+  HOME: 'OdsHome',
   P01: 'OdsP01',
   P02: 'OdsP02',
   P03: 'OdsP03',

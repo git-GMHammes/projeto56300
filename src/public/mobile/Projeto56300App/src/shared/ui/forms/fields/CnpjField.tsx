@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { isValidCnpj } from '../utils/validators';
 import { formatCnpj, getCnpjDigits } from '../utils/formatters';
-import Bootstrap from '../../../theme/bootstrap';
 import type { CnpjFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
 
 const CnpjField: React.FC<CnpjFieldProps> = ({
     name,
@@ -18,6 +18,9 @@ const CnpjField: React.FC<CnpjFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -58,24 +61,24 @@ const CnpjField: React.FC<CnpjFieldProps> = ({
     const isValid = touched && !feedback && rawLen === 14;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
             <TextInput
                 style={[
-                    fieldStyles.input,
-                    focused && styles.focused,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    fs.input,
+                    focused && fs.inputFocused,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                 ]}
                 value={value}
                 placeholder={allowLetters ? 'AA.AAA.AAA/AAAA-00' : '00.000.000/0000-00'}
-                placeholderTextColor="#6c757d"
+                placeholderTextColor={theme.colors.placeholder}
                 keyboardType={allowLetters ? 'default' : 'numeric'}
                 maxLength={18}
                 editable={!disabled && !readOnly}
@@ -84,13 +87,9 @@ const CnpjField: React.FC<CnpjFieldProps> = ({
                 onFocus={() => setFocused(true)}
                 onBlur={handleBlur}
             />
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
-});
 
 export default CnpjField;

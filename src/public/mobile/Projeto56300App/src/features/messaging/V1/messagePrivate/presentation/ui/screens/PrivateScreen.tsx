@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { SafeAreaView } from '../../../../../../../core/navigation'
 import Bootstrap from '../../../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../../../app/providers/ThemeProvider'
 import TopBar from '../../../../../../../shared/ui/components/TopBar'
 import BackButton from '../../../../../../../shared/ui/components/BackButton'
-import { usePrivateViewModel } from '../hooks/usePrivateViewModel'
+import footerData from '../../../../../../../data/message/footer_message.json'
 import type { MessagingStackParamList } from '../../../../types'
 
 interface Props {
@@ -13,25 +13,28 @@ interface Props {
   goBack: () => void
 }
 
+const item = footerData.find(i => i.key === 'dm')!
+
 export default function PrivateScreen({ goBack }: Props) {
   const { theme } = useTheme()
-  const vm = usePrivateViewModel()
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.bg }]}>
       <TopBar leftContent={<BackButton onPress={goBack} />} />
-      <View style={styles.content}>
-        {vm.loading && (
-          <Text style={[styles.info, { color: theme.colors.textMuted }]}>Carregando...</Text>
-        )}
-        {vm.error !== null && (
-          <Text style={[styles.info, { color: theme.colors.primary }]}>{vm.error}</Text>
-        )}
-        {!vm.loading && vm.error === null && (
-          <Text style={[styles.info, { color: theme.colors.text }]}>
-            {vm.data.length} mensagens privadas
-          </Text>
-        )}
+      <Text style={[styles.title, { color: theme.colors.text }]}>{item.label}</Text>
+      <View style={styles.buttons}>
+        <Pressable
+          style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+          onPress={() => {}}
+        >
+          <Text style={styles.btnText}>Ler</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+          onPress={() => {}}
+        >
+          <Text style={styles.btnText}>Criar</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   )
@@ -39,6 +42,27 @@ export default function PrivateScreen({ goBack }: Props) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  content: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  info: { fontSize: Bootstrap.fontSize.base },
+  title: {
+    fontSize: Bootstrap.fontSize.xl,
+    fontWeight: Bootstrap.fontWeight.bold,
+    textAlign: 'center',
+    paddingTop: Bootstrap.spacing.xl,
+    paddingHorizontal: Bootstrap.spacing.xl,
+  },
+  buttons: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: Bootstrap.spacing.xl,
+    gap: Bootstrap.spacing.xl,
+  },
+  btn: {
+    paddingVertical: Bootstrap.spacing.lg,
+    borderRadius: Bootstrap.borderRadius.md,
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Bootstrap.colors.white,
+    fontSize: Bootstrap.fontSize.md,
+    fontWeight: Bootstrap.fontWeight.semibold,
+  },
 })

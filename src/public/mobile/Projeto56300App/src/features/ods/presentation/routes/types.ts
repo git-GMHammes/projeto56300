@@ -1,6 +1,7 @@
 import type { NavigationProp } from '../../../../core/navigation'
 
 export type OdsStackParamList = {
+  OdsHome: undefined
   OdsP01: undefined
   OdsP02: undefined
   OdsP03: undefined

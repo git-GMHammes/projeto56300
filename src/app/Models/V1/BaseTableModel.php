@@ -16,17 +16,17 @@ use CodeIgniter\Model;
  */
 abstract class BaseTableModel extends Model
 {
-    protected $DBGroup          = 'default';
-    protected $primaryKey       = 'id';
+    protected $DBGroup = 'default';
+    protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = true;
-    protected $protectFields    = true;
-    protected $useTimestamps    = true;
-    protected $createdField     = 'created_at';
-    protected $updatedField     = 'updated_at';
-    protected $deletedField     = 'deleted_at';
-    protected $dateFormat       = 'datetime';
+    protected $returnType = 'array';
+    protected $useSoftDeletes = true;
+    protected $protectFields = true;
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+    protected $deletedField = 'deleted_at';
+    protected $dateFormat = 'datetime';
 
     /**
      * Campos excluídos de qualquer retorno de consulta.
@@ -339,7 +339,7 @@ abstract class BaseTableModel extends Model
      */
     protected function sanitizeSort(string $sort, string $order): array
     {
-        $sort  = in_array($sort, $this->sortableFields, true) ? $sort : 'id';
+        $sort = in_array($sort, $this->sortableFields, true) ? $sort : 'id';
         $order = in_array(strtolower($order), ['asc', 'desc'], true) ? strtolower($order) : 'desc';
 
         return [$sort, $order];
@@ -359,9 +359,9 @@ abstract class BaseTableModel extends Model
         }
 
         return [
-            'data'       => $data,
+            'data' => $data,
             'pagination' => [
-                'page'  => $page,
+                'page' => $page,
                 'limit' => $limit,
                 'total' => $total,
                 'pages' => $limit > 0 ? (int) ceil($total / $limit) : 0,

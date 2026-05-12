@@ -7,6 +7,9 @@
 $routes->post('login',           'Api\V1\User\AuthUser\ResourceViewController::login');
 // POST {{www}}/index.php/api/v1/auth/logout
 $routes->post('logout',          'Api\V1\User\AuthUser\ResourceViewController::logout');
+// POST {{www}}/index.php/api/v1/auth/refresh
+// Body: { "refresh_token": "<64 hex chars>" } — rota pública (access token pode estar expirado)
+$routes->post('refresh',         'Api\V1\User\AuthUser\ResourceViewController::refresh');
 
 // -------------------------------------------------------------------------
 // Fluxo de reset de senha (3 passos)

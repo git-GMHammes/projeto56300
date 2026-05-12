@@ -187,7 +187,7 @@ function UserRegisterForm() {
 
         try {
             const res = await createUserCustomer({
-                user_id: userId!,
+                user_management_id: userId!,
                 name: data.get('name') as string,
                 mail: data.get('mail') as string,
                 cpf: data.get('cpf') as string,

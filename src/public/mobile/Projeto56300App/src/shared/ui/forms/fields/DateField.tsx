@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { formatDate, getDateDigits, dateDisplayToISO } from '../utils/formatters';
-import Bootstrap from '../../../theme/bootstrap';
 import type { DateFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
 
 function isValidDateDisplay(val: string): boolean {
     const d = getDateDigits(val);
@@ -30,6 +30,9 @@ const DateField: React.FC<DateFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [focused, setFocused] = useState(false);
     const [feedback, setFeedback] = useState('');
@@ -71,24 +74,24 @@ const DateField: React.FC<DateFieldProps> = ({
     const isValid = touched && !feedback && getDateDigits(value).length === 8;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
             <TextInput
                 style={[
-                    fieldStyles.input,
-                    focused && styles.focused,
-                    isInvalid && fieldStyles.inputInvalid,
-                    isValid && fieldStyles.inputValid,
-                    (disabled || readOnly) && fieldStyles.inputDisabled,
+                    fs.input,
+                    focused && fs.inputFocused,
+                    isInvalid && fs.inputInvalid,
+                    isValid && fs.inputValid,
+                    (disabled || readOnly) && fs.inputDisabled,
                 ]}
                 value={value}
                 placeholder="DD/MM/AAAA"
-                placeholderTextColor="#6c757d"
+                placeholderTextColor={theme.colors.placeholder}
                 keyboardType="numeric"
                 maxLength={10}
                 editable={!disabled && !readOnly}
@@ -96,13 +99,9 @@ const DateField: React.FC<DateFieldProps> = ({
                 onFocus={() => setFocused(true)}
                 onBlur={handleBlur}
             />
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
-});
 
 export default DateField;

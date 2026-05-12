@@ -96,7 +96,28 @@ class SqlViewModel extends BaseViewModel
     {
         $result = $this->db->table($this->table)
             ->where('um_user', $user)
-            ->where('ut_tenant_id', $tenantId)
+            ->where('ut_user_saas_tenants_id', $tenantId)
+            ->where('um_is_active', 1)
+            ->where('deleted_at IS NULL', null, false)
+            ->get()
+            ->getRowArray();
+
+        return $result ?: null;
+    }
+
+    /**
+     * Busca um usuário ativo na view pelo ID (uc_user_id) e tenant.
+     * Usado pelo RefreshProcessor para validar se o usuário ainda está ativo.
+     *
+     * @param  int $userId   ID do usuário (campo id / uc_user_id)
+     * @param  int $tenantId ID do tenant (campo ut_user_saas_tenants_id)
+     * @return array|null    Registro completo da view ou null se não encontrado
+     */
+    public function findByIdAndTenant(int $userId, int $tenantId): ?array
+    {
+        $result = $this->db->table($this->table)
+            ->where('id', $userId)
+            ->where('ut_user_saas_tenants_id', $tenantId)
             ->where('um_is_active', 1)
             ->where('deleted_at IS NULL', null, false)
             ->get()

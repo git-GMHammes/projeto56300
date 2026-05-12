@@ -24,7 +24,7 @@ class SqlTableModel extends BaseTableModel
 
     protected $allowedFields = [
         'group_id',
-        'user_id',
+        'user_management_id',
         'reply_to_id',
         'content',
     ];

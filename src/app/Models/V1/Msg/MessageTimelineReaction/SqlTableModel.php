@@ -23,7 +23,7 @@ class SqlTableModel extends BaseTableModel
 
     protected $allowedFields = [
         'timeline_id',
-        'user_id',
+        'user_management_id',
         'reaction',
     ];
 

@@ -44,7 +44,7 @@ class CreateRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|is_natural_no_zero',
+            'user_management_id' => 'required|is_natural_no_zero',
             'name' => 'permit_empty|string|max_length[150]',
             'cpf' => 'permit_empty|string|max_length[50]',
             'whatsapp' => 'permit_empty|string|max_length[50]',
@@ -65,9 +65,9 @@ class CreateRequest
     public function messages(): array
     {
         return [
-            'user_id' => [
-                'required' => 'O campo user_id é obrigatório',
-                'is_natural_no_zero' => 'O campo user_id deve ser um número inteiro positivo',
+            'user_management_id' => [
+                'required' => 'O campo user_management_id é obrigatório',
+                'is_natural_no_zero' => 'O campo user_management_id deve ser um número inteiro positivo',
             ],
             'name' => [
                 'max_length' => 'O nome não pode exceder 150 caracteres',

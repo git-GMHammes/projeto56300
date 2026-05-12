@@ -1,12 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { fieldStyles } from '../utils/fieldStyles';
+import { makeFieldStyles } from '../utils/fieldStyles';
 import { checkPasswordStrength } from '../utils/validators';
 import Bootstrap from '../../../theme/bootstrap';
 import type { PasswordFieldProps } from '../types';
+import { useTheme } from '../../../../app/providers/ThemeProvider';
+import type { AppColors } from '../../../theme/global/types';
 
 const EyeIcon = ({ visible }: { visible: boolean }) => (
-    <Text style={styles.eyeIcon}>{visible ? '🙈' : '👁️'}</Text>
+    <Text style={staticStyles.eyeIcon}>{visible ? '🙈' : '👁️'}</Text>
 );
 
 const PasswordField: React.FC<PasswordFieldProps> = ({
@@ -30,6 +32,10 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
     onBlur,
     onValidationChange,
 }) => {
+    const { theme } = useTheme();
+    const fs = useMemo(() => makeFieldStyles(theme.colors), [theme]);
+    const ls = useMemo(() => makeLocalStyles(theme.colors), [theme]);
+
     const [touched, setTouched] = useState(false);
     const [confirmTouched, setConfirmTouched] = useState(false);
     const [focused, setFocused] = useState(false);
@@ -88,25 +94,25 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
     const isConfirmValid = confirmTouched && !confirmFeedback && confirmValue.length > 0;
 
     return (
-        <View style={fieldStyles.wrapper}>
+        <View style={fs.wrapper}>
             {label && (
-                <Text style={fieldStyles.label}>
+                <Text style={fs.label}>
                     {label}
-                    {required && <Text style={fieldStyles.required}> *</Text>}
+                    {required && <Text style={fs.required}> *</Text>}
                 </Text>
             )}
-            <View style={styles.inputRow}>
+            <View style={staticStyles.inputRow}>
                 <TextInput
                     style={[
-                        styles.inputWithEye,
-                        focused && styles.focused,
-                        isInvalid && fieldStyles.inputInvalid,
-                        isValid && fieldStyles.inputValid,
-                        (disabled || readOnly) && fieldStyles.inputDisabled,
+                        ls.inputWithEye,
+                        focused && fs.inputFocused,
+                        isInvalid && fs.inputInvalid,
+                        isValid && fs.inputValid,
+                        (disabled || readOnly) && fs.inputDisabled,
                     ]}
                     value={value}
                     placeholder={placeholder}
-                    placeholderTextColor="#6c757d"
+                    placeholderTextColor={theme.colors.placeholder}
                     secureTextEntry={secure}
                     maxLength={maxLength}
                     editable={!disabled && !readOnly}
@@ -121,50 +127,48 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
                         onBlur?.(name, value);
                     }}
                 />
-                <TouchableOpacity onPress={() => setSecure(p => !p)} style={styles.eyeBtn}>
+                <TouchableOpacity onPress={() => setSecure(p => !p)} style={staticStyles.eyeBtn}>
                     <EyeIcon visible={!secure} />
                 </TouchableOpacity>
             </View>
 
-            {isInvalid && <Text style={fieldStyles.feedback}>{feedback}</Text>}
+            {isInvalid && <Text style={fs.feedback}>{feedback}</Text>}
 
-            {/* Barra de força da senha */}
             {strongPassword && value.length > 0 && strength && (
-                <View style={styles.strengthRow}>
-                    <View style={styles.strengthBar}>
+                <View style={staticStyles.strengthRow}>
+                    <View style={staticStyles.strengthBar}>
                         {[0, 1, 2, 3].map(i => (
                             <View
                                 key={i}
                                 style={[
-                                    styles.strengthSegment,
-                                    { backgroundColor: i < strength.score ? strength.color : '#dee2e6' },
+                                    staticStyles.strengthSegment,
+                                    { backgroundColor: i < strength.score ? strength.color : theme.colors.border },
                                 ]}
                             />
                         ))}
                     </View>
-                    <Text style={[styles.strengthLabel, { color: strength.color }]}>
+                    <Text style={[staticStyles.strengthLabel, { color: strength.color }]}>
                         {strength.label}
                     </Text>
                 </View>
             )}
 
-            {/* Campo de confirmação */}
             {doubleField && (
                 <>
-                    <Text style={[fieldStyles.label, styles.confirmLabel]}>
+                    <Text style={[fs.label, staticStyles.confirmLabel]}>
                         Confirmar {label || 'senha'}
-                        {required && <Text style={fieldStyles.required}> *</Text>}
+                        {required && <Text style={fs.required}> *</Text>}
                     </Text>
-                    <View style={styles.inputRow}>
+                    <View style={staticStyles.inputRow}>
                         <TextInput
                             style={[
-                                styles.inputWithEye,
-                                isConfirmInvalid && fieldStyles.inputInvalid,
-                                isConfirmValid && fieldStyles.inputValid,
+                                ls.inputWithEye,
+                                isConfirmInvalid && fs.inputInvalid,
+                                isConfirmValid && fs.inputValid,
                             ]}
                             value={confirmValue}
                             placeholder={placeholder}
-                            placeholderTextColor="#6c757d"
+                            placeholderTextColor={theme.colors.placeholder}
                             secureTextEntry={secureConfirm}
                             maxLength={maxLength}
                             autoCapitalize="none"
@@ -175,12 +179,12 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
                                 validateConfirm(confirmValue, value);
                             }}
                         />
-                        <TouchableOpacity onPress={() => setSecureConfirm(p => !p)} style={styles.eyeBtn}>
+                        <TouchableOpacity onPress={() => setSecureConfirm(p => !p)} style={staticStyles.eyeBtn}>
                             <EyeIcon visible={!secureConfirm} />
                         </TouchableOpacity>
                     </View>
                     {isConfirmInvalid && (
-                        <Text style={fieldStyles.feedback}>{confirmFeedback}</Text>
+                        <Text style={fs.feedback}>{confirmFeedback}</Text>
                     )}
                 </>
             )}
@@ -188,23 +192,10 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
     inputRow: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    inputWithEye: {
-        flex: 1,
-        height: Bootstrap.inputHeight,
-        borderWidth: 1,
-        borderColor: Bootstrap.colors.inputBorder,
-        borderRadius: Bootstrap.borderRadius.sm,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        fontSize: Bootstrap.fontSize.base,
-        color: Bootstrap.colors.body,
-        backgroundColor: Bootstrap.colors.inputBg,
-        paddingRight: 44,
     },
     eyeBtn: {
         position: 'absolute',
@@ -214,7 +205,6 @@ const styles = StyleSheet.create({
     eyeIcon: {
         fontSize: 18,
     },
-    focused: { borderColor: Bootstrap.colors.inputBorderFocus },
     strengthRow: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -240,5 +230,23 @@ const styles = StyleSheet.create({
         marginTop: Bootstrap.spacing.md,
     },
 });
+
+function makeLocalStyles(c: AppColors) {
+    return StyleSheet.create({
+        inputWithEye: {
+            flex: 1,
+            height: Bootstrap.inputHeight,
+            borderWidth: 1,
+            borderColor: c.inputBorder,
+            borderRadius: Bootstrap.borderRadius.sm,
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            fontSize: Bootstrap.fontSize.base,
+            color: c.inputText,
+            backgroundColor: c.inputBg,
+            paddingRight: 44,
+        },
+    });
+}
 
 export default PasswordField;

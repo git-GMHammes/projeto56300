@@ -44,7 +44,7 @@ export interface SessionUser {
   uc_deleted_at: string | null
   uc_user_id_active: string
   ut_id: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
   ut_role: string
   ut_created_at: string
   ut_deleted_at: string | null
@@ -60,7 +60,7 @@ export interface LoginData {
 export interface LoginPayload {
   um_user: string
   um_password: string
-  ut_tenant_id: string
+  ut_user_saas_tenants_id: string
 }
 
 // ─── Tipos para consultas da view_auth_user ───────────────────────────────────
@@ -120,7 +120,7 @@ export interface RecoverPasswordPayload {
 
 export interface ResetTokenInfo {
   id: number
-  user_id: number
+  user_management_id: number
   expires_at: string
 }
 

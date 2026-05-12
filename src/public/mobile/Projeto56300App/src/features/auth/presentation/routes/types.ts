@@ -7,6 +7,7 @@ export type AuthStackParamList = {
   [AUTH_PATHS.FORGOT_PASSWORD]: undefined
   [AUTH_PATHS.RESET_PASSWORD]: { token: string }
   // Páginas ODS — públicas, acessíveis antes do login (APP_CONTRACT_CODE === 'cont0001')
+  OdsHome: undefined
   OdsP01: undefined
   OdsP02: undefined
   OdsP03: undefined

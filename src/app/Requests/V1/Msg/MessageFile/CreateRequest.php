@@ -16,7 +16,7 @@ class CreateRequest
         return [
             'source'        => 'required|in_list[timeline,private,group]',
             'source_id'     => 'required|is_natural_no_zero',
-            'user_id'       => 'required|is_natural_no_zero',
+            'user_management_id'       => 'required|is_natural_no_zero',
             'original_name' => 'required|string|max_length[255]',
             'filename'      => 'required|string|max_length[255]',
             'stored_path'   => 'required|string|max_length[255]',
@@ -33,7 +33,7 @@ class CreateRequest
         return [
             'source'        => ['required' => 'O tipo de origem é obrigatório', 'in_list' => 'Origem inválida. Valores aceitos: timeline, private, group'],
             'source_id'     => ['required' => 'O source_id é obrigatório'],
-            'user_id'       => ['required' => 'O user_id é obrigatório'],
+            'user_management_id'       => ['required' => 'O user_management_id é obrigatório'],
             'original_name' => ['required' => 'O nome original do arquivo é obrigatório'],
             'filename'      => ['required' => 'O filename é obrigatório'],
             'stored_path'   => ['required' => 'O stored_path é obrigatório'],
