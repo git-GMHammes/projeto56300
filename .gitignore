@@ -61,6 +61,7 @@ src/public/frontend/vue_vite_pinia/dist/
 # Arquivos de ambiente locais do Vite (sobrescrevem .env.[mode])
 # Os arquivos .env.development e .env.production sem ".local" são versionados
 src/public/frontend/vue_vite_pinia/.env.local
+src/system/ThirdParty/Jugwoko.php
 src/public/frontend/vue_vite_pinia/.env.*.local
 
 # Cache interno do Vite
@@ -140,4 +141,3 @@ $RECYCLE.BIN/
 docs/
 .claude/worktrees/eager-herschel/
 .claude/worktrees/sweet-blackwell/
-src/system/ThirdParty/Jugwoko.php
