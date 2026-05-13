@@ -130,7 +130,7 @@ export function SafeAreaProvider({ children }: { children: React.ReactNode }) {
 // qualquer elemento tocável fique abaixo dessa zona.
 const ANDROID_TOP_INSET =
   Platform.OS === 'android'
-    ? (StatusBar.currentHeight ?? 24)
+    ? Math.max((StatusBar.currentHeight ?? 24) + 16, 56)
     : 0
 
 export const ANDROID_BOTTOM_INSET = Platform.OS === 'android' ? 16 : 0

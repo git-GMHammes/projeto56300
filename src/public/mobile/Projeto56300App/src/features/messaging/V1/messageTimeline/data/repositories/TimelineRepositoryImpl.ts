@@ -10,8 +10,14 @@ export class TimelineRepositoryImpl implements ITimelineRepository {
 
   async getAll(page = 1, perPage = 15): Promise<PaginatedData<Timeline>> {
     const env = await this.ds.getAll(page, perPage)
-    if (!env.success || !env.data) throw new HttpError(env.message, env.statusCode)
-    return { ...env.data, data: TimelineMapper.toEntityList(env.data.data) }
+    if (!env.success) throw new HttpError(env.message, env.statusCode)
+    return {
+      data: TimelineMapper.fromViewDtoList(env.data ?? []),
+      currentPage: env.pagination?.page ?? page,
+      perPage: env.pagination?.limit ?? perPage,
+      total: env.pagination?.total ?? 0,
+      pageCount: env.pagination?.pages ?? 1,
+    }
   }
 
   async get(id: number): Promise<Timeline> {

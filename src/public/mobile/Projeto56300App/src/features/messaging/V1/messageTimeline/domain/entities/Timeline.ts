@@ -7,6 +7,9 @@ export interface Timeline {
   created_at: string
   updated_at: string
   deleted_at: string | null
+  author_name: string
+  author_uuid: string
+  author_role: string
 }
 
 export interface CreateTimelinePayload {

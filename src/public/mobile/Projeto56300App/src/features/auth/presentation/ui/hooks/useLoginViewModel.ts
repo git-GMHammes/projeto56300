@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { APP_ENV } from '../../../../../core/config/env'
 import { LoginUseCase } from '../../../domain/usecases/LoginUseCase'
 import { AuthRepositoryImpl } from '../../../data/repositories/AuthRepositoryImpl'
 import { HttpError } from '../../../../../core/services/HttpClient'
@@ -21,7 +22,7 @@ interface LoginState {
 
 export function useLoginViewModel() {
   const [state, setState] = useState<LoginState>({
-    form: { username: '', password: '', tenantId: '2' },
+    form: { username: APP_ENV === 'development' ? 'UWROL30M2t' : '', password: APP_ENV === 'development' ? 'A@123456' : '', tenantId: '2' },
     loading: false,
     error: null,
     session: null,

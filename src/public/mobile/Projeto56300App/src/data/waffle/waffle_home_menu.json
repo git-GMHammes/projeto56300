@@ -1,0 +1,56 @@
+[
+  {
+    "icon": "box-arrow-right",
+    "label": "Logout",
+    "description": "Encerrar sessão e sair do aplicativo",
+    "route": "logout"
+  },
+  {
+    "icon": "newspaper",
+    "label": "Time Line",
+    "description": "Visualizar o feed de mensagens e publicações",
+    "route": "Messaging"
+  },
+  {
+    "icon": "basket",
+    "label": "ODS 2",
+    "description": "Fome Zero e Agricultura Sustentável",
+    "route": "OdsP02"
+  },
+  {
+    "icon": "heart-pulse",
+    "label": "ODS 3",
+    "description": "Saúde e Bem-Estar",
+    "route": "OdsP03"
+  },
+  {
+    "icon": "book",
+    "label": "ODS 4",
+    "description": "Educação de Qualidade",
+    "route": "OdsP04"
+  },
+  {
+    "icon": "people",
+    "label": "ODS 5",
+    "description": "Igualdade de Gênero",
+    "route": "OdsP05"
+  },
+  {
+    "icon": "droplet",
+    "label": "ODS 6",
+    "description": "Água Potável e Saneamento",
+    "route": "OdsP06"
+  },
+  {
+    "icon": "brightness-high",
+    "label": "ODS 7",
+    "description": "Energia Limpa e Acessível",
+    "route": "OdsP07"
+  },
+  {
+    "icon": "briefcase",
+    "label": "ODS 8",
+    "description": "Trabalho Decente e Crescimento Econômico",
+    "route": "OdsP08"
+  }
+]

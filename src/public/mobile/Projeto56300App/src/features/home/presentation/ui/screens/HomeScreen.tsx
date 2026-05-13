@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { SafeAreaView } from '../../../../../core/navigation'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
@@ -7,8 +7,11 @@ import HamburgerMenuButton from '../../../../../shared/ui/components/HamburgerMe
 import UserMenuButton from '../../../../../shared/ui/components/UserMenuButton'
 import OdsMenuDrawer from '../../../../ods/presentation/ui/components/OdsMenuDrawer'
 import UserMenuDrawer from '../../../../../shared/ui/components/UserMenuDrawer'
+import WaffleMenu from '../../../../../shared/ui/components/WaffleMenu'
+import type { WaffleMenuItem } from '../../../../../shared/ui/components/WaffleMenu'
 import { clearSession } from '../../../../../core/services/StorageService'
 import { setTokenReader } from '../../../../../core/services/HttpClient'
+import waffleItems from '../../../../../data/waffle/waffle_home_menu.json'
 
 interface Props {
   navigate: (screenName: string) => void
@@ -28,6 +31,14 @@ export default function HomeScreen({ navigate, onLogout }: Props) {
     }
   }
 
+  const handleWafflePress = useCallback((item: WaffleMenuItem) => {
+    if (item.route === 'logout') {
+      handleUserAction('logout')
+    } else {
+      navigate(item.route)
+    }
+  }, [navigate, onLogout])
+
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.bg }]}>
       <TopBar
@@ -38,6 +49,9 @@ export default function HomeScreen({ navigate, onLogout }: Props) {
           <HamburgerMenuButton onPress={() => setOdsMenuOpen(true)} />
         }
       />
+      <View style={styles.body}>
+        <WaffleMenu items={waffleItems} onItemPress={handleWafflePress} />
+      </View>
       <OdsMenuDrawer
         visible={odsMenuOpen}
         onClose={() => setOdsMenuOpen(false)}
@@ -57,5 +71,10 @@ export default function HomeScreen({ navigate, onLogout }: Props) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
+  },
+  body: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
