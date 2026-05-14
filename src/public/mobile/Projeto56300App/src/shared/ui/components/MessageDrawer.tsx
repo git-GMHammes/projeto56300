@@ -11,11 +11,12 @@ import type { GlobalTheme } from '../../theme/global'
 import TimelineScreen from '../../../features/messaging/V1/messageTimeline/presentation/ui/screens/TimelineScreen'
 import PrivateScreen from '../../../features/messaging/V1/messagePrivate/presentation/ui/screens/PrivateScreen'
 import GroupScreen from '../../../features/messaging/V1/msgGroup/presentation/ui/screens/GroupScreen'
+import HelperScreen from '../../../features/helper/presentation/ui/screens/HelperScreen'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const PANEL_WIDTH = Math.round(SCREEN_WIDTH * 0.92)
 
-export type MessageDrawerType = 'timeline' | 'dm' | 'groups'
+export type MessageDrawerType = 'timeline' | 'dm' | 'groups' | 'helper'
 
 interface Props {
   visible: boolean
@@ -64,6 +65,8 @@ export default function MessageDrawer({ visible, type, onClose }: Props) {
         return <PrivateScreen navigate={noNavigate as any} goBack={closeDrawer} />
       case 'groups':
         return <GroupScreen navigate={noNavigate as any} goBack={closeDrawer} />
+      case 'helper':
+        return <HelperScreen goBack={closeDrawer} />
       default:
         return null
     }

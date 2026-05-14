@@ -25,6 +25,19 @@ abstract class BaseResourceTableController extends BaseController
 {
     protected $processor;
 
+    /**
+     * Slug do módulo usado por uploadAttachments() para criar subpasta por módulo.
+     * Sobrescrever no controller do módulo que quiser usar upload.
+     * Exemplo: protected string $moduleSlug = 'msg-timeline';
+     */
+    protected string $moduleSlug = 'general';
+
+    /** Arquivos extraídos manualmente do raw input para requisições PUT/PATCH multipart. */
+    protected array $putFiles = [];
+
+    /** Cache do body parseado — evita reler php://input múltiplas vezes no mesmo request. */
+    private ?array $cachedRequestBody = null;
+
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,
@@ -62,7 +75,7 @@ abstract class BaseResourceTableController extends BaseController
     public function find(): ResponseInterface
     {
         try {
-            $body    = $this->getJsonBody();
+            $body = $this->getJsonBody();
             $filters = \is_array($body) ? $body : [];
 
             $result = $this->processor->find($filters, $this->getPaginationParams());
@@ -118,7 +131,7 @@ abstract class BaseResourceTableController extends BaseController
     public function search(): ResponseInterface
     {
         try {
-            $term   = trim((string) ($this->request->getGet('q') ?? ''));
+            $term = trim((string) ($this->request->getGet('q') ?? ''));
             $result = $this->processor->search($term, $this->getPaginationParams());
 
             return $this->respondPaginated($result['data'], $result['pagination']);
@@ -171,9 +184,9 @@ abstract class BaseResourceTableController extends BaseController
     public function getNoPagination(): ResponseInterface
     {
         try {
-            $sort  = trim((string) ($this->request->getGet('sort') ?? 'id'));
+            $sort = trim((string) ($this->request->getGet('sort') ?? 'id'));
             $order = trim((string) ($this->request->getGet('order') ?? 'desc'));
-            $data  = $this->processor->getNoPagination($sort, $order);
+            $data = $this->processor->getNoPagination($sort, $order);
 
             return $this->respondSuccess($data);
         } catch (\Throwable $e) {
@@ -251,17 +264,26 @@ abstract class BaseResourceTableController extends BaseController
     public function create(): ResponseInterface
     {
         try {
+            // helper('myDebug');
+            // debug($_POST, '$_POST nativo', false);
+            // debug($this->getRequestBody(), 'getRequestBody()', true); // true = para aqui
+
             if (!$this->validate($this->getCreateRules())) {
                 return $this->respondValidationError($this->validator->getErrors());
             }
-
-            $result = $this->processor->create($this->getJsonBody());
+            $result = $this->processor->create($this->getRequestBody());
 
             if (!$result['success']) {
                 return $this->respondError($result['message'], $result['code'] ?? 409);
             }
 
-            return $this->respondCreated($result['data']);
+            $data = $result['data'];
+            $uploadResult = $this->handleInlineUpload((int) ($data['id'] ?? 0));
+            if ($uploadResult !== null) {
+                $data['_upload'] = $uploadResult;
+            }
+
+            return $this->respondCreated($data);
         } catch (\Throwable $e) {
             return $this->respondServerError($e);
         } finally {
@@ -279,13 +301,19 @@ abstract class BaseResourceTableController extends BaseController
                 return $this->respondValidationError($this->validator->getErrors());
             }
 
-            $result = $this->processor->update($id, $this->getJsonBody());
+            $result = $this->processor->update($id, $this->getRequestBody());
 
             if (!$result['success']) {
                 return $this->respondError($result['message'], $result['code'] ?? 400);
             }
 
-            return $this->respondSuccess($result['data'], 'Registro atualizado com sucesso');
+            $data = $result['data'];
+            $uploadResult = $this->handleInlineUpload($id);
+            if ($uploadResult !== null) {
+                $data['_upload'] = $uploadResult;
+            }
+
+            return $this->respondSuccess($data, 'Registro atualizado com sucesso');
         } catch (\Throwable $e) {
             return $this->respondServerError($e);
         } finally {
@@ -378,6 +406,55 @@ abstract class BaseResourceTableController extends BaseController
     }
 
     // -------------------------------------------------------------------------
+    // Upload de anexos — opcional, ativar por módulo via $moduleSlug + rota
+    // -------------------------------------------------------------------------
+
+    /**
+     * POST .../upload-files/{userCustomerId}
+     *
+     * Endpoint genérico herdável por qualquer módulo da API V1.
+     * Recebe files[] via multipart/form-data e salva em:
+     *   writable/uploads/Projeto56300App/user_customer_files/usu_{id}/{$moduleSlug}/
+     *
+     * Como ativar em um módulo:
+     *   1. No controller: protected string $moduleSlug = 'nome-do-modulo';
+     *   2. Na rota:       $routes->post('upload-files/(:num)', 'Controller::uploadAttachments/$1');
+     */
+    public function uploadAttachments(int $userCustomerId): ResponseInterface
+    {
+        try {
+            $files = $this->request->getFiles()['files'] ?? [];
+
+            if (empty($files)) {
+                return $this->respondValidationError(['files' => 'Nenhum arquivo enviado. Use o campo files[] no multipart/form-data']);
+            }
+
+            $body     = $this->getRequestBody();
+            $tenantId = (int) ($body['user_saas_tenants_id'] ?? 0);
+
+            if ($tenantId <= 0) {
+                return $this->respondValidationError(['user_saas_tenants_id' => 'Informe user_saas_tenants_id para processar o upload']);
+            }
+
+            $uploadService = new \App\Services\V1\FileUploadService();
+            $result        = $uploadService->uploadFiles($userCustomerId, $files, $this->moduleSlug, 'document', 10, [], $tenantId);
+
+            if (!$result['success'] && isset($result['code'])) {
+                return $this->respondError($result['message'], $result['code']);
+            }
+
+            return $this->respondSuccess([
+                'results' => $result['results'],
+                'total' => $result['total'],
+                'success_count' => $result['success_count'],
+                'error_count' => $result['error_count'],
+            ], 'Upload processado');
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Helpers de resposta
     // -------------------------------------------------------------------------
 
@@ -387,11 +464,11 @@ abstract class BaseResourceTableController extends BaseController
         int $statusCode = 200
     ): ResponseInterface {
         $body = [
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => $statusCode,
-            'message'    => $message,
-            'success'    => true,
+            'message' => $message,
+            'success' => true,
         ];
 
         if ($data !== null) {
@@ -414,12 +491,12 @@ abstract class BaseResourceTableController extends BaseController
         string $message = 'Registros listados com sucesso'
     ): ResponseInterface {
         return $this->response->setStatusCode(200)->setJSON([
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => 200,
-            'message'    => $message,
-            'success'    => true,
-            'data'       => $data,
+            'message' => $message,
+            'success' => true,
+            'data' => $data,
             'pagination' => $pagination,
         ]);
     }
@@ -428,11 +505,11 @@ abstract class BaseResourceTableController extends BaseController
         string $message = 'Registro não encontrado'
     ): ResponseInterface {
         return $this->response->setStatusCode(404)->setJSON([
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => 404,
-            'message'    => $message,
-            'success'    => false,
+            'message' => $message,
+            'success' => false,
         ]);
     }
 
@@ -441,12 +518,12 @@ abstract class BaseResourceTableController extends BaseController
         string $message = 'Erro de validação'
     ): ResponseInterface {
         return $this->response->setStatusCode(422)->setJSON([
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => 422,
-            'message'    => $message,
-            'success'    => false,
-            'errors'     => $errors,
+            'message' => $message,
+            'success' => false,
+            'errors' => $errors,
         ]);
     }
 
@@ -455,11 +532,11 @@ abstract class BaseResourceTableController extends BaseController
         int $statusCode = 400
     ): ResponseInterface {
         return $this->response->setStatusCode($statusCode)->setJSON([
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => $statusCode,
-            'message'    => $message,
-            'success'    => false,
+            'message' => $message,
+            'success' => false,
         ]);
     }
 
@@ -468,19 +545,19 @@ abstract class BaseResourceTableController extends BaseController
         log_message('error', '[API 500] ' . $e->getMessage() . ' em ' . $e->getFile() . ':' . $e->getLine());
 
         $body = [
-            'method'     => strtoupper($this->request->getMethod()),
-            'endpoint'   => '/' . ltrim($this->request->getUri()->getPath(), '/'),
+            'method' => strtoupper($this->request->getMethod()),
+            'endpoint' => '/' . ltrim($this->request->getUri()->getPath(), '/'),
             'statusCode' => 500,
-            'message'    => 'Erro interno no servidor',
-            'success'    => false,
+            'message' => 'Erro interno no servidor',
+            'success' => false,
         ];
 
         if (ENVIRONMENT === 'development') {
             $body['debug'] = [
                 'exception' => get_class($e),
-                'message'   => $e->getMessage(),
-                'file'      => $e->getFile(),
-                'line'      => $e->getLine(),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ];
         }
 
@@ -494,9 +571,9 @@ abstract class BaseResourceTableController extends BaseController
     protected function getPaginationParams(): array
     {
         return [
-            'page'  => max(1, (int) ($this->request->getGet('page') ?? 1)),
+            'page' => max(1, (int) ($this->request->getGet('page') ?? 1)),
             'limit' => min(100, max(1, (int) ($this->request->getGet('limit') ?? 20))),
-            'sort'  => trim((string) ($this->request->getGet('sort') ?? 'id')),
+            'sort' => trim((string) ($this->request->getGet('sort') ?? 'id')),
             'order' => trim((string) ($this->request->getGet('order') ?? 'desc')),
         ];
     }
@@ -504,5 +581,154 @@ abstract class BaseResourceTableController extends BaseController
     protected function getJsonBody(): array
     {
         return (array) ($this->request->getJSON(true) ?? []);
+    }
+
+    protected function getRequestBody(): array
+    {
+        if ($this->cachedRequestBody !== null) {
+            return $this->cachedRequestBody;
+        }
+
+        $contentType = $this->request->getHeaderLine('Content-Type');
+
+        if (str_contains($contentType, 'application/json')) {
+            $this->cachedRequestBody = (array) ($this->request->getJSON(true) ?? []);
+            return $this->cachedRequestBody;
+        }
+
+        // PHP não popula $_POST para PUT/PATCH com multipart/form-data.
+        $method = strtoupper($this->request->getMethod());
+        if (in_array($method, ['PUT', 'PATCH'], true) && str_contains($contentType, 'multipart/form-data')) {
+            $this->cachedRequestBody = $this->parsePutMultipartBody($contentType);
+            return $this->cachedRequestBody;
+        }
+
+        $this->cachedRequestBody = $this->request->getPost() ?: [];
+        return $this->cachedRequestBody;
+    }
+
+    private function parsePutMultipartBody(string $contentType): array
+    {
+        if (!preg_match('/boundary=([^\s;]+)/', $contentType, $m)) {
+            return [];
+        }
+
+        $boundary       = trim($m[1], '"');
+        $rawInput       = (string) file_get_contents('php://input');
+        $result         = [];
+        $this->putFiles = [];
+
+        foreach (explode('--' . $boundary, $rawInput) as $part) {
+            if ($part === '' || str_starts_with($part, '--')) {
+                continue;
+            }
+
+            [$rawHeaders, $body] = array_pad(explode("\r\n\r\n", $part, 2), 2, '');
+
+            if (preg_match('/filename="([^"]+)"/i', $rawHeaders, $fileMatch)) {
+                // Conteúdo binário: remove exatamente o CRLF do delimitador final (não usar rtrim — corrompe binários)
+                $fileContent  = \strlen($body) >= 2 ? \substr($body, 0, -2) : $body;
+                $originalName = $fileMatch[1];
+                $mimeType     = null;
+
+                if (preg_match('/Content-Type:\s*([^\r\n]+)/i', $rawHeaders, $mimeMatch)) {
+                    $mimeType = trim($mimeMatch[1]);
+                }
+
+                $tmpDir  = rtrim(WRITEPATH . 'tmp', DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                if (!is_dir($tmpDir)) {
+                    mkdir($tmpDir, 0755, true);
+                }
+                $tmpPath = tempnam($tmpDir, 'ci4put_');
+                file_put_contents($tmpPath, $fileContent);
+
+                $this->putFiles[] = new \App\HTTP\Files\PutUploadedFile(
+                    $tmpPath,
+                    $originalName,
+                    $mimeType,
+                    \strlen($fileContent),
+                    UPLOAD_ERR_OK
+                );
+                continue;
+            }
+
+            // Campo de texto: remove exatamente o CRLF do delimitador final
+            $body = \strlen($body) >= 2 ? \substr($body, 0, -2) : rtrim($body, "\r\n");
+
+            if (preg_match('/Content-Disposition:[^;]+;\s*name="([^"]+)"/i', $rawHeaders, $nameMatch)) {
+                $result[$nameMatch[1]] = $body;
+            }
+        }
+
+        return $result;
+    }
+
+    public function debugRequest(): ResponseInterface
+    {
+        $rawPost = $_POST;
+        $ciPost = $this->request->getPost() ?: [];
+        $ourBody = $this->getRequestBody();
+        $contentType = $this->request->getHeaderLine('Content-Type');
+
+        $filesInfo = [];
+        foreach ($_FILES as $key => $file) {
+            $filesInfo[$key] = [
+                'name' => $file['name'] ?? null,
+                'type' => $file['type'] ?? null,
+                'size' => $file['size'] ?? null,
+                'error' => $file['error'] ?? null,
+            ];
+        }
+
+        $debugData = [
+            'content_type_header' => $contentType,
+            'php_raw_post' => $rawPost,
+            'php_raw_post_encoded' => [],
+            'ci4_getpost' => $ciPost,
+            'our_getRequestBody' => $ourBody,
+            'files_keys' => array_keys($_FILES),
+            'files_info' => $filesInfo,
+        ];
+
+        foreach ($rawPost as $k => $v) {
+            $debugData['php_raw_post_encoded'][$k] = [
+                'value' => $v,
+                'strlen' => strlen((string) $v),
+                'ord_chars' => array_map('ord', str_split(substr((string) $v, 0, 8))),
+            ];
+        }
+
+        return $this->respondSuccess($debugData, 'DEBUG — dump do request recebido pelo PHP/CI4');
+    }
+
+    protected function handleInlineUpload(int $recordId = 0): ?array
+    {
+        $method = strtoupper($this->request->getMethod());
+        $files  = $this->request->getFiles()['files'] ?? [];
+
+        // Para PUT/PATCH, $_FILES não é populado pelo PHP — usar arquivos extraídos do raw input
+        if (empty($files) && in_array($method, ['PUT', 'PATCH'], true) && !empty($this->putFiles)) {
+            $files = $this->putFiles;
+        }
+
+        if (empty($files)) {
+            return null;
+        }
+
+        $body           = $this->getRequestBody();
+        $userCustomerId = (int) ($body['user_customer_id'] ?? 0);
+        $tenantId       = (int) ($body['user_saas_tenants_id'] ?? 0);
+
+        if ($userCustomerId <= 0) {
+            return ['success' => false, 'message' => 'Informe user_customer_id para processar o upload'];
+        }
+
+        if ($tenantId <= 0) {
+            return ['success' => false, 'message' => 'Informe user_saas_tenants_id para processar o upload'];
+        }
+
+        $uploadService = new \App\Services\V1\FileUploadService();
+
+        return $uploadService->uploadFiles($userCustomerId, $files, $this->moduleSlug, 'document', 10, [], $tenantId);
     }
 }

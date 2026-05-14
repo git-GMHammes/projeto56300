@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
 
 class ResourceTableController extends BaseResourceTableController
 {
+    protected string $moduleSlug = 'msg-timeline';
+
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,
@@ -29,5 +31,30 @@ class ResourceTableController extends BaseResourceTableController
     protected function getUpdateRules(): array
     {
         return (new UpdateRequest())->rules();
+    }
+
+    protected function handleInlineUpload(int $recordId = 0): ?array
+    {
+        $method = strtoupper($this->request->getMethod());
+        $files  = $this->request->getFiles()['files'] ?? [];
+
+        if (empty($files) && \in_array($method, ['PUT', 'PATCH'], true) && !empty($this->putFiles)) {
+            $files = $this->putFiles;
+        }
+
+        if (empty($files)) {
+            return null;
+        }
+
+        $body             = $this->getRequestBody();
+        $userManagementId = (int) ($body['user_management_id'] ?? 0);
+
+        if ($userManagementId <= 0) {
+            return ['success' => false, 'message' => 'Informe user_management_id para processar o upload'];
+        }
+
+        $uploadService = new \App\Services\V1\MsgFileUploadService();
+
+        return $uploadService->uploadFiles($recordId, 'timeline', $userManagementId, $files);
     }
 }

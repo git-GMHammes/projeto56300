@@ -1,0 +1,50 @@
+[
+    {
+        "key": "navegacao",
+        "icon": "grid-3x3-gap",
+        "label": "Como navegar",
+        "description": "Aprenda a navegar entre as seções do sistema usando o menu e o rodapé."
+    },
+    {
+        "key": "publicacoes",
+        "icon": "file-text",
+        "label": "Publicações",
+        "description": "Veja e interaja com as publicações da linha do tempo do sistema."
+    },
+    {
+        "key": "mensagens_privadas",
+        "icon": "chat-dots",
+        "label": "Mensagens Privadas",
+        "description": "Troque mensagens diretas e privadas com outros usuários."
+    },
+    {
+        "key": "grupos",
+        "icon": "people",
+        "label": "Mensagens de Grupos",
+        "description": "Participe de conversas em grupo com múltiplos participantes."
+    },
+    {
+        "key": "perfil",
+        "icon": "person",
+        "label": "Meu Perfil",
+        "description": "Visualize e edite as informações do seu perfil de usuário."
+    },
+    {
+        "key": "notificacoes",
+        "icon": "bell",
+        "label": "Notificações",
+        "description": "Configure e gerencie os alertas e notificações do sistema."
+    },
+    {
+        "key": "contato",
+        "icon": "envelope",
+        "label": "Fale Conosco",
+        "description": "Entre em contato com o suporte para dúvidas ou problemas."
+    },
+    {
+        "key": "sobre",
+        "icon": "book",
+        "label": "Sobre o Sistema",
+        "description": "Informações sobre a versão, termos de uso e política de privacidade."
+    }
+]

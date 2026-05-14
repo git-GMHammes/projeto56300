@@ -32,3 +32,7 @@ $routes->delete('delete-hard/(:num)', 'Api\V1\Msg\MessageTimeline\ResourceTableC
 $routes->delete('clear-deleted', 'Api\V1\Msg\MessageTimeline\ResourceTableController::clearDeleted');
 // {{www}}/index.php/api/v1/msg-timeline/clear-deleted/{id}
 $routes->delete('clear-deleted/(:num)', 'Api\V1\Msg\MessageTimeline\ResourceTableController::clearDeleted/$1');
+// {{www}}/index.php/api/v1/msg-timeline/debug-request  [TEMPORÁRIO — remover após diagnóstico]
+$routes->post('debug-request', 'Api\V1\Msg\MessageTimeline\ResourceTableController::debugRequest');
+// {{www}}/index.php/api/v1/msg-timeline/upload-files/{userCustomerId}
+$routes->post('upload-files/(:num)', 'Api\V1\Msg\MessageTimeline\ResourceTableController::uploadAttachments/$1');

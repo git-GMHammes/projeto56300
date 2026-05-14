@@ -1,4 +1,5 @@
 export interface WaffleMenuItem {
+  key?: string
   icon: string
   label: string
   description?: string

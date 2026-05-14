@@ -1,20 +1,37 @@
 [
     {
         "key": "timeline",
+        "icon": "file-text",
         "label": "Publicações",
-        "icon": "📋",
-        "description": "Linha do tempo — postagens públicas do sistema"
+        "description": "Linha do tempo — postagens públicas do sistema",
+        "route": "timeline"
+    },
+    {
+        "key": "helper",
+        "icon": "question-circle",
+        "label": "Ajuda",
+        "description": "Clique duas vezes no icone para acessar",
+        "route": "helper"
+    },
+    {
+        "key": "home",
+        "icon": "house",
+        "label": "Início",
+        "description": "Página inicial do sistema",
+        "route": "home"
     },
     {
         "key": "dm",
+        "icon": "chat-dots",
         "label": "Mensagens Privadas",
-        "icon": "💬",
-        "description": "Mensagens diretas entre usuários"
+        "description": "Mensagens diretas entre usuários",
+        "route": "dm"
     },
     {
         "key": "groups",
+        "icon": "people",
         "label": "Mensagens de Grupos",
-        "icon": "👥",
-        "description": "Conversas em grupo com múltiplos participantes"
+        "description": "Conversas em grupo com múltiplos participantes",
+        "route": "groups"
     }
 ]

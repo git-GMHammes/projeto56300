@@ -44,8 +44,17 @@ services:
     container_name: codeigniter56300_php
     restart: unless-stopped
     working_dir: /var/www/html
+    user: root
+    command: >
+      sh -c "chown -R www-data:www-data /var/www/html/writable &&
+             exec php-fpm"
     volumes:
       - ./src:/var/www/html
+    tmpfs:
+      - /var/www/html/writable/cache
+      - /var/www/html/writable/logs
+      - /var/www/html/writable/session
+      - /var/www/html/writable/tmp
     environment:
       DB_CONNECTION: mysql
       DB_HOST: mysql

@@ -4,13 +4,14 @@ import { useTheme } from '../../../../app/providers/ThemeProvider'
 import BootstrapIcon from './BootstrapIcon'
 import type { WaffleMenuProps, WaffleMenuItem } from './types'
 
-const CLOSED_SIZE   = 70
-const OPEN_SIZE     = 200
-const ITEM_SIZE     = 40
-const STAGGER_MS    = 50
-const OPEN_MS       = 300
-const TOGGLE_MS     = 200
-const FOOTER_HEIGHT = 44
+const CLOSED_SIZE = 70
+const OPEN_SIZE   = 200
+const ITEM_SIZE   = 40
+const STAGGER_MS  = 50
+const OPEN_MS     = 300
+const TOGGLE_MS   = 200
+const CARD_HEIGHT = 64
+const CARD_GAP    = 12
 
 // Converte hex #RRGGBB para rgba(r,g,b,alpha)
 const withAlpha = (hex: string, alpha: number): string => {
@@ -83,7 +84,7 @@ export default function WaffleMenu({ items, onItemPress }: WaffleMenuProps) {
     inputRange: [0, 1], outputRange: [CLOSED_SIZE, OPEN_SIZE],
   })
   const containerHeight = containerAnim.interpolate({
-    inputRange: [0, 1], outputRange: [CLOSED_SIZE, OPEN_SIZE + FOOTER_HEIGHT],
+    inputRange: [0, 1], outputRange: [CLOSED_SIZE, OPEN_SIZE],
   })
   const containerRadius = containerAnim.interpolate({
     inputRange: [0, 1], outputRange: [10, 16],
@@ -101,18 +102,46 @@ export default function WaffleMenu({ items, onItemPress }: WaffleMenuProps) {
   })
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          width:           containerWidth,
-          height:          containerHeight,
-          borderRadius:    containerRadius,
-          backgroundColor: withAlpha(theme.colors.surface, 0.5),
-          borderColor:     withAlpha(theme.colors.border, 0.5),
-        },
-      ]}
-    >
+    <View style={styles.outerWrapper}>
+      {/* Card flutuante — aparece acima do menu ao passar cursor/pressionar ícone */}
+      {isOpen && hoveredItem && (
+        <View
+          style={[
+            styles.descCard,
+            {
+              position: 'absolute',
+              bottom: OPEN_SIZE + CARD_GAP,
+              left: 0,
+              right: 0,
+              zIndex: 20,
+              backgroundColor: theme.colors.surface,
+              borderColor: withAlpha(theme.colors.border, 0.3),
+            },
+          ]}
+        >
+          <Text style={[styles.descLabel, { color: theme.colors.text }]} numberOfLines={1}>
+            {hoveredItem.label}
+          </Text>
+          {hoveredItem.description ? (
+            <Text style={[styles.descText, { color: theme.colors.text }]} numberOfLines={2}>
+              {hoveredItem.description}
+            </Text>
+          ) : null}
+        </View>
+      )}
+
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            width:           containerWidth,
+            height:          containerHeight,
+            borderRadius:    containerRadius,
+            backgroundColor: withAlpha(theme.colors.surface, 0.08),
+            borderColor:     withAlpha(theme.colors.border, 0.20),
+          },
+        ]}
+      >
       {/* Itens da grade — absolutamente posicionados */}
       {displayItems.map((item: WaffleMenuItem, index: number) => {
         const isHovered = hoveredItem?.route === item.route
@@ -132,8 +161,16 @@ export default function WaffleMenu({ items, onItemPress }: WaffleMenuProps) {
             ]}
           >
             <Pressable
-              onPress={() => { close(); onItemPress(item) }}
-              onPressIn={() => setHoveredItem(item)}
+              onPress={() => {
+                if (hoveredItem?.route === item.route) {
+                  close()
+                  onItemPress(item)
+                } else {
+                  setHoveredItem(item)
+                }
+              }}
+              onLongPress={() => { close(); onItemPress(item) }}
+              delayLongPress={400}
               onPointerEnter={() => setHoveredItem(item)}
               onPointerLeave={() => setHoveredItem(null)}
               style={({ pressed }) => [
@@ -141,6 +178,7 @@ export default function WaffleMenu({ items, onItemPress }: WaffleMenuProps) {
                 pressed && { backgroundColor: withAlpha(theme.colors.primary, 0.5) },
               ]}
               accessibilityLabel={item.label}
+              accessibilityHint={hoveredItem?.route === item.route ? 'Toque novamente para abrir' : 'Toque para ver descrição'}
               accessibilityRole="button"
             >
               <BootstrapIcon name={item.icon} size={18} color={theme.colors.text} />
@@ -165,26 +203,17 @@ export default function WaffleMenu({ items, onItemPress }: WaffleMenuProps) {
         </Pressable>
       </Animated.View>
 
-      {/* Rodapé descritivo — aparece ao passar o cursor sobre um ícone */}
-      {isOpen && hoveredItem && (
-        <View style={[styles.footer, { backgroundColor: withAlpha(theme.colors.surface, 0.9) }]}>
-          <Text style={[styles.footerLabel, { color: theme.colors.text }]} numberOfLines={1}>
-            {hoveredItem.label}
-          </Text>
-          {hoveredItem.description ? (
-            <Text style={[styles.footerDesc, { color: theme.colors.text }]} numberOfLines={1}>
-              {hoveredItem.description}
-            </Text>
-          ) : null}
-        </View>
-      )}
-    </Animated.View>
+      </Animated.View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  outerWrapper: {
+    alignItems: 'center',
+    overflow: 'visible',
+  },
   container: {
-    overflow: 'hidden',
     borderWidth: 1,
     elevation: 4,
     shadowColor: '#000',
@@ -217,28 +246,31 @@ const styles = StyleSheet.create({
     height: ITEM_SIZE,
     zIndex: 10,
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: FOOTER_HEIGHT,
-    justifyContent: 'center',
+  descCard: {
+    minHeight: CARD_HEIGHT,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
     alignItems: 'center',
-    paddingHorizontal: 8,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.08)',
+    justifyContent: 'center',
   },
-  footerLabel: {
-    fontSize: 11,
+  descLabel: {
+    fontSize: 13,
     fontWeight: '700',
-    lineHeight: 14,
+    lineHeight: 18,
+    textAlign: 'center',
   },
-  footerDesc: {
-    fontSize: 9,
-    lineHeight: 12,
-    opacity: 0.65,
+  descText: {
+    fontSize: 11,
+    lineHeight: 15,
+    opacity: 0.75,
+    textAlign: 'center',
+    marginTop: 2,
   },
 })

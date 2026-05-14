@@ -12,6 +12,16 @@ import Bootstrap from '../../theme/bootstrap'
 import { useTheme } from '../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../theme/global'
 import menuData from '../../../data/ods/menu_user.json'
+import BootstrapIcon from './WaffleMenu/BootstrapIcon'
+
+interface UserMenuItem {
+  key: string
+  icon?: string
+  label: string
+  description: string
+  route: string
+  showWhen: string
+}
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)
@@ -62,7 +72,7 @@ export default function UserMenuDrawer({ visible, isLoggedIn, onClose, onNavigat
     }
   }
 
-  const visibleItems = menuData.filter(item => {
+  const visibleItems = (menuData as UserMenuItem[]).filter(item => {
     if (item.showWhen === 'auth') return isLoggedIn
     if (item.showWhen === 'guest') return !isLoggedIn
     return true
@@ -96,16 +106,21 @@ export default function UserMenuDrawer({ visible, isLoggedIn, onClose, onNavigat
         >
           {visibleItems.map((item) => (
             <Pressable
-              key={item.ods}
-              onPress={() => handleItemPress(item.link)}
+              key={item.key}
+              onPress={() => handleItemPress(item.route)}
               style={({ pressed }) => [
                 styles.menuItem,
                 pressed && styles.menuItemPressed,
               ]}
             >
-              <Text style={styles.itemLabel}>
-                {item.icon ? `${item.icon}  ${item.ods}` : item.ods}
-              </Text>
+              <View style={styles.itemRow}>
+                {item.icon ? (
+                  <BootstrapIcon name={item.icon} size={18} color={theme.colors.primary} />
+                ) : null}
+                <Text style={[styles.itemLabel, item.icon ? { marginLeft: 8 } : null]}>
+                  {item.label}
+                </Text>
+              </View>
               <Text style={styles.itemDesc}>{item.description}</Text>
             </Pressable>
           ))}
@@ -180,11 +195,15 @@ function makeStyles(t: GlobalTheme) {
     menuItemPressed: {
       backgroundColor: t.colors.divider,
     },
+    itemRow: {
+      flexDirection: 'row' as const,
+      alignItems: 'center' as const,
+      marginBottom: 2,
+    },
     itemLabel: {
       fontSize: Bootstrap.fontSize.base,
       fontWeight: Bootstrap.fontWeight.semibold,
       color: t.colors.primary,
-      marginBottom: 2,
     },
     itemDesc: {
       fontSize: Bootstrap.fontSize.sm,

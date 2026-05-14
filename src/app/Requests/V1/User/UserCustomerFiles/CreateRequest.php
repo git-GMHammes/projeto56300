@@ -24,7 +24,8 @@ class CreateRequest
     public function rules(): array
     {
         return [
-            'user_customer_id' => 'required|is_natural_no_zero',
+            'user_saas_tenants_id' => 'required|is_natural_no_zero',
+            'user_customer_id'     => 'required|is_natural_no_zero',
             'original_name'    => 'required|string|max_length[255]',
             'filename'         => 'required|string|max_length[255]',
             'stored_path'      => 'required|string|max_length[255]',
@@ -39,6 +40,9 @@ class CreateRequest
     public function messages(): array
     {
         return [
+            'user_saas_tenants_id' => [
+                'is_natural_no_zero' => 'O campo user_saas_tenants_id deve ser um número inteiro positivo',
+            ],
             'user_customer_id' => [
                 'required'           => 'O campo user_customer_id é obrigatório',
                 'is_natural_no_zero' => 'O campo user_customer_id deve ser um número inteiro positivo',

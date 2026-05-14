@@ -13,6 +13,13 @@ import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../../../../shared/theme/global'
 import menuData from '../../../../../data/ods/menu_ods.json'
 
+interface OdsMenuItem {
+  key: string
+  label: string
+  description: string
+  route: string
+}
+
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)
 
@@ -84,16 +91,16 @@ export default function OdsMenuDrawer({ visible, onClose, onNavigate }: Props) {
           bounces={false}
           showsVerticalScrollIndicator
         >
-          {menuData.map((item) => (
+          {(menuData as OdsMenuItem[]).map((item) => (
             <Pressable
-              key={item.ods}
-              onPress={() => handleItemPress(item.link)}
+              key={item.key}
+              onPress={() => handleItemPress(item.route)}
               style={({ pressed }) => [
                 styles.menuItem,
                 pressed && styles.menuItemPressed,
               ]}
             >
-              <Text style={styles.odsLabel}>{item.ods}</Text>
+              <Text style={styles.odsLabel}>{item.label}</Text>
               <Text style={styles.odsDesc}>{item.description}</Text>
             </Pressable>
           ))}

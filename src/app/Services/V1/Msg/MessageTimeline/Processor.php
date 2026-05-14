@@ -73,4 +73,5 @@ class Processor extends MsgBaseService
 
         return ContentFilter::sanitizeFields($data, ['content']);
     }
+
 }

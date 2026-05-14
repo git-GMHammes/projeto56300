@@ -22,6 +22,7 @@ class SqlTableModel extends BaseTableModel
     protected $useTimestamps  = true;
 
     protected $allowedFields = [
+        'user_saas_tenants_id',
         'user_customer_id',
         'original_name',
         'filename',
@@ -43,6 +44,7 @@ class SqlTableModel extends BaseTableModel
 
     protected array $sortableFields = [
         'id',
+        'user_saas_tenants_id',
         'original_name',
         'filename',
         'category',
@@ -61,6 +63,15 @@ class SqlTableModel extends BaseTableModel
     {
         return $this->db->table('user_002_customer')
             ->where('id', $userCustomerId)
+            ->where('deleted_at IS NULL', null, false)
+            ->countAllResults() > 0;
+    }
+
+    public function existsTenant(int $tenantId): bool
+    {
+        return $this->db->table('user_004_saas_tenants')
+            ->where('id', $tenantId)
+            ->where('active', 1)
             ->where('deleted_at IS NULL', null, false)
             ->countAllResults() > 0;
     }

@@ -1,107 +1,23 @@
 [
-  {
-    "ods": "Home",
-    "description": "Painel principal",
-    "link": "Home"
-  },
-  {
-    "ods": "ODS 1",
-    "description": "Erradicar a pobreza",
-    "link": "OdsP01"
-  },
-  {
-    "ods": "ODS 2",
-    "description": "Acabar com fome",
-    "link": "OdsP02"
-  },
-  {
-    "ods": "ODS 3",
-    "description": "Saúde e bem-estar",
-    "link": "OdsP03"
-  },
-  {
-    "ods": "ODS 4",
-    "description": "Educação de qualidade",
-    "link": "OdsP04"
-  },
-  {
-    "ods": "ODS 5",
-    "description": "Igualdade de gênero",
-    "link": "OdsP05"
-  },
-  {
-    "ods": "ODS 6",
-    "description": "Água e saneamento",
-    "link": "OdsP06"
-  },
-  {
-    "ods": "ODS 7",
-    "description": "Energia limpa",
-    "link": "OdsP07"
-  },
-  {
-    "ods": "ODS 8",
-    "description": "Trabalho decente",
-    "link": "OdsP08"
-  },
-  {
-    "ods": "ODS 9",
-    "description": "Indústria e inovação",
-    "link": "OdsP09"
-  },
-  {
-    "ods": "ODS 10",
-    "description": "Reduzir desigualdades",
-    "link": "OdsP10"
-  },
-  {
-    "ods": "ODS 11",
-    "description": "Cidades sustentáveis",
-    "link": "OdsP11"
-  },
-  {
-    "ods": "ODS 12",
-    "description": "Consumo responsável",
-    "link": "OdsP12"
-  },
-  {
-    "ods": "ODS 13",
-    "description": "Ação climática",
-    "link": "OdsP13"
-  },
-  {
-    "ods": "ODS 14",
-    "description": "Vida na água",
-    "link": "OdsP14"
-  },
-  {
-    "ods": "ODS 15",
-    "description": "Vida terrestre",
-    "link": "OdsP15"
-  },
-  {
-    "ods": "ODS 16",
-    "description": "Paz e justiça",
-    "link": "OdsP16"
-  },
-  {
-    "ods": "ODS 17",
-    "description": "Parcerias globais",
-    "link": "OdsP17"
-  },
-  {
-    "ods": "ODS 18",
-    "description": "Eliminar o racismo e a discriminação",
-    "link": "OdsP18"
-  },
-  {
-    "ods": "Login",
-    "description": "Login",
-    "link": "Acesso ao Sistema"
-  },
-  {
-    "ods": "Mensagens",
-    "description": "Mural, DM e Grupos",
-    "link": "Messaging"
-  }
+  { "key": "home",      "label": "Home",       "description": "Painel principal",                        "route": "Home"           },
+  { "key": "ods_01",    "label": "ODS 1",      "description": "Erradicar a pobreza",                     "route": "OdsP01"         },
+  { "key": "ods_02",    "label": "ODS 2",      "description": "Acabar com fome",                         "route": "OdsP02"         },
+  { "key": "ods_03",    "label": "ODS 3",      "description": "Saúde e bem-estar",                       "route": "OdsP03"         },
+  { "key": "ods_04",    "label": "ODS 4",      "description": "Educação de qualidade",                   "route": "OdsP04"         },
+  { "key": "ods_05",    "label": "ODS 5",      "description": "Igualdade de gênero",                     "route": "OdsP05"         },
+  { "key": "ods_06",    "label": "ODS 6",      "description": "Água e saneamento",                       "route": "OdsP06"         },
+  { "key": "ods_07",    "label": "ODS 7",      "description": "Energia limpa",                           "route": "OdsP07"         },
+  { "key": "ods_08",    "label": "ODS 8",      "description": "Trabalho decente",                        "route": "OdsP08"         },
+  { "key": "ods_09",    "label": "ODS 9",      "description": "Indústria e inovação",                    "route": "OdsP09"         },
+  { "key": "ods_10",    "label": "ODS 10",     "description": "Reduzir desigualdades",                   "route": "OdsP10"         },
+  { "key": "ods_11",    "label": "ODS 11",     "description": "Cidades sustentáveis",                    "route": "OdsP11"         },
+  { "key": "ods_12",    "label": "ODS 12",     "description": "Consumo responsável",                     "route": "OdsP12"         },
+  { "key": "ods_13",    "label": "ODS 13",     "description": "Ação climática",                          "route": "OdsP13"         },
+  { "key": "ods_14",    "label": "ODS 14",     "description": "Vida na água",                            "route": "OdsP14"         },
+  { "key": "ods_15",    "label": "ODS 15",     "description": "Vida terrestre",                          "route": "OdsP15"         },
+  { "key": "ods_16",    "label": "ODS 16",     "description": "Paz e justiça",                           "route": "OdsP16"         },
+  { "key": "ods_17",    "label": "ODS 17",     "description": "Parcerias globais",                       "route": "OdsP17"         },
+  { "key": "ods_18",    "label": "ODS 18",     "description": "Eliminar o racismo e a discriminação",    "route": "OdsP18"         },
+  { "key": "login",     "label": "Login",      "description": "Login",                                   "route": "Acesso ao Sistema" },
+  { "key": "mensagens", "label": "Mensagens",  "description": "Mural, DM e Grupos",                     "route": "Messaging"      }
 ]

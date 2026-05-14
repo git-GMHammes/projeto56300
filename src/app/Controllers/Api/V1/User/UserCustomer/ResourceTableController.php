@@ -54,7 +54,14 @@ class ResourceTableController extends BaseResourceTableController
                 return $this->respondValidationError(['file' => 'Arquivo inválido ou não enviado']);
             }
 
-            $result = $this->processor->uploadAvatar($id, $file);
+            $body     = $this->getRequestBody();
+            $tenantId = (int) ($body['user_saas_tenants_id'] ?? 0);
+
+            if ($tenantId <= 0) {
+                return $this->respondValidationError(['user_saas_tenants_id' => 'Informe user_saas_tenants_id no body da requisição']);
+            }
+
+            $result = $this->processor->uploadAvatar($id, $file, $tenantId);
 
             if (!$result['success']) {
                 return $this->respondError($result['message'], $result['code'] ?? 400);

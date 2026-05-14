@@ -125,7 +125,7 @@ class Processor extends BaseTableService
      * @param \CodeIgniter\HTTP\Files\UploadedFile    $file       Arquivo recebido via multipart
      * @return array{success: bool, data?: array, message?: string, code?: int}
      */
-    public function uploadAvatar(int $customerId, \CodeIgniter\HTTP\Files\UploadedFile $file): array
+    public function uploadAvatar(int $customerId, \CodeIgniter\HTTP\Files\UploadedFile $file, int $userSaasTenantId): array
     {
         if (!$this->tableModel->find($customerId)) {
             return ['success' => false, 'message' => 'Cliente não encontrado', 'code' => 404];
@@ -158,17 +158,18 @@ class Processor extends BaseTableService
         $now        = date('Y-m-d H:i:s');
 
         db_connect('banco1')->table('user_003_customer_files')->insert([
-            'user_customer_id' => $customerId,
-            'original_name'    => $file->getClientFilename(),
-            'filename'         => $filename,
-            'stored_path'      => $storedPath,
-            'uuid'             => $uuid,
-            'mime'             => $file->getMimeType(),
-            'size'             => $file->getSize(),
-            'category'         => 'avatar',
-            'checksum'         => $checksum,
-            'created_at'       => $now,
-            'updated_at'       => $now,
+            'user_saas_tenants_id' => $userSaasTenantId,
+            'user_customer_id'     => $customerId,
+            'original_name'        => $file->getClientFilename(),
+            'filename'             => $filename,
+            'stored_path'          => $storedPath,
+            'uuid'                 => $uuid,
+            'mime'                 => $file->getMimeType(),
+            'size'                 => $file->getSize(),
+            'category'             => 'avatar',
+            'checksum'             => $checksum,
+            'created_at'           => $now,
+            'updated_at'           => $now,
         ]);
 
         $this->tableModel->update($customerId, ['profile' => $storedPath]);

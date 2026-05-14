@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V1\Msg\MsgFile;
+namespace App\Models\V1\Msg\MessageFile;
 
 use App\Models\V1\BaseTableModel;
 
