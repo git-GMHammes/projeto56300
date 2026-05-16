@@ -10,7 +10,7 @@ use CodeIgniter\HTTP\Files\UploadedFile;
 /**
  * Serviço de upload para módulos de mensagens (msg_*).
  *
- * Salva o arquivo em disco e registra em msg_008_file com o discriminador
+ * Salva o arquivo em disco e registra em msg_003_timeline_file com o discriminador
  * polimórfico source (timeline | private | group) e source_id apontando
  * para o registro-pai na tabela do módulo.
  *

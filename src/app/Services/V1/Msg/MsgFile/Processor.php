@@ -2,18 +2,18 @@
 
 namespace App\Services\V1\Msg\MsgFile;
 
-use App\Models\V1\Msg\MsgFile\SqlTableModel;
-use App\Models\V1\Msg\MsgFile\SqlViewModel;
+use App\Models\V1\Msg\MessageFile\SqlTableModel;
+use App\Models\V1\Msg\MessageFile\SqlViewModel;
 use App\Services\V1\Msg\MsgBaseService;
 
 /**
- * Service de negócio para anexos multimídia (msg_008_file).
+ * Service de negócio para anexos multimídia (msg_003_timeline_file).
  *
  * Polimorfismo via discriminador `source` (timeline|private|group) + `source_id`.
  * Após o upload, os campos de identificação do arquivo (stored_path, uuid, checksum)
  * são imutáveis — arquivos só podem ser excluídos (soft delete), não substituídos.
  *
- * Tabela : msg_008_file — source, source_id, user_id, original_name,
+ * Tabela : msg_003_timeline_file — source, source_id, user_id, original_name,
  *                         filename, stored_path, uuid, mime, size, category, checksum
  * View   : (sem view dedicada neste momento)
  *

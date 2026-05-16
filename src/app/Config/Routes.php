@@ -29,6 +29,10 @@ $routes->group('api/v1', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserCustomer/EndPointView.php';
     });
 
+    $routes->group('user-customer-file', function ($routes) {
+        require __DIR__ . '/Routes/Api/v1/User/UserCustomer/EndpointFile.php';
+    });
+
     $routes->group('user-customer-files', function ($routes) {
         require __DIR__ . '/Routes/Api/v1/User/UserCustomerFiles/EndpointTable.php';
     });

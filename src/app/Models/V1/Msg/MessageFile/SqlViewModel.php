@@ -7,7 +7,7 @@ use App\Models\V1\BaseViewModel;
 /**
  * Model de leitura para a view view_msg_file.
  *
- * JOIN: msg_008_file mf  INNER JOIN user_001_management um
+ * JOIN: msg_003_timeline_file mf  INNER JOIN user_001_management um
  *
  * Colunas disponíveis:
  *   id,

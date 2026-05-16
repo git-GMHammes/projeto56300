@@ -3,7 +3,7 @@
 namespace App\Requests\V1\Msg\MessageFile;
 
 /**
- * Validação para PUT /update/{id} (msg_008_file).
+ * Validação para PUT /update/{id} (msg_003_timeline_file).
  * Arquivos são imutáveis após o upload.
  * Apenas category e mime podem ser corrigidos.
  */

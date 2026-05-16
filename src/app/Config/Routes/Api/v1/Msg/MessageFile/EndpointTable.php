@@ -1,5 +1,5 @@
 <?php
-// Rotas REST para manipulação da tabela msg_008_file
+// Rotas REST para manipulação da tabela msg_003_timeline_file
 // {{www}}/index.php/api/v1/message-file/find
 $routes->post('find', 'Api\V1\Msg\MessageFile\ResourceTableController::find');
 // {{www}}/index.php/api/v1/message-file/get-grouped

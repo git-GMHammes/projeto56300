@@ -3,8 +3,10 @@
 namespace App\Controllers\Api\V1\User\UserCustomer;
 
 use App\Controllers\Api\V1\BaseResourceTableController;
+use App\Libraries\FileUploadLibrary;
 use App\Requests\V1\User\UserCustomer\CreateRequest;
 use App\Requests\V1\User\UserCustomer\UpdateRequest;
+use App\Requests\V1\User\UserCustomerFiles\UploadFileRequest;
 use App\Services\V1\User\UserCustomer\Processor;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -35,6 +37,32 @@ class ResourceTableController extends BaseResourceTableController
     protected function getUpdateRules(): array
     {
         return (new UpdateRequest())->rules();
+    }
+
+    protected function handleInlineUpload(int $recordId = 0): ?array
+    {
+        $method = strtoupper($this->request->getMethod());
+        $files  = $this->request->getFiles()['files'] ?? [];
+
+        if (empty($files) && in_array($method, ['PUT', 'PATCH'], true) && !empty($this->putFiles)) {
+            $files = $this->putFiles;
+        }
+
+        if (empty($files)) {
+            return null;
+        }
+
+        $body     = $this->getRequestBody();
+        $tenantId = (int) ($body['user_saas_tenants_id'] ?? 0);
+
+        if ($tenantId <= 0) {
+            return ['success' => false, 'message' => 'Informe user_saas_tenants_id para processar o upload'];
+        }
+
+        $constraints = new UploadFileRequest();
+        $library     = new FileUploadLibrary();
+
+        return $library->upload($recordId, $constraints->moduleSlug(), $files, $constraints, $tenantId);
     }
 
     /**

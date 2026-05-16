@@ -54,7 +54,7 @@ async function http<T>(url: string, options: RequestInit = {}): Promise<T> {
   return response.json() as Promise<T>
 }
 
-// ─── Service — msg_008_file ───────────────────────────────────────────────────
+// ─── Service — msg_003_timeline_file ──────────────────────────────────────────
 
 export async function upload(
   source: FileSource,

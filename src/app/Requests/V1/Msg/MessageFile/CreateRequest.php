@@ -3,7 +3,7 @@
 namespace App\Requests\V1\Msg\MessageFile;
 
 /**
- * Validação para POST /create (msg_008_file).
+ * Validação para POST /create (msg_003_timeline_file).
  * DDL: source ENUM NOT NULL, source_id NOT NULL, user_id NOT NULL,
  *      original_name VARCHAR(255) NOT NULL, filename VARCHAR(255) NOT NULL,
  *      stored_path VARCHAR(255) NOT NULL UNIQUE, uuid CHAR(36) UNIQUE,
