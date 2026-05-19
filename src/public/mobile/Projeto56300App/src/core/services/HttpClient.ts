@@ -74,6 +74,34 @@ export async function httpClient<T>(
   }
 }
 
+export async function httpClientFormData<T>(
+  path: string,
+  formData: FormData,
+): Promise<T> {
+  const token = await _tokenReader()
+  const headers: Record<string, string> = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+
+  try {
+    const res = await fetch(`${BASE}${path}`, {
+      method: 'POST',
+      headers,
+      body: formData,
+      signal: controller.signal,
+    })
+    clearTimeout(timer)
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok) throw new HttpError(json?.message ?? `HTTP ${res.status}`, res.status, json)
+    return json as T
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 export async function httpClientRaw<T>(
   path: string,
   options: RequestInit = {},

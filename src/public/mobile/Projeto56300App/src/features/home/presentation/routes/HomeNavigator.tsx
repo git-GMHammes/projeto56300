@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useImperativeHandle } from 'react'
 import { createNativeStackNavigator } from '../../../../core/navigation'
 import type { NativeStackScreenProps } from '../../../../core/navigation'
 import type { HomeStackParamList } from './types'
@@ -24,8 +24,14 @@ import POds016 from '../../../ods/presentation/ui/screens/pods016'
 import POds017 from '../../../ods/presentation/ui/screens/pods017'
 import POds018 from '../../../ods/presentation/ui/screens/pods018'
 import MessagingScreen from '../../../messaging/V1/presentation/MessagingScreen'
+import HelperScreen from '../../../helper/presentation/ui/screens/HelperScreen'
 
 const Stack = createNativeStackNavigator<HomeStackParamList>()
+
+export interface HomeNavigatorHandle {
+  navigateToHome: () => void
+  navigateToHelper: () => void
+}
 
 interface HomeNavigatorProps {
   onLogout: () => void
@@ -42,11 +48,18 @@ function makeHomeScreenWrapper(onLogout: () => void) {
   }
 }
 
-export function HomeNavigator({ onLogout }: HomeNavigatorProps) {
+export const HomeNavigator = React.forwardRef<HomeNavigatorHandle, HomeNavigatorProps>(
+  function HomeNavigator({ onLogout }, ref) {
+  const navRef = useRef<{ navigate: (name: string, params?: any) => void; goBack: () => void } | null>(null)
   const HomeScreenWrapper = React.useMemo(() => makeHomeScreenWrapper(onLogout), [onLogout])
 
+  useImperativeHandle(ref, () => ({
+    navigateToHome: () => navRef.current?.navigate(HOME_PATHS.HOME),
+    navigateToHelper: () => navRef.current?.navigate(HOME_PATHS.HELPER),
+  }), [])
+
   return (
-    <Stack.Navigator initialRouteName={HOME_PATHS.HOME}>
+    <Stack.Navigator initialRouteName={HOME_PATHS.HOME} navigationRef={navRef}>
       <Stack.Screen name={HOME_PATHS.HOME} component={HomeScreenWrapper} />
       <Stack.Screen name={ODS_PATHS.P01}       component={POds001} />
       <Stack.Screen name={ODS_PATHS.P02}       component={POds002} />
@@ -67,6 +80,12 @@ export function HomeNavigator({ onLogout }: HomeNavigatorProps) {
       <Stack.Screen name={ODS_PATHS.P17}       component={POds017} />
       <Stack.Screen name={ODS_PATHS.P18}       component={POds018} />
       <Stack.Screen name={ODS_PATHS.MESSAGING} component={MessagingScreen} />
+      <Stack.Screen
+        name={HOME_PATHS.HELPER}
+        component={({ navigation }: NativeStackScreenProps<HomeStackParamList>) =>
+          <HelperScreen goBack={() => navigation.goBack()} />
+        }
+      />
     </Stack.Navigator>
   )
-}
+})

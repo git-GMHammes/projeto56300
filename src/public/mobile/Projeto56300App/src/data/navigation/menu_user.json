@@ -5,7 +5,9 @@
         "label": "Login",
         "description": "Entrar no sistema",
         "route": "Login",
-        "showWhen": "guest"
+        "showWhen": "guest",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
     },
     {
         "key": "perfil",
@@ -13,7 +15,9 @@
         "label": "Perfil",
         "description": "Editar perfil, configurações e preferências",
         "route": "Profile",
-        "showWhen": "auth"
+        "showWhen": "auth",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
     },
     {
         "key": "home",
@@ -21,7 +25,9 @@
         "label": "Home",
         "description": "Página inicial",
         "route": "Home",
-        "showWhen": "always"
+        "showWhen": "always",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
     },
     {
         "key": "logout",
@@ -29,6 +35,8 @@
         "label": "Logout",
         "description": "Sair do sistema",
         "route": "__logout__",
-        "showWhen": "auth"
+        "showWhen": "auth",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
     }
 ]

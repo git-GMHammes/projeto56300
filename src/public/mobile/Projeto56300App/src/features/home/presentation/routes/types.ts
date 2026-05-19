@@ -21,6 +21,7 @@ export type HomeStackParamList = {
   OdsP17: undefined
   OdsP18: undefined
   Messaging: undefined
+  Helper: undefined
 }
 
 export type HomePageScreenProps = {

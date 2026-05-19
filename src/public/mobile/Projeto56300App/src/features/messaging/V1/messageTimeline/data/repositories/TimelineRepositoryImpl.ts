@@ -1,4 +1,4 @@
-import type { ITimelineRepository } from '../../domain/repositories/ITimelineRepository'
+import type { ITimelineRepository, FileAsset } from '../../domain/repositories/ITimelineRepository'
 import type { Timeline, CreateTimelinePayload, UpdateTimelinePayload } from '../../domain/entities/Timeline'
 import type { PaginatedData } from '../../../shared/types'
 import { TimelineRemoteDataSource } from '../datasources/TimelineRemoteDataSource'
@@ -34,6 +34,23 @@ export class TimelineRepositoryImpl implements ITimelineRepository {
 
   async create(payload: CreateTimelinePayload): Promise<Timeline> {
     const env = await this.ds.create(payload)
+    if (!env.success || !env.data) throw new HttpError(env.message, env.statusCode)
+    return TimelineMapper.toEntity(env.data)
+  }
+
+  async createWithFile(payload: CreateTimelinePayload, file?: FileAsset): Promise<Timeline> {
+    if (!file) return this.create(payload)
+
+    const formData = new FormData()
+    formData.append('content', payload.content)
+    formData.append('tenant_id', String(payload.tenant_id))
+    formData.append('user_management_id', String(payload.user_management_id))
+    if (payload.is_pinned !== undefined) {
+      formData.append('is_pinned', String(payload.is_pinned))
+    }
+    formData.append('files', { uri: file.uri, name: file.name, type: file.type } as unknown as Blob)
+
+    const env = await this.ds.createMultipart(formData)
     if (!env.success || !env.data) throw new HttpError(env.message, env.statusCode)
     return TimelineMapper.toEntity(env.data)
   }

@@ -4,7 +4,9 @@ import Bootstrap from '../../theme/bootstrap'
 import { useTheme } from '../../../app/providers/ThemeProvider'
 import { ANDROID_BOTTOM_INSET } from '../../../core/navigation'
 import BootstrapIcon from './WaffleMenu/BootstrapIcon'
-import footerData from '../../../data/message/footer_message.json'
+import footerData from '../../../data/messaging/footer_message.json'
+import { matchesRole, matchesRoute } from '../../utils/menuFilter'
+import { useCurrentRoute } from '../../../core/navigation/RouteContext'
 
 interface FooterItem {
   key: string
@@ -12,20 +14,28 @@ interface FooterItem {
   label: string
   description: string
   route?: string
+  visibleOnRoutes?: string[]
+  allowedRoles?: string[]
 }
 
 interface Props {
   activeKey: string | null
   onPress: (key: string) => void
+  userRole?: string
 }
 
 const CARD_GAP = 8
 
-export default function MessageFooterBar({ activeKey, onPress }: Props) {
+export default function MessageFooterBar({ activeKey, onPress, userRole = 'guest' }: Props) {
   const { theme } = useTheme()
   const [pendingKey, setPendingKey] = useState<string | null>(null)
 
-  const items = footerData as FooterItem[]
+  const { currentRoute } = useCurrentRoute()
+
+  const items = (footerData as FooterItem[]).filter(item =>
+    matchesRoute(item.visibleOnRoutes ?? ['*'], currentRoute) &&
+    matchesRole(item.allowedRoles ?? ['*'], userRole)
+  )
   const pendingItem = items.find(item => item.key === pendingKey) ?? null
 
   function handlePress(key: string) {

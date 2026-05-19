@@ -12,12 +12,14 @@ import Bootstrap from '../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../../../../shared/theme/global'
 import menuData from '../../../../../data/ods/menu_ods.json'
+import { matchesRole } from '../../../../../shared/utils/menuFilter'
 
 interface OdsMenuItem {
   key: string
   label: string
   description: string
   route: string
+  allowedRoles?: string[]
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -25,11 +27,12 @@ const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)
 
 interface Props {
   visible: boolean
+  userRole?: string
   onClose: () => void
   onNavigate: (screenName: string) => void
 }
 
-export default function OdsMenuDrawer({ visible, onClose, onNavigate }: Props) {
+export default function OdsMenuDrawer({ visible, userRole = 'guest', onClose, onNavigate }: Props) {
   const { theme } = useTheme()
   const slideAnim = useRef(new Animated.Value(PANEL_WIDTH)).current
   const [mounted, setMounted] = useState(false)
@@ -91,7 +94,9 @@ export default function OdsMenuDrawer({ visible, onClose, onNavigate }: Props) {
           bounces={false}
           showsVerticalScrollIndicator
         >
-          {(menuData as OdsMenuItem[]).map((item) => (
+          {(menuData as OdsMenuItem[]).filter(item =>
+              matchesRole(item.allowedRoles ?? ['*'], userRole)
+            ).map((item) => (
             <Pressable
               key={item.key}
               onPress={() => handleItemPress(item.route)}

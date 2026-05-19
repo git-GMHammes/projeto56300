@@ -1,0 +1,71 @@
+[
+    {
+        "key": "timeline",
+        "icon": "file-text",
+        "label": "Publicações",
+        "description": "Linha do tempo — postagens públicas do sistema",
+        "route": "timeline",
+        "visibleOnRoutes": [
+            "Messaging"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
+    },
+    {
+        "key": "dm",
+        "icon": "chat-dots",
+        "label": "Mensagens Privadas",
+        "description": "Mensagens diretas entre usuários",
+        "route": "dm",
+        "visibleOnRoutes": [
+            "Messaging"
+        ],
+        "allowedRoles": [
+            "admin",
+            "manager",
+            "user"
+        ]
+    },
+    {
+        "key": "home",
+        "icon": "house",
+        "label": "Início",
+        "description": "Página inicial do sistema",
+        "route": "home",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
+    },
+    {
+        "key": "groups",
+        "icon": "people",
+        "label": "Mensagens de Grupos",
+        "description": "Conversas em grupo com múltiplos participantes",
+        "route": "groups",
+        "visibleOnRoutes": [
+            "Messaging"
+        ],
+        "allowedRoles": [
+            "admin",
+            "manager",
+            "user"
+        ]
+    },
+    {
+        "key": "helper",
+        "icon": "question-circle",
+        "label": "Ajuda",
+        "description": "Clique duas vezes no icone para acessar",
+        "route": "helper",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
+    }
+]

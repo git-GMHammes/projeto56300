@@ -186,9 +186,10 @@ Arrays fixos, listas de opções, labels de menu, textos descritivos, configura�
 ```
 src/
 ├── data/                          ← JSONs globais
+│   ├── navigation/
+│   │   └── menu_user.json         ← menu contextual do usuário (global)
 │   ├── ods/
 │   │   ├── menu_ods.json          ← menu de navegação ODS
-│   │   ├── menu_user.json         ← menu contextual do usuário
 │   │   └── description.json       ← descrições longas dos ODS
 │   └── message/
 │       └── footer_message.json    ← abas da tela de mensagens
@@ -233,9 +234,9 @@ import categorias from '../../data/categorias.json'
 | Arquivo | Nível | Conteúdo |
 |---|---|---|
 | `src/data/ods/menu_ods.json` | Global | 20 itens de navegação ODS (Home, ODS 1–18, Login, Messaging) |
-| `src/data/ods/menu_user.json` | Global | Menu contextual: Login, Perfil, Home, Logout com `showWhen` |
+| `src/data/navigation/menu_user.json` | Global | Menu contextual: Login, Perfil, Home, Logout com `showWhen` |
 | `src/data/ods/description.json` | Global | 18 ODS com `key`, `title`, `description` e `image` |
-| `src/data/message/footer_message.json` | Global | 3 abas de mensagens: Mural, Mensagens Diretas, Grupos |
+| `src/data/messaging/footer_message.json` | Global | 3 abas de mensagens: Mural, Mensagens Diretas, Grupos |
 
 ---
 

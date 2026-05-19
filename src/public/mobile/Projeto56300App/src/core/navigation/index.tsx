@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
+import { useCurrentRoute } from './RouteContext'
 import { View, Platform, StatusBar } from 'react-native'
 
 // ── Navigation prop types ──────────────────────────────────────────────────
@@ -53,10 +54,12 @@ export function createNativeStackNavigator<
     children,
     initialRouteName,
     screenOptions: _screenOptions,
+    navigationRef,
   }: {
     children: React.ReactNode
     initialRouteName?: keyof ParamList & string
     screenOptions?: any
+    navigationRef?: React.MutableRefObject<{ navigate: (name: string, params?: any) => void; goBack: () => void } | null>
   }) {
     const screenMap: Record<string, React.ComponentType<any>> = {}
 
@@ -89,6 +92,13 @@ export function createNativeStackNavigator<
 
     const current = stack[stack.length - 1]
     const Component = screenMap[current.name]
+
+    const { setCurrentRoute } = useCurrentRoute()
+    useEffect(() => { setCurrentRoute(stack.map(e => e.name).join('/')) }, [stack, setCurrentRoute])
+
+    useEffect(() => {
+      if (navigationRef) navigationRef.current = { navigate: navigate as any, goBack }
+    }, [navigate, goBack, navigationRef])
 
     if (!Component) return null
 

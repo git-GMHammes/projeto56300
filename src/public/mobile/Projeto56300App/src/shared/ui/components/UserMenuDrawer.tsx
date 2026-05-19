@@ -11,8 +11,9 @@ import {
 import Bootstrap from '../../theme/bootstrap'
 import { useTheme } from '../../../app/providers/ThemeProvider'
 import type { GlobalTheme } from '../../theme/global'
-import menuData from '../../../data/ods/menu_user.json'
+import menuData from '../../../data/navigation/menu_user.json'
 import BootstrapIcon from './WaffleMenu/BootstrapIcon'
+import { matchesRole } from '../../utils/menuFilter'
 
 interface UserMenuItem {
   key: string
@@ -20,7 +21,8 @@ interface UserMenuItem {
   label: string
   description: string
   route: string
-  showWhen: string
+  showWhen?: string
+  allowedRoles?: string[]
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
@@ -28,13 +30,13 @@ const PANEL_WIDTH = Math.min(Math.round(SCREEN_WIDTH * 0.82), 300)
 
 interface Props {
   visible: boolean
-  isLoggedIn: boolean
+  userRole: string
   onClose: () => void
   onNavigate: (screenName: string) => void
   onAction: (action: string) => void
 }
 
-export default function UserMenuDrawer({ visible, isLoggedIn, onClose, onNavigate, onAction }: Props) {
+export default function UserMenuDrawer({ visible, userRole, onClose, onNavigate, onAction }: Props) {
   const { theme } = useTheme()
   const slideAnim = useRef(new Animated.Value(-PANEL_WIDTH)).current
   const [mounted, setMounted] = useState(false)
@@ -72,11 +74,9 @@ export default function UserMenuDrawer({ visible, isLoggedIn, onClose, onNavigat
     }
   }
 
-  const visibleItems = (menuData as UserMenuItem[]).filter(item => {
-    if (item.showWhen === 'auth') return isLoggedIn
-    if (item.showWhen === 'guest') return !isLoggedIn
-    return true
-  })
+  const visibleItems = (menuData as UserMenuItem[]).filter(item =>
+    matchesRole(item.allowedRoles ?? ['*'], userRole)
+  )
 
   const styles = makeStyles(theme)
 
