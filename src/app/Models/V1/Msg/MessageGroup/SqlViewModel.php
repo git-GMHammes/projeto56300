@@ -17,7 +17,7 @@ use App\Models\V1\BaseViewModel;
  *   mgm_group_id, mgm_user_management_id, mgm_reply_to_id, mgm_content,
  *   created_at, updated_at, deleted_at,
  *   um_id, um_uuid, um_user, um_is_active,
- *   um_password, um_last_login, um_created_at, um_updated_at, um_deleted_at,
+ *   um_last_login, um_created_at, um_updated_at, um_deleted_at,
  *   reply_id, reply_group_id, reply_user_management_id, reply_reply_to_id,
  *   reply_content, reply_created_at, reply_updated_at, reply_deleted_at
  */
