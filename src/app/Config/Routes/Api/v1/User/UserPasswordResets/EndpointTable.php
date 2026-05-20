@@ -14,6 +14,10 @@ $routes->get('get-all', 'Api\V1\User\UserPasswordResets\ResourceTableController:
 $routes->get('get-no-pagination', 'Api\V1\User\UserPasswordResets\ResourceTableController::getNoPagination');
 // {{www}}/index.php/api/v1/user-password-resets/get-deleted/{id}
 $routes->get('get-deleted/(:num)', 'Api\V1\User\UserPasswordResets\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/user-password-resets/get-all-with-deleted/{id}
+$routes->get('get-all-with-deleted/(:num)', 'Api\V1\User\UserPasswordResets\ResourceTableController::getAllWithDeleted/$1');
+// {{www}}/index.php/api/v1/user-password-resets/get-all-with-deleted
+$routes->get('get-all-with-deleted', 'Api\V1\User\UserPasswordResets\ResourceTableController::getAllWithDeleted');
 // {{www}}/index.php/api/v1/user-password-resets/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\User\UserPasswordResets\ResourceTableController::getDeletedAll');
 // {{www}}/index.php/api/v1/user-password-resets/get-with-deleted/{id}

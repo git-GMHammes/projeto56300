@@ -254,6 +254,33 @@ abstract class BaseResourceTableController extends BaseController
         }
     }
 
+    /**
+     * GET .../get-all-with-deleted/{id} — Busca registro pelo ID (ativo ou soft-deleted).
+     * GET .../get-all-with-deleted      — Lista paginada de todos os registros (ativos + soft-deleted).
+     */
+    public function getAllWithDeleted(?int $id = null): ResponseInterface
+    {
+        try {
+            if ($id !== null) {
+                $record = $this->processor->getAllWithDeleted($id, []);
+
+                if (!$record) {
+                    return $this->respondNotFound('Registro não encontrado');
+                }
+
+                return $this->respondSuccess($record, 'Registro encontrado com sucesso');
+            }
+
+            $result = $this->processor->getAllWithDeleted(null, $this->getPaginationParams());
+
+            return $this->respondPaginated($result['data'], $result['pagination'], 'Registros listados com sucesso');
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        } finally {
+            // reservado para log/auditoria/métricas
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Escrita
     // -------------------------------------------------------------------------
