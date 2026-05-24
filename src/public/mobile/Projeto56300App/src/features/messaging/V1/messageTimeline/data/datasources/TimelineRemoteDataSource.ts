@@ -35,7 +35,7 @@ export class TimelineRemoteDataSource {
   }
 
   createMultipart(formData: FormData): Promise<ApiEnvelope<TimelineDto>> {
-    return httpClientFormData(`${TABLE_BASE}/create`, formData)
+    return httpClientFormData(`${TABLE_BASE}/create`, formData, 60_000)
   }
 
   deleteSoft(id: number): Promise<ApiEnvelope<void>> {

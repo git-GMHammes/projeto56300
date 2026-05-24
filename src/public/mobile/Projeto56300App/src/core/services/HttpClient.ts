@@ -77,6 +77,7 @@ export async function httpClient<T>(
 export async function httpClientFormData<T>(
   path: string,
   formData: FormData,
+  timeoutMs = API_TIMEOUT_MS,
 ): Promise<T> {
   const token = await _tokenReader()
   const headers: Record<string, string> = {
@@ -84,7 +85,7 @@ export async function httpClientFormData<T>(
   }
 
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
     const res = await fetch(`${BASE}${path}`, {

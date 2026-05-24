@@ -217,7 +217,7 @@ abstract class BaseResourceViewController extends BaseResourceTableController
     /**
      * GET .../get-all-with-deleted?page=1&limit=20&sort=id&order=desc
      */
-    public function getAllWithDeleted(): ResponseInterface
+    public function getAllWithDeleted(?int $id = null): ResponseInterface
     {
         try {
             $result = $this->processor->getAllWithDeletedView($this->getPaginationParams());

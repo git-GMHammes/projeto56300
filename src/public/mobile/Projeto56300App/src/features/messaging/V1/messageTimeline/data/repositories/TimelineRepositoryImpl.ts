@@ -33,7 +33,12 @@ export class TimelineRepositoryImpl implements ITimelineRepository {
   }
 
   async create(payload: CreateTimelinePayload): Promise<Timeline> {
-    const env = await this.ds.create(payload)
+    const env = await this.ds.create({
+      user_saas_tenants_id: payload.tenant_id,
+      user_management_id: payload.user_management_id,
+      content: payload.content,
+      is_pinned: payload.is_pinned,
+    })
     if (!env.success || !env.data) throw new HttpError(env.message, env.statusCode)
     return TimelineMapper.toEntity(env.data)
   }
@@ -43,12 +48,12 @@ export class TimelineRepositoryImpl implements ITimelineRepository {
 
     const formData = new FormData()
     formData.append('content', payload.content)
-    formData.append('tenant_id', String(payload.tenant_id))
+    formData.append('user_saas_tenants_id', String(payload.tenant_id))
     formData.append('user_management_id', String(payload.user_management_id))
     if (payload.is_pinned !== undefined) {
       formData.append('is_pinned', String(payload.is_pinned))
     }
-    formData.append('files', { uri: file.uri, name: file.name, type: file.type } as unknown as Blob)
+    formData.append('files[]', { uri: file.uri, name: file.name, type: file.type } as unknown as Blob)
 
     const env = await this.ds.createMultipart(formData)
     if (!env.success || !env.data) throw new HttpError(env.message, env.statusCode)
