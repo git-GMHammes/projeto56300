@@ -188,7 +188,7 @@ $routes->group('vehicle-brand-view', function ($routes) {
 
 ## Passo 3 — Criar os arquivos de rotas
 
-### `EndpointTable.php` — CRUD completo (15 rotas)
+### `EndpointTable.php` — CRUD completo (18 rotas)
 
 Arquivo: `src/app/Config/Routes/Api/v1/Mec/VehicleBrand/EndpointTable.php`
 
@@ -209,6 +209,10 @@ $routes->get('get-all', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getAll
 $routes->get('get-no-pagination', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getNoPagination');
 // {{www}}/index.php/api/v1/vehicle-brand/get-deleted/{id}
 $routes->get('get-deleted/(:num)', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/get-all-with-deleted/{id}
+$routes->get('get-all-with-deleted/(:num)', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getAllWithDeleted/$1');
+// {{www}}/index.php/api/v1/vehicle-brand/get-all-with-deleted
+$routes->get('get-all-with-deleted', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getAllWithDeleted');
 // {{www}}/index.php/api/v1/vehicle-brand/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\Mec\VehicleBrand\ResourceTableController::getDeletedAll');
 // {{www}}/index.php/api/v1/vehicle-brand/get-with-deleted/{id}
@@ -229,7 +233,7 @@ $routes->delete('clear-deleted', 'Api\V1\Mec\VehicleBrand\ResourceTableControlle
 $routes->delete('clear-deleted/(:num)', 'Api\V1\Mec\VehicleBrand\ResourceTableController::clearDeleted/$1');
 ```
 
-### `EndpointView.php` — Leitura via view (8 rotas, opcional)
+### `EndpointView.php` — Leitura via view (9 rotas, opcional)
 
 Arquivo: `src/app/Config/Routes/Api/v1/Mec/VehicleBrand/EndpointView.php`
 
@@ -250,6 +254,8 @@ $routes->get('get-all', 'Api\V1\Mec\VehicleBrand\ResourceViewController::getAll'
 $routes->get('get-no-pagination', 'Api\V1\Mec\VehicleBrand\ResourceViewController::getNoPagination');
 // {{www}}/index.php/api/v1/vehicle-brand-view/get-deleted/{id}
 $routes->get('get-deleted/(:num)', 'Api\V1\Mec\VehicleBrand\ResourceViewController::getDeleted/$1');
+// {{www}}/index.php/api/v1/vehicle-brand-view/get-all-with-deleted
+$routes->get('get-all-with-deleted', 'Api\V1\Mec\VehicleBrand\ResourceViewController::getAllWithDeleted');
 // {{www}}/index.php/api/v1/vehicle-brand-view/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\Mec\VehicleBrand\ResourceViewController::getDeletedAll');
 ```
@@ -355,18 +361,19 @@ class SqlTableModel extends BaseTableModel
 
 ### O que a base fornece automaticamente
 
-| Método da base           | O que faz                                               |
-| ------------------------ | ------------------------------------------------------- |
-| `findPaginated()`        | Busca paginada com filtros WHERE exato ou LIKE          |
-| `findGrouped()`          | Busca paginada com filtros multivalorados (WHERE IN)    |
-| `searchByTerm()`         | Busca textual por LIKE em `$searchFields`               |
-| `getOrdered()`           | Lista todos os registros sem paginação                  |
-| `existsByField()`        | Verifica unicidade (ativo, com exclusão opcional de ID) |
-| `findWithDeleted()`      | Busca por ID incluindo soft-deleted                     |
-| `findOnlyDeleted()`      | Busca por ID somente se soft-deleted                    |
-| `findDeletedPaginated()` | Lista paginada de soft-deleted                          |
-| `restore()`              | Restaura soft-deleted (zera `deleted_at`)               |
-| `clearDeleted()`         | Hard delete em todos ou em um soft-deleted específico   |
+| Método da base                  | O que faz                                                    |
+| ------------------------------- | ------------------------------------------------------------ |
+| `findPaginated()`               | Busca paginada com filtros WHERE exato ou LIKE               |
+| `findGrouped()`                 | Busca paginada com filtros multivalorados (WHERE IN)         |
+| `searchByTerm()`                | Busca textual por LIKE em `$searchFields`                    |
+| `getOrdered()`                  | Lista todos os registros sem paginação                       |
+| `existsByField()`               | Verifica unicidade (ativo, com exclusão opcional de ID)      |
+| `findWithDeleted()`             | Busca por ID incluindo soft-deleted                          |
+| `findOnlyDeleted()`             | Busca por ID somente se soft-deleted                         |
+| `findDeletedPaginated()`        | Lista paginada de soft-deleted                               |
+| `findAllWithDeletedPaginated()` | Lista paginada de TODOS os registros (ativos + soft-deleted) |
+| `restore()`                     | Restaura soft-deleted (zera `deleted_at`)                    |
+| `clearDeleted()`                | Hard delete em todos ou em um soft-deleted específico        |
 
 > **Arquivo base:** `src/app/Models/V1/BaseTableModel.php`
 
@@ -420,15 +427,16 @@ class SqlViewModel extends BaseViewModel
 
 ### O que a base de view fornece automaticamente
 
-| Método da base               | O que faz                                              |
-| ---------------------------- | ------------------------------------------------------ |
-| `findPaginatedView()`        | Busca paginada com filtros (exclui deleted por padrão) |
-| `findGroupedView()`          | Busca paginada com filtros multivalorados (WHERE IN)   |
-| `searchByTermView()`         | Busca textual por LIKE em `$searchFields`              |
-| `findById()`                 | Busca registro ativo por ID                            |
-| `findDeletedById()`          | Busca registro soft-deleted por ID                     |
-| `findDeletedPaginatedView()` | Lista paginada de soft-deleted                         |
-| `findAllView()`              | Lista todos os ativos sem paginação                    |
+| Método da base                      | O que faz                                                    |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `findPaginatedView()`               | Busca paginada com filtros (exclui deleted por padrão)       |
+| `findGroupedView()`                 | Busca paginada com filtros multivalorados (WHERE IN)         |
+| `searchByTermView()`                | Busca textual por LIKE em `$searchFields`                    |
+| `findById()`                        | Busca registro ativo por ID                                  |
+| `findDeletedById()`                 | Busca registro soft-deleted por ID                           |
+| `findDeletedPaginatedView()`        | Lista paginada de soft-deleted                               |
+| `findAllWithDeletedPaginatedView()` | Lista paginada de TODOS os registros (ativos + soft-deleted) |
+| `findAllView()`                     | Lista todos os ativos sem paginação                          |
 
 > **Arquivo base:** `src/app/Models/V1/BaseViewModel.php`
 
@@ -669,7 +677,7 @@ PUT /update/{id}
 Arquivo: `src/app/Controllers/Api/V1/Mec/VehicleBrand/ResourceTableController.php`
 
 Herda `BaseResourceTableController`. Escreva **apenas** o `initController` e os dois métodos de regras.
-Os 15 endpoints já estão implementados na base.
+Os 18 endpoints já estão implementados na base.
 
 ```php
 <?php
@@ -709,24 +717,26 @@ class ResourceTableController extends BaseResourceTableController
 
 ### Endpoints fornecidos pela base (não escreva nada disto)
 
-| Método HTTP | Rota                     | Método do Controller | O que faz                             |
-| ----------- | ------------------------ | -------------------- | ------------------------------------- |
-| `POST`      | `/find`                  | `find()`             | Filtro paginado (WHERE exato ou LIKE) |
-| `POST`      | `/get-grouped`           | `getGrouped()`       | Filtro multivalorado (WHERE IN)       |
-| `GET`       | `/search?q=termo`        | `search()`           | Busca textual LIKE em `$searchFields` |
-| `GET`       | `/get/{id}`              | `get()`              | Busca um registro ativo por ID        |
-| `GET`       | `/get-all`               | `getAll()`           | Lista paginada de ativos              |
-| `GET`       | `/get-no-pagination`     | `getNoPagination()`  | Lista todos os ativos (sem paginação) |
-| `GET`       | `/get-deleted/{id}`      | `getDeleted()`       | Busca um soft-deleted por ID          |
-| `GET`       | `/get-deleted-all`       | `getDeletedAll()`    | Lista paginada de soft-deleted        |
-| `GET`       | `/get-with-deleted/{id}` | `getWithDeleted()`   | Busca por ID (ativo ou soft-deleted)  |
-| `POST`      | `/create`                | `create()`           | Cria novo registro                    |
-| `PUT`       | `/update/{id}`           | `update()`           | Atualiza registro existente           |
-| `DELETE`    | `/delete-soft/{id}`      | `deleteSoft()`       | Soft delete (seta `deleted_at`)       |
-| `PATCH`     | `/delete-restore/{id}`   | `deleteRestore()`    | Restaura soft-deleted                 |
-| `DELETE`    | `/delete-hard/{id}`      | `deleteHard()`       | Hard delete permanente                |
-| `DELETE`    | `/clear-deleted`         | `clearDeleted()`     | Hard delete de todos os soft-deleted  |
-| `DELETE`    | `/clear-deleted/{id}`    | `clearDeleted($id)`  | Hard delete de um soft-deleted        |
+| Método HTTP | Rota                         | Método do Controller     | O que faz                                                    |
+| ----------- | ---------------------------- | ------------------------ | ------------------------------------------------------------ |
+| `POST`      | `/find`                      | `find()`                 | Filtro paginado (WHERE exato ou LIKE)                        |
+| `POST`      | `/get-grouped`               | `getGrouped()`           | Filtro multivalorado (WHERE IN)                              |
+| `GET`       | `/search?q=termo`            | `search()`               | Busca textual LIKE em `$searchFields`                        |
+| `GET`       | `/get/{id}`                  | `get()`                  | Busca um registro ativo por ID                               |
+| `GET`       | `/get-all`                   | `getAll()`               | Lista paginada de ativos                                     |
+| `GET`       | `/get-no-pagination`         | `getNoPagination()`      | Lista todos os ativos (sem paginação)                        |
+| `GET`       | `/get-deleted/{id}`          | `getDeleted()`           | Busca um soft-deleted por ID                                 |
+| `GET`       | `/get-deleted-all`           | `getDeletedAll()`        | Lista paginada de soft-deleted                               |
+| `GET`       | `/get-with-deleted/{id}`     | `getWithDeleted()`       | Busca por ID (ativo ou soft-deleted)                         |
+| `GET`       | `/get-all-with-deleted/{id}` | `getAllWithDeleted($id)` | Busca por ID (ativo ou soft-deleted) — método unificado      |
+| `GET`       | `/get-all-with-deleted`      | `getAllWithDeleted()`    | Lista paginada de TODOS os registros (ativos + soft-deleted) |
+| `POST`      | `/create`                    | `create()`               | Cria novo registro                                           |
+| `PUT`       | `/update/{id}`               | `update()`               | Atualiza registro existente                                  |
+| `DELETE`    | `/delete-soft/{id}`          | `deleteSoft()`           | Soft delete (seta `deleted_at`)                              |
+| `PATCH`     | `/delete-restore/{id}`       | `deleteRestore()`        | Restaura soft-deleted                                        |
+| `DELETE`    | `/delete-hard/{id}`          | `deleteHard()`           | Hard delete permanente                                       |
+| `DELETE`    | `/clear-deleted`             | `clearDeleted()`         | Hard delete de todos os soft-deleted                         |
+| `DELETE`    | `/clear-deleted/{id}`        | `clearDeleted($id)`      | Hard delete de um soft-deleted                               |
 
 > **Arquivo base:** `src/app/Controllers/Api/V1/BaseResourceTableController.php`
 
@@ -900,4 +910,14 @@ Exemplo: `GET /api/v1/vehicle-brand/get-all?page=2&limit=10&sort=name&order=asc`
 | Cargo    | Analista de Sistemas                                                                                                                            |
 | Empresa  | Habilidade .Com                                                                                                                                 |
 | Site     | [habilidade.com](https://habilidade.com)                                                                                                        |
+| LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |
+
+## 10. Sobre o Autor
+
+| Campo    | Informação |
+| -------- | ---------- |
+| Nome     | Gustavo Hammes |
+| Cargo    | Analista de Sistemas |
+| Empresa  | Habilidade .Com |
+| Site     | [habilidade.com](https://habilidade.com) |
 | LinkedIn | [linkedin.com/in/gustavo-hammes](https://www.linkedin.com/in/gustavo-hammes?utm_source=share_via&utm_content=profile&utm_medium=member_android) |

@@ -4,62 +4,116 @@
         "icon": "box-arrow-right",
         "label": "Logout",
         "description": "Encerrar sessão e sair do aplicativo",
-        "route": "logout"
+        "route": "logout",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "messaging",
         "icon": "newspaper",
         "label": "Time Line",
         "description": "Visualizar o feed de mensagens e publicações",
-        "route": "Messaging"
+        "route": "Messaging",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "ods_02",
         "icon": "basket",
         "label": "ODS 2",
         "description": "Fome Zero e Agricultura Sustentável",
-        "route": "OdsP02"
+        "route": "OdsP02",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "ods_03",
         "icon": "heart-pulse",
         "label": "ODS 3",
         "description": "Saúde e Bem-Estar",
-        "route": "OdsP03"
+        "route": "OdsP03",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
+    },
+    {
+        "key": "exit",
+        "icon": "x-circle",
+        "label": "Sair",
+        "description": "Clique para fechar o menu",
+        "route": "/",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "helper",
         "icon": "question-circle",
         "label": "Ajuda",
         "description": "Clique duas vezes no icone para acessar",
-        "route": "helper"
+        "route": "helper",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "ods_05",
         "icon": "people",
         "label": "ODS 5",
         "description": "Igualdade de Gênero",
-        "route": "OdsP05"
+        "route": "OdsP05",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "ods_06",
         "icon": "droplet",
         "label": "ODS 6",
         "description": "Água Potável e Saneamento",
-        "route": "OdsP06"
+        "route": "OdsP06",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     },
     {
         "key": "ods_07",
         "icon": "brightness-high",
         "label": "ODS 7",
         "description": "Energia Limpa e Acessível",
-        "route": "OdsP07"
-    },
-    {
-        "key": "ods_08",
-        "icon": "briefcase",
-        "label": "ODS 8",
-        "description": "Trabalho Decente e Crescimento Econômico",
-        "route": "OdsP08"
+        "route": "OdsP07",
+        "visibleOnRoutes": [
+            "*"
+        ],
+        "allowedRoles": [
+            "*"
+        ]
     }
 ]

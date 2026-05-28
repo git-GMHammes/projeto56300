@@ -137,6 +137,18 @@ abstract class BaseViewModel extends Model
     }
 
     /**
+     * Lista todos os registros paginados na view — ativos e soft-deleted.
+     */
+    public function findAllWithDeletedPaginatedView(
+        int $page = 1,
+        int $limit = 20,
+        string $sort = 'id',
+        string $order = 'desc'
+    ): array {
+        return $this->findPaginatedView([], $page, $limit, $sort, $order, true);
+    }
+
+    /**
      * Busca textual paginada na view (somente registros ativos).
      *
      * @param string $term Termo pesquisado nos $searchFields

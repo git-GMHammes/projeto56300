@@ -14,6 +14,10 @@ $routes->get('get-all', 'Api\V1\User\UserCustomerFiles\ResourceTableController::
 $routes->get('get-no-pagination', 'Api\V1\User\UserCustomerFiles\ResourceTableController::getNoPagination');
 // {{www}}/index.php/api/v1/user-customer-files/get-deleted/{id}
 $routes->get('get-deleted/(:num)', 'Api\V1\User\UserCustomerFiles\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/user-customer-files/get-all-with-deleted/{id}
+$routes->get('get-all-with-deleted/(:num)', 'Api\V1\User\UserCustomerFiles\ResourceTableController::getAllWithDeleted/$1');
+// {{www}}/index.php/api/v1/user-customer-files/get-all-with-deleted
+$routes->get('get-all-with-deleted', 'Api\V1\User\UserCustomerFiles\ResourceTableController::getAllWithDeleted');
 // {{www}}/index.php/api/v1/user-customer-files/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\User\UserCustomerFiles\ResourceTableController::getDeletedAll');
 // {{www}}/index.php/api/v1/user-customer-files/get-with-deleted/{id}

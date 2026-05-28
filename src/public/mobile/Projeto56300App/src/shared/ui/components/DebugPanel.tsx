@@ -13,6 +13,7 @@ import {
   API_TIMEOUT_MS,
   APP_CONTRACT_CODE,
 } from '../../../core/config/env'
+import { useCurrentRoute } from '../../../core/navigation/RouteContext'
 
 if (APP_ENV !== 'development') {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -28,6 +29,7 @@ const CONFIG_VARS: { label: string; value: string | number }[] = [
 
 export default function DebugPanel() {
   const { theme } = useTheme()
+  const { currentRoute } = useCurrentRoute()
   const s = useMemo(() => makeStyles(theme.colors), [theme])
   const [visible, setVisible] = useState(false)
 
@@ -49,13 +51,17 @@ export default function DebugPanel() {
 
         <View style={s.sheet}>
           <View style={s.header}>
-            <Text style={s.headerTitle}>🛠 Debug — Config Vars</Text>
+            <Text style={s.headerTitle}>🛠 Debug</Text>
             <TouchableOpacity onPress={() => setVisible(false)} style={s.closeBtn}>
               <Text style={s.closeText}>✕</Text>
             </TouchableOpacity>
           </View>
 
           <ScrollView contentContainerStyle={s.body} showsVerticalScrollIndicator={false}>
+            <View style={s.routeRow}>
+              <Text style={s.rowLabel}>CURRENT_ROUTE</Text>
+              <Text style={s.routeValue} selectable>{currentRoute || '—'}</Text>
+            </View>
             {CONFIG_VARS.map(({ label, value }) => (
               <View key={label} style={s.row}>
                 <Text style={s.rowLabel}>{label}</Text>
@@ -141,6 +147,18 @@ function makeStyles(c: AppColors) {
       paddingHorizontal: Bootstrap.spacing.xl,
       paddingVertical: Bootstrap.spacing.lg,
       gap: Bootstrap.spacing.md,
+    },
+    routeRow: {
+      backgroundColor: c.bg,
+      borderRadius: Bootstrap.borderRadius.md,
+      padding: Bootstrap.spacing.lg,
+      borderLeftWidth: 3,
+      borderLeftColor: '#10b981',
+    },
+    routeValue: {
+      fontSize: Bootstrap.fontSize.base,
+      color: '#10b981',
+      fontWeight: Bootstrap.fontWeight.bold,
     },
     row: {
       backgroundColor: c.bg,

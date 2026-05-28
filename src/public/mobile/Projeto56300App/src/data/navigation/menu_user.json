@@ -1,0 +1,42 @@
+[
+    {
+        "key": "login",
+        "icon": "person",
+        "label": "Login",
+        "description": "Entrar no sistema",
+        "route": "Login",
+        "showWhen": "guest",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
+    },
+    {
+        "key": "perfil",
+        "icon": "person",
+        "label": "Perfil",
+        "description": "Editar perfil, configurações e preferências",
+        "route": "Profile",
+        "showWhen": "auth",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
+    },
+    {
+        "key": "home",
+        "icon": "house",
+        "label": "Home",
+        "description": "Página inicial",
+        "route": "Home",
+        "showWhen": "always",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
+    },
+    {
+        "key": "logout",
+        "icon": "box-arrow-right",
+        "label": "Logout",
+        "description": "Sair do sistema",
+        "route": "__logout__",
+        "showWhen": "auth",
+        "visibleOnRoutes": ["*"],
+        "allowedRoles": ["*"]
+    }
+]

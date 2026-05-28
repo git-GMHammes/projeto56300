@@ -4,6 +4,8 @@ export interface WaffleMenuItem {
   label: string
   description?: string
   route: string
+  visibleOnRoutes?: string[]
+  allowedRoles?: string[]
 }
 
 export interface WaffleMenuProps {

@@ -273,6 +273,30 @@ abstract class BaseTableModel extends Model
     }
 
     /**
+     * Lista todos os registros paginados — ativos e soft-deleted (ignora deleted_at).
+     */
+    public function findAllWithDeletedPaginated(
+        int $page = 1,
+        int $limit = 20,
+        string $sort = 'id',
+        string $order = 'desc'
+    ): array {
+        [$sort, $order] = $this->sanitizeSort($sort, $order);
+
+        $builder = $this->db->table($this->table);
+
+        $total = $builder->countAllResults(false);
+
+        $data = $builder
+            ->orderBy($sort, $order)
+            ->limit($limit, ($page - 1) * $limit)
+            ->get()
+            ->getResultArray();
+
+        return $this->buildPaginatedResult($data, $total, $page, $limit);
+    }
+
+    /**
      * Restaura um registro soft-deleted zerando o campo deleted_at.
      *
      * Usa o builder direto para contornar $allowedFields,

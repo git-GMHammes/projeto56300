@@ -18,7 +18,7 @@ use App\Models\V1\BaseViewModel;
  *   ut_id, ut_user_management_id, ut_user_saas_tenants_id, ut_role,
  *   ut_created_at, ut_updated_at, ut_deleted_at,
  *   um_id, um_uuid, um_user, um_is_active,
- *   um_password, um_last_login, um_created_at, um_updated_at, um_deleted_at
+ *   um_last_login, um_created_at, um_updated_at, um_deleted_at
  */
 class SqlViewModel extends BaseViewModel
 {

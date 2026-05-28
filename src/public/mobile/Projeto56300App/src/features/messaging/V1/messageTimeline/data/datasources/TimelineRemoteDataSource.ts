@@ -1,4 +1,4 @@
-import { httpClient } from '../../../../../../core/services/HttpClient'
+import { httpClient, httpClientFormData } from '../../../../../../core/services/HttpClient'
 import type { ApiEnvelope } from '../../../../../../core/services/HttpClient'
 import type { TimelineDto, TimelineViewDto, CreateTimelineDtoRequest, UpdateTimelineDtoRequest } from '../dto/TimelineDto'
 
@@ -32,6 +32,10 @@ export class TimelineRemoteDataSource {
 
   update(id: number, payload: UpdateTimelineDtoRequest): Promise<ApiEnvelope<TimelineDto>> {
     return httpClient(`${TABLE_BASE}/update/${id}`, { method: 'PUT', body: JSON.stringify(payload) })
+  }
+
+  createMultipart(formData: FormData): Promise<ApiEnvelope<TimelineDto>> {
+    return httpClientFormData(`${TABLE_BASE}/create`, formData, 60_000)
   }
 
   deleteSoft(id: number): Promise<ApiEnvelope<void>> {

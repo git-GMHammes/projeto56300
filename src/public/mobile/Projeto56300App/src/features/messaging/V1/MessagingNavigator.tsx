@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useCurrentRoute } from '../../../core/navigation/RouteContext'
 import { View, StyleSheet } from 'react-native'
 import { MESSAGING_PATHS } from './paths'
 import type { MessagingStackParamList } from './types'
@@ -9,6 +10,17 @@ import GroupScreen from './msgGroup/presentation/ui/screens/GroupScreen'
 import GroupMemberScreen from './messageGroupMember/presentation/ui/screens/GroupMemberScreen'
 import GroupMessageScreen from './messageGroup/presentation/ui/screens/GroupMessageScreen'
 import MessageFileScreen from './messageFile/presentation/ui/screens/MessageFileScreen'
+
+const SUB_ROUTE_NAMES: Record<string, string> = {
+  [MESSAGING_PATHS.TIMELINE]:          'Timeline',
+  [MESSAGING_PATHS.TIMELINE_REACTION]: 'TimelineReaction',
+  [MESSAGING_PATHS.PRIVATE]:           'Private',
+  [MESSAGING_PATHS.GROUP]:             'Group',
+  [MESSAGING_PATHS.GROUP_MEMBER]:      'GroupMember',
+  [MESSAGING_PATHS.GROUP_MESSAGE]:     'GroupMessage',
+  [MESSAGING_PATHS.GROUP_READ]:        'GroupRead',
+  [MESSAGING_PATHS.FILE]:              'File',
+}
 
 const MAIN_TAB_KEYS = new Set<string>([
   MESSAGING_PATHS.TIMELINE,
@@ -31,6 +43,15 @@ interface Props {
 
 export default function MessagingNavigator({ initialScreen = MESSAGING_PATHS.TIMELINE, goBack }: Props) {
   const [nav, setNav] = useState<NavState>({ screen: initialScreen })
+  const { setCurrentRoute } = useCurrentRoute()
+
+  useEffect(() => {
+    const subName = SUB_ROUTE_NAMES[nav.screen] ?? nav.screen
+    const timer = setTimeout(() => {
+      setCurrentRoute(`Messaging/${subName}`)
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [nav.screen, setCurrentRoute])
 
   function navigate(screen: MessagingScreen, params?: NavParams) {
     setNav({ screen, params })

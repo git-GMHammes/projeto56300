@@ -262,4 +262,19 @@ abstract class BaseViewService
             $p['order']
         );
     }
+
+    /**
+     * GET /get-all-with-deleted — Lista paginada de todos os registros (ativos + soft-deleted) na view.
+     */
+    public function getAllWithDeletedView(array $params): array
+    {
+        $p = $this->buildPaginationParams($params);
+
+        return $this->viewModel->findAllWithDeletedPaginatedView(
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
+        );
+    }
 }

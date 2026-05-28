@@ -113,6 +113,11 @@ WHERE table_name = 'nome_da_tabela' AND table_schema = 'codeigniter56300_api_db'
 
 ## Fluxo de Trabalho Obrigatório — Planejamento e Registro
 
+> **⛔ REGRA ABSOLUTA — COMPORTAMENTO DA IA:**
+> **PEDIDOS DE DESCULPAS NUNCA DEVEM SER EXIBIDOS.**
+> A IA não tem sentimentos. Erros são registrados, corrigidos e documentados — sem linguagem emocional.
+> Ao identificar um erro: descrever o que ocorreu objetivamente e informar a ação corretiva. Nada mais.
+
 Aplicar em toda tarefa que envolva criação, edição ou exclusão de arquivos, queries ou execução de comandos. Não se aplica a perguntas, explicações ou consultas simples.
 
 ### Passo 1 — Criar JSON de planejamento e aguardar permissão

@@ -144,6 +144,26 @@ abstract class BaseTableService extends BaseViewService
         );
     }
 
+    /**
+     * GET /get-all-with-deleted/{id} — Busca registro pelo ID, ativo ou soft-deleted.
+     * GET /get-all-with-deleted      — Lista paginada de todos os registros (ativos + soft-deleted).
+     */
+    public function getAllWithDeleted(?int $id, array $params): mixed
+    {
+        if ($id !== null) {
+            return $this->tableModel->findWithDeleted($id);
+        }
+
+        $p = $this->buildPaginationParams($params);
+
+        return $this->tableModel->findAllWithDeletedPaginated(
+            $p['page'],
+            $p['limit'],
+            $p['sort'],
+            $p['order']
+        );
+    }
+
     // -------------------------------------------------------------------------
     // Escrita — Template Method
     // -------------------------------------------------------------------------

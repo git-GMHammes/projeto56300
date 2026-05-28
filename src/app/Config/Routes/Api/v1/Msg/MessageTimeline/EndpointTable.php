@@ -14,6 +14,10 @@ $routes->get('get-all', 'Api\V1\Msg\MessageTimeline\ResourceTableController::get
 $routes->get('get-no-pagination', 'Api\V1\Msg\MessageTimeline\ResourceTableController::getNoPagination');
 // {{www}}/index.php/api/v1/msg-timeline/get-deleted/{id}
 $routes->get('get-deleted/(:num)', 'Api\V1\Msg\MessageTimeline\ResourceTableController::getDeleted/$1');
+// {{www}}/index.php/api/v1/msg-timeline/get-all-with-deleted/{id}
+$routes->get('get-all-with-deleted/(:num)', 'Api\V1\Msg\MessageTimeline\ResourceTableController::getAllWithDeleted/$1');
+// {{www}}/index.php/api/v1/msg-timeline/get-all-with-deleted
+$routes->get('get-all-with-deleted', 'Api\V1\Msg\MessageTimeline\ResourceTableController::getAllWithDeleted');
 // {{www}}/index.php/api/v1/msg-timeline/get-deleted-all
 $routes->get('get-deleted-all', 'Api\V1\Msg\MessageTimeline\ResourceTableController::getDeletedAll');
 // {{www}}/index.php/api/v1/msg-timeline/get-with-deleted/{id}

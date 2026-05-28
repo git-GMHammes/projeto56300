@@ -29,7 +29,7 @@ export interface TimelineViewDto {
 }
 
 export interface CreateTimelineDtoRequest {
-  tenant_id: number
+  user_saas_tenants_id: number
   user_management_id: number
   content: string
   is_pinned?: 0 | 1

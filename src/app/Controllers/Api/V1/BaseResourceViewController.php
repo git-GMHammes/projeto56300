@@ -213,4 +213,20 @@ abstract class BaseResourceViewController extends BaseResourceTableController
             // reservado para log/auditoria/métricas
         }
     }
+
+    /**
+     * GET .../get-all-with-deleted?page=1&limit=20&sort=id&order=desc
+     */
+    public function getAllWithDeleted(?int $id = null): ResponseInterface
+    {
+        try {
+            $result = $this->processor->getAllWithDeletedView($this->getPaginationParams());
+
+            return $this->respondPaginated($result['data'], $result['pagination'], 'Registros listados com sucesso');
+        } catch (\Throwable $e) {
+            return $this->respondServerError($e);
+        } finally {
+            // reservado para log/auditoria/métricas
+        }
+    }
 }

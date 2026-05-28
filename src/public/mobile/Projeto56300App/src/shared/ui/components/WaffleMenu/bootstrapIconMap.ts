@@ -28,9 +28,11 @@ const bootstrapIconMap: Record<string, number> = {
   'list-task':    0xF477,
   'heart-pulse':  0xF76F,
   'moon':         0xF497,
+  'newspaper':    0xF4A3,
   'people':          0xF4D0,
   'person':          0xF4E1,
   'question-circle': 0xF505,
+  'x-circle':        0xF623,
 }
 
 export const FALLBACK_ICON = 0xF3FC // grid

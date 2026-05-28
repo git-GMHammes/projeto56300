@@ -1,25 +1,41 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Modal, Text, TouchableOpacity } from 'react-native'
 import { HomeNavigator } from '../../features/home/presentation/routes'
+import type { HomeNavigatorHandle } from '../../features/home/presentation/routes/HomeNavigator'
 import MessageFooterBar from '../../shared/ui/components/MessageFooterBar'
-import MessageDrawer, { type MessageDrawerType } from '../../shared/ui/components/MessageDrawer'
+import BottomSheetContainer from '../../shared/ui/components/BottomSheet/BottomSheetContainer'
+import TopBanner from '../../shared/ui/components/TopBanner'
 import { useInactivityTimeout } from '../../core/hooks/useInactivityTimeout'
+import { getUser } from '../../core/services/StorageService'
+
+type SessionUser = { ut_role?: string }
 
 interface Props {
   onLogout: () => void
 }
 
+const CANVAS_KEYS = new Set(['timeline', 'dm', 'groups'])
+
 export function AppNavigator({ onLogout }: Props) {
-  const [activeDrawer, setActiveDrawer]   = useState<MessageDrawerType | null>(null)
+  const homeNavigatorRef = React.useRef<HomeNavigatorHandle>(null)
+  const [activeSheet, setActiveSheet] = useState<string | null>(null)
+  const [banner, setBanner]           = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [showWarnModal, setShowWarnModal] = useState(false)
+  const [userRole, setUserRole]       = useState('guest')
+
+  useEffect(() => {
+    getUser<SessionUser>().then(user => {
+      setUserRole(user?.ut_role ?? 'guest')
+    })
+  }, [])
 
   const handleWarn   = useCallback(() => setShowWarnModal(true), [])
   const handleLogout = useCallback(() => { setShowWarnModal(false); onLogout() }, [onLogout])
 
   const { resetTimers } = useInactivityTimeout({
-    onWarn:  handleWarn,
+    onWarn:   handleWarn,
     onLogout: handleLogout,
-    enabled: true,
+    enabled:  true,
   })
 
   const handleTouch = useCallback(() => {
@@ -27,23 +43,45 @@ export function AppNavigator({ onLogout }: Props) {
     resetTimers()
   }, [resetTimers])
 
+  const handleFooterPress = useCallback((key: string) => {
+    if (CANVAS_KEYS.has(key)) {
+      setActiveSheet(key)
+    } else if (key === 'home') {
+      homeNavigatorRef.current?.navigateToHome()
+    } else if (key === 'helper') {
+      homeNavigatorRef.current?.navigateToHelper()
+    }
+  }, [])
+
   return (
     <View
       style={styles.container}
       onStartShouldSetResponderCapture={() => { handleTouch(); return false }}
     >
       <View style={styles.content}>
-        <HomeNavigator onLogout={onLogout} />
+        <HomeNavigator ref={homeNavigatorRef} onLogout={onLogout} />
       </View>
+
       <MessageFooterBar
-        activeKey={activeDrawer}
-        onPress={(key) => setActiveDrawer(key as MessageDrawerType)}
+        activeKey={activeSheet}
+        userRole={userRole}
+        onPress={handleFooterPress}
       />
-      <MessageDrawer
-        visible={activeDrawer !== null}
-        type={activeDrawer}
-        onClose={() => setActiveDrawer(null)}
+
+      <BottomSheetContainer
+        activeKey={activeSheet}
+        onClose={() => setActiveSheet(null)}
+        onSuccess={(msg) => setBanner({ type: 'success', message: msg })}
+        onError={(msg) => setBanner({ type: 'error', message: msg })}
       />
+
+      <TopBanner
+        visible={banner !== null}
+        type={banner?.type ?? 'success'}
+        message={banner?.message ?? ''}
+        onDismiss={() => setBanner(null)}
+      />
+
       <Modal transparent visible={showWarnModal} animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>

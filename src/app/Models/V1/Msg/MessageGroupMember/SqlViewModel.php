@@ -16,7 +16,7 @@ use App\Models\V1\BaseViewModel;
  *   mgm_group_id, mgm_user_management_id, mgm_role, mgm_joined_at, mgm_left_at,
  *   created_at, updated_at, deleted_at,
  *   um_id, um_uuid, um_user, um_is_active,
- *   um_password, um_last_login, um_created_at, um_updated_at, um_deleted_at
+ *   um_last_login, um_created_at, um_updated_at, um_deleted_at
  */
 class SqlViewModel extends BaseViewModel
 {

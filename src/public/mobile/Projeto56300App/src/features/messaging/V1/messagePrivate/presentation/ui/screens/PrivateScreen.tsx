@@ -5,7 +5,7 @@ import Bootstrap from '../../../../../../../shared/theme/bootstrap'
 import { useTheme } from '../../../../../../../app/providers/ThemeProvider'
 import TopBar from '../../../../../../../shared/ui/components/TopBar'
 import BackButton from '../../../../../../../shared/ui/components/BackButton'
-import footerData from '../../../../../../../data/message/footer_message.json'
+import footerData from '../../../../../../../data/messaging/footer_message.json'
 import type { MessagingStackParamList } from '../../../../types'
 
 interface Props {

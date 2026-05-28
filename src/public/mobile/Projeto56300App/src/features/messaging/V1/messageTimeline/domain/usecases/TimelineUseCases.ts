@@ -1,4 +1,4 @@
-import type { ITimelineRepository } from '../repositories/ITimelineRepository'
+import type { ITimelineRepository, FileAsset } from '../repositories/ITimelineRepository'
 import type { CreateTimelinePayload, UpdateTimelinePayload } from '../entities/Timeline'
 
 export class GetTimelineListUseCase {
@@ -19,6 +19,11 @@ export class SearchTimelineUseCase {
 export class CreateTimelineUseCase {
   constructor(private readonly repo: ITimelineRepository) {}
   execute(payload: CreateTimelinePayload) { return this.repo.create(payload) }
+}
+
+export class CreateTimelineWithFileUseCase {
+  constructor(private readonly repo: ITimelineRepository) {}
+  execute(payload: CreateTimelinePayload, file?: FileAsset) { return this.repo.createWithFile(payload, file) }
 }
 
 export class UpdateTimelineUseCase {
