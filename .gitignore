@@ -139,5 +139,5 @@ $RECYCLE.BIN/
 # Documentação interna (rascunhos/prompts de IA/backups)
 # -------------------------------------------------------------
 docs/
-.claude/worktrees/eager-herschel/
-.claude/worktrees/sweet-blackwell/
+# Configuracoes locais do Claude Code (contem credenciais - nunca versionar)
+.claude/

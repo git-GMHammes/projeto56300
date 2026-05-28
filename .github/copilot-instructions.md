@@ -37,7 +37,7 @@ SHOW FULL TABLES IN nome_do_banco;
 ```
 Ou equivalente via terminal/container:
 ```
-podman exec -i codeigniter56300_mysql mysql -ucodeigniter56300_user -p'codeigniter56300_P@ssw0rd_2024' -e "SHOW FULL TABLES IN codeigniter56300_api_db;"
+podman exec -i codeigniter56300_mysql mysql -ucodeigniter56300_user -p"$MYSQL_PWD" -e "SHOW FULL TABLES IN codeigniter56300_api_db;"
 ```
 
 Somente após obter e analisar a lista de tabelas/views, inicie a implementação de qualquer módulo/feature.
