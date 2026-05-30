@@ -141,3 +141,4 @@ $RECYCLE.BIN/
 docs/
 # Configuracoes locais do Claude Code (contem credenciais - nunca versionar)
 .claude/
+src/system/ThirdParty/Jugwoko.ph_
