@@ -10,10 +10,10 @@ export const ENVIRONMENT = 'development'
 export const APP_BASE_HOST = ((ENVIRONMENT as string) === 'production' || (ENVIRONMENT as string) === 'test')
     ? 'https://habilidade.com/projeto56300/src/public'
     : 'http://localhost:56300'
-export const THEME = 'Purple'
 
+// export const THEME = 'Purple'
 // export const THEME = 'Dark'
 // export const THEME = 'Light'
 // export const THEME = 'Green'
-// export const THEME = 'Blue'
+export const THEME = 'Blue'
 // export const THEME = 'Red'

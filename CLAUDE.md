@@ -32,6 +32,52 @@ Instruções globais do projeto. Carregado automaticamente em toda conversa.
 - Usar `podman` ou `podman-compose`; `docker-compose.yml` é compatível com ambos
 - Root do backend: `./src` → `/var/www/html`
 
+### Comandos de operação
+
+```bash
+# Subir todos os containers
+podman compose up -d
+
+# Verificar status
+podman ps --filter "name=codeigniter56300" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Log do Vite (frontend)
+podman logs --tail 30 codeigniter56300_node
+```
+
+### URLs de acesso
+
+| Serviço       | URL                        |
+| ------------- | -------------------------- |
+| Frontend      | http://localhost:56303/    |
+| Backend/API   | http://localhost:56300/    |
+| Adminer (DB)  | http://localhost:56302/    |
+
+> **Atenção:** o frontend deve ser acessado **sempre pela porta externa 56303**, nunca por 5173 (porta interna do container). Acessar pela 5173 causa falha no WebSocket HMR porque o token gerado pelo Vite não bate com a conexão entrante.
+
+### Vite 8 — configuração obrigatória para container
+
+O projeto usa **Vite 8**, que introduziu validação estrita do header `Host` nas conexões WebSocket HMR. Sem `allowedHosts: true`, o Vite rejeita conexões vindas de `localhost:56303` (porta externa) porque internamente escuta em `5173`.
+
+O `vite.config.ts` **deve conter** `allowedHosts: true` no bloco `server`:
+
+```ts
+server: {
+  host: true,
+  port: 5173,
+  allowedHosts: true,       // obrigatório no Vite 8 com container
+  hmr: {
+    host: 'localhost',
+    clientPort: 56303,      // porta externa do container
+  },
+  watch: {
+    usePolling: true,
+  },
+}
+```
+
+> **Não adicionar** `port` dentro do bloco `hmr` — causaria o Vite tentar abrir um servidor WS separado na porta 56303 dentro do container, o que falha.
+
 ---
 
 ## Multi-Tenancy SaaS
@@ -64,6 +110,53 @@ Toda tabela de módulo **deve ter** `user_saas_tenants_id` (FK para `user_004_sa
 | `contact_us` | Formulário de Contato  | contact_us, contact_us_files                                                                  |
 
 > Novo módulo: prefixo único de 3-4 letras + numeração sequencial (`prefixo_NNN_nome`).
+
+---
+
+## Frontend — Roteamento
+
+- Usa **BrowserRouter** (React Router v6) — URLs limpas sem `#`
+- `base: '/'` no `vite.config.ts` — obrigatório para BrowserRouter funcionar com rotas profundas
+- Vite dev server serve `index.html` como SPA fallback para todas as rotas
+
+### Convenção de rotas frontend
+
+Rotas frontend espelham os endpoints da API REST do backend. O nome da feature no frontend deve coincidir com o nome usado na API.
+
+**Padrão:**
+```
+/v1/{feature}/{acao}
+/v1/{feature}/{acao}/{id}
+```
+
+**Rotas implementadas por feature (espelho da API `web/v1/{feature}/...`):**
+
+| Rota Frontend              | Endpoint API (backend)                  |
+| -------------------------- | --------------------------------------- |
+| `/v1/login`                | `POST /api/v1/auth/login` (especial)    |
+| `/v1/{feature}/find`       | `POST .../find`                         |
+| `/v1/{feature}/get-grouped`| `POST .../get-grouped`                  |
+| `/v1/{feature}/search`     | `GET  .../search`                       |
+| `/v1/{feature}/get/:id`    | `GET  .../get/{id}`                     |
+| `/v1/{feature}/get-all`    | `GET  .../get-all`                      |
+| `/v1/{feature}/get-no-pagination` | `GET .../get-no-pagination`      |
+| `/v1/{feature}/create`     | `POST .../create`                       |
+| `/v1/{feature}/update/:id` | `PUT  .../update/{id}`                  |
+| `/v1/{feature}/delete-soft/:id`    | `DELETE .../delete-soft/{id}`  |
+| `/v1/{feature}/delete-restore/:id` | `PATCH  .../delete-restore/{id}` |
+| `/v1/{feature}/delete-hard/:id`    | `DELETE .../delete-hard/{id}`  |
+| `/v1/{feature}/upload-avatar/:id`  | `POST   .../upload-avatar/{id}` |
+
+### Estrutura de arquivos de rota por feature
+
+```
+src/routes/
+├── {Feature}/
+│   ├── PublicRoutes.tsx    ← rotas públicas (login, registro, etc.)
+│   ├── PrivateRoutes.tsx   ← rotas protegidas (CRUD, dashboard)
+│   └── index.ts            ← re-exporta publicRoutes e privateRoutes
+└── AppRoutes.tsx           ← agrega todas as rotas dos módulos
+```
 
 ---
 

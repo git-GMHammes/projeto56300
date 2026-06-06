@@ -1,4 +1,4 @@
-﻿import { HashRouter, Routes, Route } from 'react-router-dom'
+﻿import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { moduloTestePublicRoutes } from './ModuloTeste'
 import { layoutTestPublicRoutes } from './LayoutTest'
 import { authPublicRoutes } from './Auth'
@@ -19,14 +19,14 @@ const publicRoutes = [
 
 function AppRoutes() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         {publicRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />
         ))}
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
